@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FYPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Login">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_id" Type="varchar" MaxLength="20" />
+    <Property Name="User_name" Type="varchar" MaxLength="100" />
+    <Property Name="User_type" Type="varchar" MaxLength="20" />
+    <Property Name="User_password" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="Reg_no" />
+    </Key>
+    <Property Name="Reg_no" Type="varchar" MaxLength="14" Nullable="false" />
+    <Property Name="St_firstName" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="St_middlename" Type="varchar" MaxLength="25" />
+    <Property Name="St_lastname" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="Fathername" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Session" Type="varchar" MaxLength="12" Nullable="false" />
+    <Property Name="Section" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="Discipline" Type="varchar" MaxLength="12" />
+    <Property Name="Gender" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="Semester" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <EntityContainer Name="FYPModelStoreContainer">
+    <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

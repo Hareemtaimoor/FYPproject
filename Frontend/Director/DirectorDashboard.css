@@ -1,0 +1,157 @@
+/* Color Palette */
+:root {
+  --primary: #0f3b35;
+  --secondary: #1a635a;
+  --bg-light: #faf4f4;
+  --white: #ffffff;
+  --text-muted: #666;
+}
+
+/* 1. Remove global scroll and extra spacing */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: var(--primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.app-viewport {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+/* 2. Container behaves like a mobile app window */
+.app-container {
+  width: 100%;
+  max-width: 480px; /* Forces mobile-view on desktop */
+  background-color: var(--primary);
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* 3. Header Spacing Fix */
+.app-header {
+  padding: 20px 0 10px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.header-logo {
+  width: 80px;
+  height: auto;
+}
+
+/* 4. Profile Card Styling */
+.profile-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 20px;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.profile-role {
+  margin: 4px 0 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.profile-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+}
+
+/* 5. Section Label Fix */
+.section-title {
+  color: var(--white);
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  text-align: left;
+  padding-left: 4px;
+}
+
+/* 6. Action Items (Rows) */
+.action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-item {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.action-item:active {
+  transform: scale(0.98);
+  background: #f0f0f0;
+}
+
+.action-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.action-subtext {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.action-arrow {
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+/* 7. Footer/Logout Fix */
+.app-footer {
+  margin-top: auto; /* Pushes logout to bottom */
+  padding: 30px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.pill-logout-btn {
+  background-color: var(--bg-light);
+  color: #121212;
+  border: none;
+  padding: 12px 0;
+  width: 80%;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Web specific adjustments */
+@media (min-width: 768px) {
+  .app-container {
+    border-left: 1px solid rgba(255,255,255,0.1);
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+}

@@ -1,0 +1,129 @@
+/* NotPeerEvalutors.css */
+
+.pe-mobile-bg {
+    background-color: #2d4a44; /* Dark green background */
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.pe-container {
+    width: 100%;
+    max-width: 380px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pe-logo-wrapper {
+    margin-bottom: 25px;
+}
+
+.pe-main-logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+
+/* White Info Card */
+.pe-info-card {
+    background-color: white;
+    width: 100%;
+    border-radius: 4px; /* Straight edges for the info section */
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.pe-card-label {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 12px 0;
+}
+
+.pe-info-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pe-text-details p {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #444;
+}
+
+.pe-avatar-img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+}
+
+/* Dashboard Label */
+.pe-dashboard-label {
+    background-color: white;
+    padding: 6px 25px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    border-radius: 2px;
+}
+
+/* Actions Card with Rounded Corners */
+.pe-actions-card {
+    background-color: white;
+    width: 100%;
+    border-radius: 35px; /* Large rounded corners as per screenshot */
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pe-action-btn {
+    background-color: #2d4a44;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px; /* Pill buttons */
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 85%;
+    margin: 0 auto;
+}
+
+/* Logout Footer */
+.pe-footer {
+    margin-top: auto;
+    padding-bottom: 30px;
+}
+
+.pe-logout-btn {
+    background-color: white;
+    color: #000;
+    border: none;
+    padding: 8px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.pe-logout-icon-box {
+    background-color: #58a6ff; /* Blue box for arrow icon */
+    color: white;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+}

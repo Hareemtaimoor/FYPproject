@@ -1,0 +1,108 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|d:\\fyp2\\newbead\\bead\\backend\\finalbackend\\finalbackend\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|solutionrelative:finalbackend\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|d:\\fyp2\\newbead\\bead\\backend\\finalbackend\\finalbackend\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|solutionrelative:finalbackend\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|d:\\fyp2\\newbead\\bead\\backend\\finalbackend\\finalbackend\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|solutionrelative:finalbackend\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|d:\\fyp2\\newbead\\bead\\backend\\finalbackend\\finalbackend\\models\\model1.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
+      "RelativeMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|solutionrelative:finalbackend\\models\\model1.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|d:\\fyp2\\newbead\\bead\\backend\\finalbackend\\finalbackend\\app_start\\webapiconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DFEC0D50-8746-4A59-AD72-9C347AAF60AA}|FinalBackend\\FinalBackend.csproj|solutionrelative:finalbackend\\app_start\\webapiconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Model1.edmx [Diagram1]",
+              "DocumentMoniker": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\Models\\Model1.edmx",
+              "RelativeDocumentMoniker": "FinalBackend\\Models\\Model1.edmx",
+              "ToolTip": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\Models\\Model1.edmx [Diagram1]",
+              "RelativeToolTip": "FinalBackend\\Models\\Model1.edmx [Diagram1]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
+              "WhenOpened": "2026-02-08T19:16:21.353Z",
+              "EditorCaption": " [Diagram1]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Web.config",
+              "DocumentMoniker": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\Web.config",
+              "RelativeDocumentMoniker": "FinalBackend\\Web.config",
+              "ToolTip": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\Web.config*",
+              "RelativeToolTip": "FinalBackend\\Web.config*",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAAAFIAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2026-02-07T21:08:03.272Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WebApiConfig.cs",
+              "DocumentMoniker": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\App_Start\\WebApiConfig.cs",
+              "RelativeDocumentMoniker": "FinalBackend\\App_Start\\WebApiConfig.cs",
+              "ToolTip": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\App_Start\\WebApiConfig.cs",
+              "RelativeToolTip": "FinalBackend\\App_Start\\WebApiConfig.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAwAgAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-07T20:43:21.653Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StudentController.cs",
+              "DocumentMoniker": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\Controllers\\StudentController.cs",
+              "RelativeDocumentMoniker": "FinalBackend\\Controllers\\StudentController.cs",
+              "ToolTip": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\Controllers\\StudentController.cs",
+              "RelativeToolTip": "FinalBackend\\Controllers\\StudentController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-07T20:42:00.192Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "FinalBackend\\Controllers\\LoginController.cs",
+              "ToolTip": "D:\\FYP2\\NewBEAD\\BEAD\\Backend\\FinalBackend\\FinalBackend\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "FinalBackend\\Controllers\\LoginController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-07T20:38:28.449Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

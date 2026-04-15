@@ -1,0 +1,177 @@
+/* LastSemStudentDashboard.css */
+
+/* Global Wrapper to lock screen height */
+.ls-dashboard-wrapper {
+    background-color: rgb(15, 59, 53);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    overflow: hidden; /* Prevent body scroll */
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.ls-main-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 450px; /* Optimized for Mobile */
+    height: 100%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+}
+
+/* Header Section */
+.ls-logo-section {
+    text-align: center;
+    padding: 5px 0;
+    flex-shrink: 0;
+}
+
+.ls-header-logo {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+}
+
+/* Fixed Info Card */
+.ls-info-card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.ls-card-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(15, 59, 53);
+    text-align: center;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.ls-info-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ls-info-text p {
+    margin: 3px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.ls-student-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+}
+
+/* MAIN SCROLLABLE SECTION */
+.ls-courses-container {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    /* flex-grow: 1 ko hata kar niche wali line likhein */
+    flex: 0 1 55%; /* Ye screen ka takreeban 55% hissa lega, baqi niche space chorega */
+    display: flex;
+    flex-direction: column;
+    min-height: 0; 
+    margin-bottom: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    overflow: hidden; /* Taake content bahar na nikle */
+}
+
+/* Iske andar jo scroll box hai usay barqarar rakhein */
+.ls-scroll-box {
+    overflow-y: auto;
+    flex: 1; 
+}
+
+.ls-scroll-box {
+    overflow-y: auto; /* Internal scrolling only */
+    flex-grow: 1;
+    padding-right: 5px;
+}
+
+.ls-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.ls-item-details {
+    width: 65%;
+}
+
+.ls-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+    color: #222;
+}
+
+.ls-item-subtext {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+}
+
+.ls-eval-btn {
+    background-color: rgb(15, 59, 53);
+    color: white;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* States */
+.ls-done-bg { background-color: #f9f9f9; }
+.ls-text-muted { color: #aaa !important; text-decoration: line-through; }
+.ls-btn-disabled { background-color: #888 !important; cursor: not-allowed; }
+
+.ls-fyp-divider {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(15, 59, 53);
+    margin: 15px 0 5px 0;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+
+/* Footer Logout Section (Always Visible) */
+.ls-footer-section {
+    padding: 5px 0 15px 0;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.ls-logout-btn {
+    background: white;
+    color: rgb(15, 59, 53);
+    border: none;
+    padding: 10px 60px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    cursor: pointer;
+}
+
+/* Scrollbar Styling */
+.ls-scroll-box::-webkit-scrollbar { width: 5px; }
+.ls-scroll-box::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="FYPModelStoreContainer" CdmEntityContainer="FYPEntities1">
+    <EntitySetMapping Name="Logins">
+      <EntityTypeMapping TypeName="FYPModel.Login">
+        <MappingFragment StoreEntitySet="Login">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="User_id" ColumnName="User_id" />
+          <ScalarProperty Name="User_name" ColumnName="User_name" />
+          <ScalarProperty Name="User_type" ColumnName="User_type" />
+          <ScalarProperty Name="User_password" ColumnName="User_password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Students">
+      <EntityTypeMapping TypeName="FYPModel.Student">
+        <MappingFragment StoreEntitySet="Student">
+          <ScalarProperty Name="Reg_no" ColumnName="Reg_no" />
+          <ScalarProperty Name="St_firstName" ColumnName="St_firstName" />
+          <ScalarProperty Name="St_middlename" ColumnName="St_middlename" />
+          <ScalarProperty Name="St_lastname" ColumnName="St_lastname" />
+          <ScalarProperty Name="Fathername" ColumnName="Fathername" />
+          <ScalarProperty Name="Session" ColumnName="Session" />
+          <ScalarProperty Name="Section" ColumnName="Section" />
+          <ScalarProperty Name="Discipline" ColumnName="Discipline" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Semester" ColumnName="Semester" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

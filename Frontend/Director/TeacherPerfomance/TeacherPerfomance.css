@@ -1,0 +1,168 @@
+/* Background setup to look like a mobile app */
+.mobile-container {
+  background-color: #004d40; /* Dark Green from screenshot */
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.inner-content {
+  width: 100%;
+  max-width: 400px; /* Mobile width */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.logo-section {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+.header-logo {
+  width: 80px;
+  height: auto;
+}
+
+/* White Cards Styling */
+.white-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.card-header {
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.card-body {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-info p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.profile-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+/* Search Bar Area */
+.search-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 15px;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  outline: none;
+}
+
+.search-icon-btn {
+  background-color: #004d40;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* Scrolling Teacher List */
+.teacher-list-scroll {
+  max-height: 250px; /* Adjust height for scrolling */
+  overflow-y: auto;
+  padding: 0 15px;
+}
+
+/* Row Styling from Screenshot */
+.teacher-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.teacher-info {
+  flex: 1;
+  padding-right: 10px;
+}
+
+.teacher-name {
+  font-size: 0.85rem;
+  color: #333;
+  line-height: 1.2;
+}
+
+.view-btn {
+  background-color: #004d40;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+/* Performance Mapping link */
+.mapping-section {
+  text-align: center;
+  padding: 15px;
+}
+
+.mapping-btn {
+  background: none;
+  border: none;
+  color: #004d40;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Bottom Dashboard Button */
+.footer-nav {
+  margin-top: auto;
+  padding-bottom: 20px;
+}
+
+.dashboard-pill-btn {
+  width: 100%;
+  background-color: white;
+  color: #004d40;
+  border: none;
+  padding: 12px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

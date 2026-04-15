@@ -1,0 +1,134 @@
+/* ROOT VARIABLES FOR EASY UPDATES */
+:root {
+  --primary: #0f3b35;
+  --accent-red: #b11e1e;
+  --bg-white: #faf4f4;
+  --text-dark: #121212;
+}
+
+* { box-sizing: border-box; }
+
+.app-container {
+  background-color: var(--primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  font-family: sans-serif;
+}
+
+/* HEADER */
+.header-card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.title { font-size: 16px; margin: 0; color: #333; }
+.detail { font-size: 14px; margin: 0; color: #666; }
+.avatar-circle {
+  width: 45px; height: 45px; border-radius: 50%;
+  background: var(--primary); color: white;
+  display: flex; align-items: center; justify-content: center; font-weight: bold;
+}
+
+/* MAIN LAYOUT ENGINE */
+.main-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column; /* Default: Mobile Stacked */
+  margin-top: 20px;
+  gap: 15px;
+}
+
+/* TABS */
+.tab-sidebar {
+  display: flex;
+  flex-direction: row; /* Horizontal on mobile */
+  justify-content: space-around;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.tab-btn {
+  background: none; border: none; padding: 10px; color: #ccc; cursor: pointer;
+}
+
+.tab-btn.active {
+  color: white; border-bottom: 3px solid white; font-weight: bold;
+}
+
+/* RIGHT PANEL & LIST */
+.list-panel { flex: 1; display: flex; flex-direction: column; }
+
+select {
+  width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: none;
+}
+
+.scroll-list {
+  flex: 1; overflow-y: auto; max-height: 60vh;
+}
+
+.card-item {
+  background: white; border-radius: 8px; padding: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-left { display: flex; align-items: center; gap: 10px; }
+
+.custom-check {
+  width: 20px; height: 20px; border: 2px solid var(--primary);
+  border-radius: 4px; cursor: pointer; text-align: center; line-height: 16px;
+}
+
+.custom-check.checked { background: var(--primary); color: white; }
+
+.card-info .name { display: block; font-weight: bold; font-size: 14px; }
+.card-info .desc { font-size: 11px; color: #888; }
+
+/* BADGE */
+.badge {
+  background: var(--primary); color: white; padding: 5px 10px;
+  border-radius: 6px; text-align: center;
+}
+.badge small { display: block; font-size: 8px; }
+
+/* BUTTONS */
+.btn-compare {
+  background: var(--accent-red); color: white; border: none;
+  padding: 15px; border-radius: 8px; font-weight: bold; margin: 10px 0;
+}
+
+.btn-dash {
+  width: 100%; background: var(--bg-white); border: none;
+  padding: 12px; border-radius: 25px; font-weight: bold;
+}
+
+/* WEB STYLING (RESPONSIVE OVERRIDE) */
+@media (min-width: 768px) {
+  .main-content {
+    flex-direction: row; /* Side-by-side on Web */
+  }
+
+  .tab-sidebar {
+    width: 200px;
+    flex-direction: column; /* Vertical on Web */
+    border-bottom: none;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    justify-content: flex-start;
+  }
+
+  .tab-btn {
+    text-align: left; padding: 20px;
+  }
+
+  .tab-btn.active {
+    border-bottom: none; border-left: 4px solid white; background: rgba(255,255,255,0.1);
+  }
+
+  .scroll-list { max-height: 70vh; }
+}

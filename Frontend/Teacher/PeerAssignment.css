@@ -1,0 +1,169 @@
+.peer-mobile-bg {
+  background-color: #1a2e28; /* Dark Green Background */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.peer-mobile-container {
+  width: 100%;
+  max-width: 450px; /* Mobile width constraint */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.peer-header {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.peer-main-logo {
+  width: 70px;
+}
+
+/* Info Card Styling */
+.peer-info-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.peer-card-label {
+  background: #f8f9fa;
+  padding: 8px;
+  text-align: center;
+  font-weight: bold;
+  color: #0f3b35;
+  border-bottom: 1px solid #eee;
+}
+
+.peer-info-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+.peer-text-details p {
+  margin: 4px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.peer-avatar-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #eee;
+}
+
+/* Table Section Styling */
+.peer-data-card {
+  background: white;
+  border-radius: 15px;
+  border: 2px solid #2D463E;
+  overflow: hidden;
+}
+
+.peer-table-header {
+  background: #0f3b35;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.peer-search-box {
+  padding: 10px;
+  background: #fff;
+}
+
+.peer-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.peer-table-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.peer-main-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.peer-main-table th {
+  background: #2D463E;
+  color: white;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.peer-main-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  font-size: 14px;
+  color: #2D463E;
+}
+
+/* Custom Checkbox */
+.peer-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #0f3b35;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.peer-checkbox.checked {
+  background: #0f3b35;
+}
+
+/* Footer Buttons */
+.peer-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.peer-submit-pill {
+  background: white;
+  color: #0f3b35;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.peer-submit-pill:disabled {
+  opacity: 0.6;
+}
+
+.peer-home-btn {
+  background: white;
+  color: #0f3b35;
+  border: none;
+  padding: 8px 30px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}

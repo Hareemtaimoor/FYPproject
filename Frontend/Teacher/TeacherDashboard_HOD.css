@@ -1,0 +1,128 @@
+/* TeacherDashboard_HOD.css */
+
+.hod-dashboard-wrapper {
+    background-color: #0f3b35; /* Dark Green Background */
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto; /* Scroll if content is long */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.hod-mobile-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hod-logo-header {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.hod-main-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+/* White Cards with Borders */
+.hod-section-card {
+    background-color: white;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Dark Green Header Inside Card */
+.hod-section-header {
+    background-color: #0d5c4b;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Info Body Layout */
+.hod-info-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.hod-text-info p {
+    margin: 5px 0;
+    font-size: 15px;
+    color: #333;
+}
+
+.hod-profile-img {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background-color: #eee;
+}
+
+/* Buttons List Styling */
+.hod-buttons-list {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hod-action-btn {
+    background-color: #0f3b35;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 30px; /* Pill Shape */
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.hod-action-btn:active {
+    background-color: #144d45;
+}
+
+/* Logout Styling */
+.hod-footer {
+    margin-top: 10px;
+    padding-bottom: 30px;
+}
+
+.hod-logout-pill {
+    background: white;
+    color: #000;
+    border: none;
+    padding: 10px 35px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+.logout-icon {
+    background-color: #4da3ff;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-size: 12px;
+}

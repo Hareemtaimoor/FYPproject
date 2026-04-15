@@ -1,0 +1,171 @@
+/* Dashboard Wrapper */
+.dashboard-container {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #1a2e28 0%, #2D463E 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: 'Crimson Pro', serif;
+}
+
+.main-web-card {
+  background: #ffffff;
+  width: 95%;
+  max-width: 1000px;
+  min-height: 80vh;
+  border-radius: 24px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Sidebar Styling */
+.sidebar-info {
+  flex: 0.8;
+  background-color: #f4f7f6;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid #e0e0e0;
+}
+
+.dashboard-logo {
+  width: 90px;
+  margin-bottom: 25px;
+  border: 4px solid #4CAF50;
+  border-radius: 50%;
+  background: white;
+}
+
+/* Right Content Area */
+.content-area {
+  flex: 1.2;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.content-header {
+  font-size: 1.8rem;
+  color: #2D463E;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.course-subtitle {
+  color: #4CAF50;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* Teacher Card Layout */
+.teacher-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.teacher-card {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.3s;
+}
+
+.teacher-card:hover {
+  transform: translateX(10px);
+  border-color: #4CAF50;
+}
+
+.teacher-info-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.teacher-avatar-small {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #2D463E;
+}
+
+.teacher-meta h4 {
+  margin: 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.teacher-meta span {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn-evaluate {
+  background-color: #2D463E;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-evaluate:hover {
+  background-color: #1a2e28;
+}
+
+.footer-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+}
+
+.home-btn-web {
+  background: white;
+  color: #2D463E;
+  border: 2px solid #2D463E;
+  padding: 10px 30px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.home {
+  background: white;
+  color: #2D463E;
+  border: 2px solid #2D463E;
+  padding: 10px 30px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.home-btn-web:hover {
+  background: #2D463E;
+  color: white;
+}
+.home:hover {
+  background: #2D463E;
+  color: white;
+}

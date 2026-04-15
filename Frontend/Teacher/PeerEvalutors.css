@@ -1,0 +1,132 @@
+/* PeerEvalutors.css */
+
+.pe-mobile-bg {
+    background-color: #2d4a44; /* Screenshot ka dark green color */
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.pe-container {
+    width: 100%;
+    max-width: 380px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pe-logo-wrapper {
+    margin-bottom: 30px;
+}
+
+.pe-main-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+/* Info Card Styling */
+.pe-info-card {
+    background-color: white;
+    width: 100%;
+    border-radius: 4px; /* Straight edges like the image */
+    padding: 15px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.pe-card-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+
+.pe-info-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pe-text-details {
+    text-align: left;
+}
+
+.pe-text-details p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #444;
+}
+
+.pe-avatar-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+/* Faculty Dashboard Label */
+.pe-dashboard-label {
+    background-color: white;
+    padding: 8px 30px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    border-radius: 2px;
+}
+
+/* Actions Card Styling */
+.pe-actions-card {
+    background-color: white;
+    width: 100%;
+    border-radius: 35px; /* Rounded card from screenshot */
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pe-action-btn {
+    background-color: #2d4a44;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 30px; /* Pill shape buttons */
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 90%;
+    margin: 0 auto;
+}
+
+/* Logout Button Styling */
+.pe-footer {
+    margin-top: 30px;
+}
+
+.pe-logout-btn {
+    background-color: white;
+    color: #000;
+    border: none;
+    padding: 8px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.pe-logout-icon-box {
+    background-color: #58a6ff; /* Blue box for arrow */
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+}
