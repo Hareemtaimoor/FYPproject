@@ -41,7 +41,7 @@ const Login = () => {
                 }
             } 
             
-            // 2. TEACHER LOGIC (Fixed)
+            
            // 2. TEACHER LOGIC (Fixed)
 else if (userType.includes("teacher")) {
     // Designation se spaces khatam kar ke comparison karein
@@ -72,12 +72,12 @@ else if (userType.includes("teacher")) {
 
     return (
         <div className="login-wrapper">
-            <button 
+            {/* <button 
                 className="director-link-btn" 
                 onClick={() => nav("/DirectorDashboard")}
             >
                 Director
-            </button>
+            </button> */}
 
             <div className="login-card">
                 <img src={logo} alt="BIIT Logo" className="login-logo" />

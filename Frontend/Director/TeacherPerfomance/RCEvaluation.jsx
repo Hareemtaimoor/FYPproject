@@ -11,15 +11,22 @@ const RCEvaluation = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  useEffect(() => { fetchSessions(); }, []);
-  useEffect(() => { if (selectedSession) fetchData(); }, [activeTab, selectedSession]);
+  useEffect(() => { 
+    fetchSessions(); 
+  }, []);
+
+  useEffect(() => { 
+    if (selectedSession) fetchData(); 
+  }, [activeTab, selectedSession]);
 
   const fetchSessions = async () => {
     try {
-      const response = await axios.get(`${APIEndPoint}/Director/GetAllSessions`);
+      const response = await axios.get(`${ApiEndPoint}/Director/GetAllSessions`);
       setSessions(response.data);
       if (response.data.length > 0) setSelectedSession(response.data[0]);
-    } catch (error) { console.error("Error:", error); }
+    } catch (error) { 
+      console.error("Error fetching sessions:", error); 
+    }
   };
 
   const fetchData = async () => {
@@ -27,10 +34,14 @@ const RCEvaluation = () => {
     setLoading(true);
     try {
       const type = activeTab === "Teachers" ? "Teachers" : "Courses";
-      const response = await axios.get(`${APIEndPoint}/Director/GetAllocated${type}?session=${encodeURIComponent(selectedSession)}`);
+      const response = await axios.get(`${ApiEndPoint}/Director/GetAllocated${type}?session=${encodeURIComponent(selectedSession)}`);
       setDataList(response.data);
-    } catch (error) { setDataList([]); }
-    finally { setLoading(false); }
+    } catch (error) { 
+      console.error("Error fetching data:", error);
+      setDataList([]); 
+    } finally { 
+      setLoading(false); 
+    }
   };
 
   const toggleSelection = (id) => {
@@ -50,7 +61,7 @@ const RCEvaluation = () => {
       </header>
 
       <main className="main-content">
-        {/* Navigation Tabs - Vertical on Web, Horizontal on Mobile */}
+        {/* Navigation Tabs */}
         <nav className="tab-sidebar">
           {["Teachers", "Courses", "Confidential"].map((tab) => (
             <button
@@ -65,21 +76,32 @@ const RCEvaluation = () => {
 
         {/* List Area */}
         <section className="list-panel">
-          <div className="session-selector">
-            <select value={selectedSession} onChange={(e) => setSelectedSession(e.target.value)}>
-              {sessions.map((s, i) => <option key={i} value={s}>{s}</option>)}
-            </select>
+          <div className="list-header-row">
+            <div className="session-selector">
+              <label>Session: </label>
+              <select value={selectedSession} onChange={(e) => setSelectedSession(e.target.value)}>
+                {sessions.map((s, i) => <option key={i} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <button className="btn-compare" disabled={selectedItems.length < 2}>
+              Compare ({selectedItems.length})
+            </button>
           </div>
 
           <div className="scroll-list">
-            {loading ? <div className="loader">Loading...</div> : 
+            {loading ? (
+              <div className="loader-container">
+                <div className="spinner"></div>
+                <p>Loading {activeTab}...</p>
+              </div>
+            ) : dataList.length > 0 ? (
               dataList.map((item, idx) => {
                 const id = item.TeacherID || item.CourseNo;
                 const isSelected = selectedItems.includes(id);
                 return (
-                  <div key={idx} className="card-item">
+                  <div key={idx} className={`card-item ${isSelected ? 'selected' : ''}`} onClick={() => toggleSelection(id)}>
                     <div className="card-left">
-                      <div className={`custom-check ${isSelected ? 'checked' : ''}`} onClick={() => toggleSelection(id)}>
+                      <div className={`custom-check ${isSelected ? 'checked' : ''}`}>
                         {isSelected && "✓"}
                       </div>
                       <div className="card-info">
@@ -92,16 +114,16 @@ const RCEvaluation = () => {
                         <small>Rating</small>
                         <strong>{item.AverageRating || "0.0"}</strong>
                       </div>
-                    ) : <span className="arrow-icon">➔</span>}
+                    ) : (
+                      <span className="arrow-icon">➔</span>
+                    )}
                   </div>
                 );
               })
-            }
+            ) : (
+              <div className="no-data">No records found for this session.</div>
+            )}
           </div>
-
-          <button className="btn-compare" disabled={selectedItems.length < 2}>
-            Compare ({selectedItems.length})
-          </button>
         </section>
       </main>
 

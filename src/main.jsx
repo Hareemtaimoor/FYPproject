@@ -22,9 +22,9 @@ import CHR from '../Frontend/Teacher/CHR.jsx';
 import Attendance from '../Frontend/Teacher/Attendance.jsx';
 import RCEvaluation from '../Frontend/Director/TeacherPerfomance/RCEvaluation.jsx';
 import CompareScreenFrom_C_T from '../Frontend/Director/TeacherPerfomance/CompareScreenFrom_C_T.jsx';
-import AllAssignedCourseTeacher from '../Frontend/Director/TeacherPerfomance/AllAssignedCourseTeachers.jsx';
-import ViewConfidentialEvaluation from '../Frontend/Director/TeacherPerfomance/ViewConfidentialEvaluation.jsx';
-import ViewRegularEvaluation from '../Frontend/Director/TeacherPerfomance/ViewRegularEvaluation.jsx';
+//import AllAssignedCourseTeachers from '../Frontend/Director/TeacherPerfomance/AllAssignedCourseTeachers.jsx';
+//import ViewConfidentialEvaluation from '../Frontend/Director/TeacherPerfomance/ViewConfidentialEvaluation.jsx';
+//import ViewRegularEvaluation from '../Frontend/Director/TeacherPerfomance/ViewRegularEvaluation.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -55,9 +55,9 @@ createRoot(document.getElementById('root')).render(
         <Route path="/TeacherPerformance" element={<TeacherPerfomance/>} /> {/* Spelling Match with Dashboard */}
         <Route path="/RCEvaluation" element={<RCEvaluation />} />
         <Route path="/CompareScreenFrom_C_T" element={<CompareScreenFrom_C_T />} />
-        <Route path="/AllAssignedCourseTeacher" element={<AllAssignedCourseTeacher />} />
-        <Route path="/ViewConfidentialEvaluation" element={<ViewConfidentialEvaluation />} />
-        <Route path="/ViewRegularEvaluation" element={<ViewRegularEvaluation />} />
+        {/* <Route path="/AllAssignedCourseTeachers" element={<AllAssignedCourseTeachers />} /> */}
+        {/* <Route path="/ViewConfidentialEvaluation" element={<ViewConfidentialEvaluation />} /> */}
+        {/* <Route path="/ViewRegularEvaluation" element={<ViewRegularEvaluation />} /> */}
 
 
         {/* Fallback */}
