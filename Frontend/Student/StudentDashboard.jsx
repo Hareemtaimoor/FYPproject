@@ -14,6 +14,10 @@ const StudentDashboard = () => {
     const [profile, setProfile] = useState(null);
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
+    
+    // New states for Confidential Evaluation
+    const [isTopper, setIsTopper] = useState(false);
+    const [isConfDone, setIsConfDone] = useState(false);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -23,12 +27,28 @@ const StudentDashboard = () => {
                 const profileRes = await axios.get(`${ApiEndPoint}Student/GetStudentProfile`, { params: { AridNo } });
                 
                 if (profileRes.status === 200) {
-                    setProfile(profileRes.data);
+                    const profileData = profileRes.data;
+                    setProfile(profileData);
+
+                    // --- START: Confidential Logic Integration ---
+                    try {
+                        const confResp = await axios.get(`${ApiEndPoint}Student/getConfidentialStudent`, { params: { AridNo } });
+                        if (confResp.status === 200) {
+                            const confData = confResp.data;
+                            if (confData.CGPA >= 3.7) {
+                                setIsTopper(true);
+                                const checkConf = await axios.get(`${ApiEndPoint}Student/CheckIfAlreadyEvaluatedCon`, { params: { AridNo } });
+                                setIsConfDone(checkConf.data === true);
+                            }
+                        }
+                    } catch (e) { console.log("Confidential check failed", e); }
+                    // --- END: Confidential Logic Integration ---
+
                     const courseRes = await axios.get(`${ApiEndPoint}Student/GetStudentCourses`, {
                         params: { 
-                            AridNo: profileRes.data.AridNo.trim(), 
-                            semester: profileRes.data.Semester, 
-                            discipline: profileRes.data.Course.trim() 
+                            AridNo: profileData.AridNo.trim(), 
+                            semester: profileData.Semester, 
+                            discipline: profileData.Course.trim() 
                         }
                     });
 
@@ -37,7 +57,7 @@ const StudentDashboard = () => {
                             courseRes.data.map(async (course) => {
                                 try {
                                     const check = await axios.get(`${ApiEndPoint}Student/CheckIfAlreadyEvaluated`, {
-                                        params: { AridNo: profileRes.data.AridNo.trim(), CourseCode: course.CourseNo }
+                                        params: { AridNo: profileData.AridNo.trim(), CourseCode: course.CourseNo }
                                     });
                                     return { ...course, isDone: check.data === true };
                                 } catch (e) { return { ...course, isDone: false }; }
@@ -65,7 +85,6 @@ const StudentDashboard = () => {
                     <img src={logo} alt="BIIT Logo" className="header-logo-img" />
                 </div>
 
-                {/* Profile Pill Card - Same as Question Screen */}
                 <div className="white-pill-card">
                     <div className="student-info-flex">
                         <div className="info-text-box">
@@ -81,7 +100,6 @@ const StudentDashboard = () => {
 
                 <div className="section-divider">Pending Evaluations</div>
 
-                {/* Course List as Pill Cards */}
                 {courses.map((course, index) => (
                     <div key={index} className={`white-pill-card ${course.isDone ? "completed-card" : ""}`}>
                         <div className="student-info-flex">
@@ -109,13 +127,31 @@ const StudentDashboard = () => {
                         </div>
                     </div>
                 ))}
+
+                {/* --- Confidential Evaluation Section --- */}
+                {isTopper && (
+                    <div className="white-pill-card" style={{ border: '2px solid #b40f0f' }}>
+                         <div className="student-info-flex" style={{ justifyContent: 'center', padding: '10px' }}>
+                            <button 
+                                className={isConfDone ? "done-badge" : "evaluate-btn-solid"} 
+                                style={{ backgroundColor: isConfDone ? "" : "#b40f0f", width: '100%', cursor: isConfDone ? 'default' : 'pointer' }}
+                                disabled={isConfDone}
+                                onClick={() => navigate("/ConfidentalStudentEvaluationForm", { state: { AridNo } })}
+                            >
+                                {isConfDone ? "✅ Confidential Done" : "🌟 Perform Confidential Evaluation"}
+                            </button>
+                        </div>
+                    </div>
+                )}
+                {/* --- End Confidential Section --- */}
+
             </div>
 
-           <div className="questions-footer-nav">
-    <button className="logout-btn-white" onClick={() => navigate("/")}>
-        Logout
-    </button>
-</div>
+            <div className="questions-footer-nav">
+                <button className="logout-btn-white" onClick={() => navigate("/")}>
+                    Logout
+                </button>
+            </div>
         </div>
     );
 };

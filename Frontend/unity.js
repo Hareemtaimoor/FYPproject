@@ -1,2 +1,2 @@
-const ApiEndPoint = 'http://172.16.16.150/FYP2/api/';
+const ApiEndPoint = 'http://192.168.0.44/FYP2/api/';
 export default ApiEndPoint;
