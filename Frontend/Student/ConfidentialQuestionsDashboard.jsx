@@ -111,8 +111,12 @@ const ConfidentialQuestionsDashboard = () => {
 
         try {
             setLoading(true);
-            const response = await axios.post(`${ApiEndPoint}Student/SubmitEvaluation`, submissionData);
-            
+            const response = await axios.post(`${ApiEndPoint}student/submit-confidential`, submissionData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log(response);
             if (response.status === 200) {
                 alert("Evaluation stored successfully!");
                 navigate(-1); 

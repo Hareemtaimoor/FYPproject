@@ -1,0 +1,108 @@
+.decrypt-page {
+    background-color: #1a2e28;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.decrypt-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px 16px 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.decrypt-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 980px;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.decrypt-card h2,
+.decrypt-card h3 {
+    margin: 0 0 10px;
+    color: #1a2e28;
+}
+
+.hint-text {
+    margin: 0 0 12px;
+    color: #4f5f5b;
+    font-size: 0.9rem;
+}
+
+.file-input {
+    width: 100%;
+    margin-bottom: 8px;
+    display: none;
+}
+
+.upload-top-btn {
+    background-color: #4caf50;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.upload-top-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.file-name,
+.status-text {
+    margin: 4px 0;
+    color: #2f4f4a;
+}
+
+.error-text {
+    margin: 8px 0 0;
+    color: #b00020;
+    font-weight: 600;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th,
+td {
+    border: 1px solid #d4ddda;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+    font-size: 0.85rem;
+}
+
+th {
+    background-color: #e6efec;
+    color: #1a2e28;
+}
+
+.raw-json {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background-color: #f7f9f8;
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}

@@ -118,7 +118,7 @@ const ConfidentalStudentEvaluationForm = () => {
                             <button 
                                 className={course.isDone ? "done-badge" : "evaluate-btn-solid"}
                                 disabled={course.isDone}
-                                onClick={() => navigate("/StudentQuestionsDashboard", { 
+                                onClick={() => navigate("/ConfidentialQuestionsDashboard", { 
                                     state: { 
                                         courseNo: course.CourseNo, 
                                         courseName: course.CourseName, 

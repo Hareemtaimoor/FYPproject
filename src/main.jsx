@@ -24,6 +24,8 @@ import RCEvaluation from '../Frontend/Director/TeacherPerfomance/RCEvaluation.js
 import CompareScreenFrom_C_T from '../Frontend/Director/TeacherPerfomance/CompareScreenFrom_C_T.jsx';
 import ConfidentalStudentEvaluationForm from '../Frontend/Student/ConfidentalStudentEvaluationForm.jsx';
 import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
+import ConfidentialDecryptor from '../Frontend/Director/ConfidentialDecryptor.jsx';
+import ConfidentialDecryptorTable from '../Frontend/Director/ConfidentialDecryptorTable.jsx';
 //import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
 //import AllAssignedCourseTeachers from '../Frontend/Director/TeacherPerfomance/AllAssignedCourseTeachers.jsx';
 //import ViewConfidentialEvaluation from '../Frontend/Director/TeacherPerfomance/ViewConfidentialEvaluation.jsx';
@@ -60,6 +62,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/TeacherPerformance" element={<TeacherPerfomance/>} /> {/* Spelling Match with Dashboard */}
         <Route path="/RCEvaluation" element={<RCEvaluation />} />
         <Route path="/CompareScreenFrom_C_T" element={<CompareScreenFrom_C_T />} />
+        <Route path="/ConfidentialDecryptor" element={<ConfidentialDecryptor />} />
+        <Route path="/ConfidentialDecryptorTable" element={<ConfidentialDecryptorTable />} />
         {/* <Route path="/AllAssignedCourseTeachers" element={<AllAssignedCourseTeachers />} /> */}
         {/* <Route path="/ViewConfidentialEvaluation" element={<ViewConfidentialEvaluation />} /> */}
         {/* <Route path="/ViewRegularEvaluation" element={<ViewRegularEvaluation />} /> */}

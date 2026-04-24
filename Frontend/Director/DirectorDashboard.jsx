@@ -71,6 +71,18 @@ const DirectorDashboard = () => {
                     </div>
                 </div>
 
+                <div className="white-pill-card action-hover-effect" onClick={() => navigate("/ConfidentialDecryptor")}>
+                    <div className="student-info-flex">
+                        <div className="info-text-box">
+                            <p className="small-label">Encrypted Results</p>
+                            <p style={{fontSize: "0.95rem", fontWeight: "bold", color: "#1a2e28"}}>
+                                Confidential File Decryptor
+                            </p>
+                        </div>
+                        <button className="evaluate-btn-solid">Open</button>
+                    </div>
+                </div>
+
             </div>
 
             {/* Footer Navigation */}
