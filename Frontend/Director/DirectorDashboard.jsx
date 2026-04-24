@@ -16,65 +16,68 @@ const DirectorDashboard = () => {
     };
 
     return (
-        <div className="app-viewport">
-            <div className="app-container">
+        <div className="questions-container">
+            <div className="questions-scroll-area">
                 
-                {/* Compact Header */}
-                <header className="app-header">
-                    <img src={logo} alt="BIIT Logo" className="header-logo" />
-                </header>
+                {/* Logo Section */}
+                <div className="top-logo-wrap">
+                    <img src={logo} alt="BIIT Logo" className="header-logo-img" />
+                </div>
 
-                {/* Director Profile Card */}
-                <section className="profile-section">
-                    <div className="profile-card">
-                        <div className="profile-details">
-                            <h2 className="profile-name">Dr. Jamil Sawar</h2>
-                            <p className="profile-role">Director</p>
+                {/* Profile Pill Card */}
+                <div className="white-pill-card">
+                    <div className="student-info-flex">
+                        <div className="info-text-box">
+                            <p>Name: <strong>Dr. Jamil Sawar</strong></p>
+                            <p>Role: <strong>Director</strong></p>
+                            <p style={{marginTop: '5px', color: '#4CAF50', fontWeight: 'bold', fontSize: '0.75rem'}}>
+                                BIIT Administration
+                            </p>
                         </div>
-                        <div className="profile-avatar-wrap">
-                            <img src={avatar} alt="Director Avatar" className="profile-img" />
-                        </div>
+                        <img src={avatar} alt="Director Avatar" className="student-avatar-img" />
                     </div>
-                </section>
+                </div>
 
-                {/* Action List Section */}
-                <main className="dashboard-actions">
-                    <h3 className="section-title">Director Dashboard</h3>
-                    
-                    <div className="action-list">
-                        <div className="action-item" onClick={() => navigate("/RCEvaluation")}>
-                            <div className="action-info">
-                                <span className="action-label">Teacher Performance</span>
-                                <span className="action-subtext">Analytics & Feedback</span>
-                            </div>
-                            <span className="action-arrow">➔</span>
-                        </div>
+                <div className="section-divider">Director Dashboard</div>
 
-                        <div className="action-item" onClick={() => navigate("/ManageQuestions")}>
-                            <div className="action-info">
-                                <span className="action-label">Manage Questions</span>
-                                <span className="action-subtext">Evaluation Setup</span>
-                            </div>
-                            <span className="action-arrow">➔</span>
+                {/* Action Items - Using the same card styling as courses */}
+                <div className="white-pill-card action-hover-effect" onClick={() => navigate("/RCEvaluation")}>
+                    <div className="student-info-flex">
+                        <div className="info-text-box">
+                            <p className="small-label">Analytics & Feedback</p>
+                            <p style={{fontSize: '0.95rem', fontWeight: 'bold', color: '#1a2e28'}}>Teacher Performance</p>
                         </div>
-
-                        <div className="action-item" onClick={() => navigate("/GenderAnalytics")}>
-                            <div className="action-info">
-                                <span className="action-label">Gender Analytics</span>
-                                <span className="action-subtext">Participation Ratio</span>
-                            </div>
-                            <span className="action-arrow">➔</span>
-                        </div>
+                        <button className="evaluate-btn-solid">View</button>
                     </div>
-                </main>
+                </div>
 
-                {/* Compact Footer */}
-                <footer className="app-footer">
-                    <button className="pill-logout-btn" onClick={handleLogout}>
-                        Logout
-                    </button>
-                </footer>
+                <div className="white-pill-card action-hover-effect" onClick={() => navigate("/ManageQuestions")}>
+                    <div className="student-info-flex">
+                        <div className="info-text-box">
+                            <p className="small-label">Evaluation Setup</p>
+                            <p style={{fontSize: '0.95rem', fontWeight: 'bold', color: '#1a2e28'}}>Manage Questions</p>
+                        </div>
+                        <button className="evaluate-btn-solid">Manage</button>
+                    </div>
+                </div>
 
+                <div className="white-pill-card action-hover-effect" onClick={() => navigate("/GenderAnalytics")}>
+                    <div className="student-info-flex">
+                        <div className="info-text-box">
+                            <p className="small-label">Participation Ratio</p>
+                            <p style={{fontSize: '0.95rem', fontWeight: 'bold', color: '#1a2e28'}}>Gender Analytics</p>
+                        </div>
+                        <button className="evaluate-btn-solid">Analytics</button>
+                    </div>
+                </div>
+
+            </div>
+
+            {/* Footer Navigation */}
+            <div className="questions-footer-nav">
+                <button className="logout-btn-white" onClick={handleLogout}>
+                    Logout
+                </button>
             </div>
         </div>
     );

@@ -22,6 +22,9 @@ import CHR from '../Frontend/Teacher/CHR.jsx';
 import Attendance from '../Frontend/Teacher/Attendance.jsx';
 import RCEvaluation from '../Frontend/Director/TeacherPerfomance/RCEvaluation.jsx';
 import CompareScreenFrom_C_T from '../Frontend/Director/TeacherPerfomance/CompareScreenFrom_C_T.jsx';
+import ConfidentalStudentEvaluationForm from '../Frontend/Student/ConfidentalStudentEvaluationForm.jsx';
+import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
+//import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
 //import AllAssignedCourseTeachers from '../Frontend/Director/TeacherPerfomance/AllAssignedCourseTeachers.jsx';
 //import ViewConfidentialEvaluation from '../Frontend/Director/TeacherPerfomance/ViewConfidentialEvaluation.jsx';
 //import ViewRegularEvaluation from '../Frontend/Director/TeacherPerfomance/ViewRegularEvaluation.jsx';
@@ -39,6 +42,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/Junior_SeniorCourseTeacherDashboard" element={<Junior_SeniorCourseTeacherDashboard />} />
         <Route path="/SeniorTeacherCourse" element={<SeniorTeacherCourse />} />
         <Route path="/StudentQuestionsDashboard" element={<StudentQuestionsDashboard />} />
+        <Route path="/ConfidentalStudentEvaluationForm" element={<ConfidentalStudentEvaluationForm/>}/>
+         <Route path="/ConfidentialQuestionsDashboard" element={<ConfidentialQuestionsDashboard/>}/>
 
         {/* Teacher Routes */}
         <Route path="/NotPeerEvaluators" element={<NotPeerEvalutors />} />

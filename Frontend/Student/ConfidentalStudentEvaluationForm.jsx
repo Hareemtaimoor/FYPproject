@@ -6,7 +6,7 @@ import logo from "../Images/Biit_Logo.png";
 import avatar from "../Images/avatar.png";
 import ApiEndPoint from '../unity.js';
 
-const ConfidentialStudentEvaluationForm = () => {
+const ConfidentalStudentEvaluationForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const AridNo = location.state?.AridNo;
@@ -65,7 +65,32 @@ const ConfidentialStudentEvaluationForm = () => {
                     <img src={logo} alt="BIIT Logo" className="header-logo-img" />
                 </div>
 
-                {/* Profile Pill Card - Same as Question Screen */}
+                {/* --- SIRF HEADING SECTION KI INLINE STYLING --- */}
+                <div style={{ textAlign: 'center', marginBottom: '25px', marginTop: '10px' }}>
+                    <h1 style={{
+                        fontSize: '1.5rem',
+                        color: '#e9f1efff',
+                        margin: 0,
+                        fontWeight: '800',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1.2px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        Confidential Evaluation
+                    </h1>
+                    {/* <p style={{
+                        fontSize: '0.8rem',
+                        color: '#666',
+                        marginTop: '5px',
+                        fontWeight: '500',
+                        letterSpacing: '0.5px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        Quality Enhancement Cell (QEC)
+                    </p> */}
+                </div>
+                {/* ----------------------------------------------- */}
+
                 <div className="white-pill-card">
                     <div className="student-info-flex">
                         <div className="info-text-box">
@@ -81,7 +106,6 @@ const ConfidentialStudentEvaluationForm = () => {
 
                 <div className="section-divider">Pending Evaluations</div>
 
-                {/* Course List as Pill Cards */}
                 {courses.map((course, index) => (
                     <div key={index} className={`white-pill-card ${course.isDone ? "completed-card" : ""}`}>
                         <div className="student-info-flex">
@@ -111,13 +135,13 @@ const ConfidentialStudentEvaluationForm = () => {
                 ))}
             </div>
 
-           <div className="questions-footer-nav">
-    <button className="logout-btn-white" onClick={() => navigate("/")}>
-        Logout
-    </button>
-</div>
+            <div className="questions-footer-nav">
+                <button className="logout-btn-white" onClick={() => navigate("/")}>
+                    Logout
+                </button>
+            </div>
         </div>
     );
 };
 
-export default ConfidentialStudentEvaluationForm;
+export default ConfidentalStudentEvaluationForm;

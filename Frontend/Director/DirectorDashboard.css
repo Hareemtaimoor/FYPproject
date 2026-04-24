@@ -1,157 +1,122 @@
-/* Color Palette */
-:root {
-  --primary: #0f3b35;
-  --secondary: #1a635a;
-  --bg-light: #faf4f4;
-  --white: #ffffff;
-  --text-muted: #666;
+/* Director Dashboard Styling - Matching Student Dashboard */
+
+.questions-container {
+    background-color: #1a2e28;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 1. Remove global scroll and extra spacing */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: var(--primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+.questions-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px 0 120px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.app-viewport {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
+.top-logo-wrap { margin-bottom: 20px; }
+
+.header-logo-img {
+    width: 75px; height: 75px;
+    background-color: white;
+    border-radius: 50%;
+    border: 3px solid #4CAF50;
+    padding: 2px;
 }
 
-/* 2. Container behaves like a mobile app window */
-.app-container {
-  width: 100%;
-  max-width: 480px; /* Forces mobile-view on desktop */
-  background-color: var(--primary);
-  display: flex;
-  flex-direction: column;
-  padding: 0 16px;
-  box-sizing: border-box;
+.white-pill-card {
+    background-color: white;
+    width: 92%;
+    max-width: 400px;
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-sizing: border-box;
+    transition: 0.3s;
 }
 
-/* 3. Header Spacing Fix */
-.app-header {
-  padding: 20px 0 10px 0;
-  display: flex;
-  justify-content: center;
+/* Hover effect for clickable cards */
+.action-hover-effect:hover {
+    transform: translateY(-3px);
+    background-color: #f9f9f9;
+    cursor: pointer;
 }
 
-.header-logo {
-  width: 80px;
-  height: auto;
+.student-info-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* 4. Profile Card Styling */
-.profile-card {
-  background: var(--white);
-  border-radius: 16px;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  margin-bottom: 20px;
+.info-text-box p {
+    margin: 2px 0;
+    font-size: 0.85rem;
+    color: #333;
 }
 
-.profile-name {
-  margin: 0;
-  font-size: 1.1rem;
-  color: var(--primary);
-  font-weight: 700;
+.student-avatar-img {
+    width: 55px; height: 55px;
+    border-radius: 50%;
+    border: 2px solid #1a2e28;
 }
 
-.profile-role {
-  margin: 4px 0 0 0;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+.section-divider {
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 15px 0 10px 0;
 }
 
-.profile-img {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 2px solid var(--primary);
+.evaluate-btn-solid {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    cursor: pointer;
 }
 
-/* 5. Section Label Fix */
-.section-title {
-  color: var(--white);
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-  text-align: left;
-  padding-left: 4px;
+.small-label {
+    font-size: 0.65rem;
+    color: #888;
+    text-transform: uppercase;
 }
 
-/* 6. Action Items (Rows) */
-.action-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.questions-footer-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1a2e28;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
 }
 
-.action-item {
-  background: var(--white);
-  border-radius: 12px;
-  padding: 14px 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  transition: transform 0.1s;
+.logout-btn-white {
+    background-color: white;
+    color: #1a2e28;
+    border: none;
+    padding: 8px 30px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.action-item:active {
-  transform: scale(0.98);
-  background: #f0f0f0;
-}
-
-.action-label {
-  display: block;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #333;
-}
-
-.action-subtext {
-  display: block;
-  font-size: 0.75rem;
-  color: #888;
-  margin-top: 2px;
-}
-
-.action-arrow {
-  color: var(--primary);
-  font-size: 1.1rem;
-}
-
-/* 7. Footer/Logout Fix */
-.app-footer {
-  margin-top: auto; /* Pushes logout to bottom */
-  padding: 30px 0;
-  display: flex;
-  justify-content: center;
-}
-
-.pill-logout-btn {
-  background-color: var(--bg-light);
-  color: #121212;
-  border: none;
-  padding: 12px 0;
-  width: 80%;
-  border-radius: 25px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-/* Web specific adjustments */
-@media (min-width: 768px) {
-  .app-container {
-    border-left: 1px solid rgba(255,255,255,0.1);
-    border-right: 1px solid rgba(255,255,255,0.1);
-  }
+.logout-btn-white:hover {
+    background-color: #e0e0e0;
 }
