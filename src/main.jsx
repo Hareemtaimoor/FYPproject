@@ -16,6 +16,7 @@ import TeacherEvalutionQuestions from '../Frontend/Teacher/TeacherEvalutionQuest
 import PeerEvalutors from '../Frontend/Teacher/PeerEvalutors.jsx';
 import NotPeerEvalutors from '../Frontend/Teacher/NotPeerEvalutors.jsx'; // Sahi spelling check karlein
 import EvaluateTeachers from '../Frontend/Teacher/EvaluateTeachers.jsx';
+import EvaluationRate from '../Frontend/Teacher/EvaluationRate.jsx';
 import DirectorDashboard from '../Frontend/Director/DirectorDashboard.jsx';
 import TeacherPerfomance from '../Frontend/Director/TeacherPerfomance/TeacherPerfomance.jsx';
 import CHR from '../Frontend/Teacher/CHR.jsx';
@@ -56,6 +57,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/EvaluateTeachers" element={<EvaluateTeachers/>} />
         <Route path="/CHR" element={<CHR/>} />
         <Route path="/Attendance" element={<Attendance/>} />
+        <Route path="/EvaluationRate" element={<EvaluationRate/>} />
 
         {/* Director Routes */}
         <Route path="/DirectorDashboard" element={<DirectorDashboard />} />

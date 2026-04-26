@@ -30,9 +30,6 @@ const DirectorDashboard = () => {
                         <div className="info-text-box">
                             <p>Name: <strong>Dr. Jamil Sawar</strong></p>
                             <p>Role: <strong>Director</strong></p>
-                            <p style={{marginTop: '5px', color: '#4CAF50', fontWeight: 'bold', fontSize: '0.75rem'}}>
-                                BIIT Administration
-                            </p>
                         </div>
                         <img src={avatar} alt="Director Avatar" className="student-avatar-img" />
                     </div>

@@ -73,8 +73,8 @@ const PeerEvalutors = () => {
         <div className="pe-actions-card">
           <button className="pe-action-btn" onClick={() => navigate("/CHR")}>View CHR</button>
           <button className="pe-action-btn" onClick={() => navigate("/Attendance")}>View Attendance</button>
-          <button className="pe-action-btn" onClick={() => navigate("/EvaluationRecords")}>View Evaluation</button>
-          <button className="pe-action-btn" onClick={() => navigate("/PeerEvaluation")}>Peer Evaluation</button>
+          <button className="pe-action-btn" onClick={() => navigate("/EvaluationRate")}>View Evaluation</button>
+          <button className="pe-action-btn" onClick={() => navigate("/EvaluateTeachers", { state: { TeacherID: userEmpNo } })}>Peer Evaluation</button>
         </div>
 
         {/* Logout Button */}

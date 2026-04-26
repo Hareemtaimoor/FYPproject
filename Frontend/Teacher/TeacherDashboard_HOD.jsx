@@ -60,8 +60,8 @@ const TeacherDashboard_HOD = () => {
           <div className="hod-buttons-list">
             <button className="hod-action-btn" onClick={() => navigate("/CHR")}>View CHR</button>
             <button className="hod-action-btn" onClick={() => navigate("/Attendance")}>View Attendance</button>
-            <button className="hod-action-btn">View Evaluation</button>
-            <button className="hod-action-btn">Peer Evaluation</button>
+           <button className="pe-action-btn" onClick={() => navigate("/EvaluationRate")}>View Evaluation</button>
+          <button className="pe-action-btn" onClick={() => navigate("/EvaluateTeachers")}>Evaluate Teachers</button>
             <button className="hod-action-btn"onClick={() => navigate("/PeerAssignment")}>Assign Peer</button>
           </div>
         </div>

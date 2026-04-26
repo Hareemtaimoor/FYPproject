@@ -122,10 +122,17 @@
     font-size: 0.85rem;
 }
 
+/* Specific alignment for the Teacher Name column (2nd column) */
+.peer-main-table th:nth-child(2),
+.peer-main-table td:nth-child(2) {
+    text-align: right;
+    padding-right: 24px; /* Adjust this to control the gap from the right edge */
+}
+
 .peer-main-table td {
     padding: 12px;
     border-bottom: 1px solid #eee;
-    text-align: center;
+    text-align: center; /* Default for other columns like checkboxes */
     font-size: 0.85rem;
     color: var(--teacher-text-body);
 }

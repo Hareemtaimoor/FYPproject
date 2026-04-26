@@ -1,52 +1,46 @@
 @import "./TeacherTheme.css";
 
-/* EvaluateTeachers.css - compact faculty list */
-
 .compact-bg {
     background-color: var(--teacher-bg);
     min-height: 100vh;
-    width: 100%;
     display: flex;
     justify-content: center;
-    overflow-y: auto;
-    margin: 0;
+    padding: 12px 10px 24px;
     font-family: var(--teacher-font);
     box-sizing: border-box;
+    overflow-x: hidden; /* Horizontal scroll khatam karne ke liye */
 }
 
 .compact-content {
+    width: 100%;
+    max-width: 450px;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    width: 100%;
-    max-width: 400px;
-    padding: 8px 12px 20px;
-    box-sizing: border-box;
+    gap: 14px;
 }
 
+/* Logo Styling */
 .mini-logo-wrap {
     text-align: center;
-    padding: 4px 0;
-    flex-shrink: 0;
+    padding: 8px 0;
 }
 
 .mini-logo {
-    width: 48px;
-    height: 48px;
+    width: 72px;
+    height: 72px;
     object-fit: contain;
     background: var(--teacher-card);
     border-radius: 50%;
-    border: 2px solid var(--teacher-accent);
-    padding: 3px;
+    border: 3px solid var(--teacher-accent);
+    padding: 4px;
     box-sizing: border-box;
 }
 
+/* Profile Card */
 .mini-info-card {
     background: var(--teacher-card);
-    border-radius: var(--teacher-radius-md);
-    padding: 8px 14px;
-    margin-bottom: 10px;
-    flex-shrink: 0;
+    border-radius: var(--teacher-radius-lg);
+    overflow: hidden;
     box-shadow: var(--teacher-shadow);
 }
 
@@ -54,137 +48,183 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 14px 16px;
 }
 
 .p-name {
-    font-size: 0.85rem;
     margin: 0;
     color: var(--teacher-text);
+    font-size: 1rem;
 }
 
 .p-sub {
-    font-size: 0.72rem;
-    margin: 2px 0 0;
-    color: var(--teacher-muted);
+    margin: 4px 0 0;
+    color: var(--teacher-text-body);
+    font-size: 0.85rem;
 }
 
 .mini-avatar {
-    width: 36px;
-    height: 36px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
+    background: #eee;
     border: 2px solid var(--teacher-border);
     object-fit: cover;
 }
 
+/* Search Bar */
+.search-wrap {
+    position: relative;
+    padding: 0 5px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: var(--teacher-radius-pill);
+    border: 1px solid #ccc;
+    outline: none;
+    font-family: var(--teacher-font);
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+.clear-search {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Main List Card */
 .mini-courses-card {
     background: var(--teacher-card);
     border-radius: var(--teacher-radius-lg);
-    padding: 12px;
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    margin-bottom: 10px;
+    border: 1px solid var(--teacher-border);
+    overflow: hidden;
     box-shadow: var(--teacher-shadow);
 }
 
 .mini-card-header {
-    font-size: 0.9rem;
-    font-weight: 700;
+    background: var(--teacher-bg-elevated);
+    color: white;
+    padding: 12px;
     text-align: center;
-    margin-bottom: 8px;
-    color: var(--teacher-text);
-    border-bottom: 1px solid var(--teacher-border);
-    padding-bottom: 6px;
+    font-weight: 700;
+    font-size: 0.95rem;
 }
 
+/* Scrolling Logic - PeerAssignment screen ki tarah */
 .mini-scroll-box {
+    max-height: 380px;
     overflow-y: auto;
-    flex: 1;
-    padding-right: 3px;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 .mini-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
 }
 
-.row-title {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--teacher-text-body);
-}
-
-.row-sub {
-    font-size: 0.65rem;
-    color: var(--teacher-muted);
-    display: block;
-}
-
-.mini-btn {
-    background: var(--teacher-bg-elevated);
-    color: var(--teacher-card);
-    border: none;
-    padding: 6px 12px;
-    border-radius: var(--teacher-radius-md);
-    font-size: 0.72rem;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: var(--teacher-font);
-    transition: background-color 0.2s ease;
-}
-
-.mini-btn:hover:not(:disabled) {
-    background: var(--teacher-accent);
-}
-
-.btn-off {
-    background: #999 !important;
-    cursor: not-allowed;
+.mini-row:hover {
+    background-color: rgba(15, 59, 53, 0.02);
 }
 
 .done-row {
-    background: #f9f9f9;
-    opacity: 0.85;
+    background-color: #f9f9f9;
+}
+
+.row-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.row-title {
+    font-size: 0.9rem;
+    color: var(--teacher-text);
+}
+
+.row-sub {
+    font-size: 0.75rem;
+    color: #666;
 }
 
 .ls-text-muted {
-    color: #aaa !important;
-    text-decoration: line-through;
+    color: #999;
+    text-decoration: line-through; /* Optional: Done teachers ko strike-through dikhane ke liye */
 }
 
+/* Button Styling */
+.mini-btn {
+    background-color: var(--teacher-bg-elevated);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--teacher-radius-pill);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 85px;
+    transition: transform 0.1s;
+}
+
+.mini-btn:active {
+    transform: scale(0.95);
+}
+
+.btn-off {
+    background-color: #c7f3d0 !important;
+    color: #0f3b35 !important;
+    cursor: not-allowed;
+}
+
+/* Footer */
 .mini-footer {
-    padding: 12px 0;
-    text-align: center;
-    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
 
 .mini-logout {
     background: var(--teacher-card);
     color: var(--teacher-text);
     border: none;
-    padding: 10px 40px;
+    padding: 10px 30px;
     border-radius: var(--teacher-radius-pill);
     font-weight: 700;
-    font-size: 0.95rem;
     box-shadow: var(--teacher-shadow);
     cursor: pointer;
     font-family: var(--teacher-font);
-    transition: background-color 0.2s ease;
 }
 
-.mini-logout:hover {
-    background: var(--teacher-border);
+/* Loader */
+.loader-flex {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #0f3b35;
 }
 
-.mini-scroll-box::-webkit-scrollbar {
-    width: 4px;
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-.mini-scroll-box::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

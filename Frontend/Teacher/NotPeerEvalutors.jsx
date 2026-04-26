@@ -81,7 +81,7 @@ const NotPeerEvalutors = () => {
           <button className="pe-action-btn" onClick={() => navigate("/Attendance")}>
             View Attendance
           </button>
-          <button className="pe-action-btn" onClick={() => navigate("/EvaluationRecords")}>
+          <button className="pe-action-btn" onClick={() => navigate("/EvaluationRate")}>
             View Evaluation
           </button>
         </div>

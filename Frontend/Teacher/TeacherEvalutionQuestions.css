@@ -80,6 +80,12 @@
     color: var(--teacher-text);
 }
 
+.teacher-desig {
+    margin: 6px 0 0;
+    font-size: 0.85rem;
+    color: var(--teacher-muted);
+}
+
 .progress-section {
     width: 100%;
     font-size: 0.85rem;
@@ -106,6 +112,81 @@
     padding: 28px;
     overflow-y: auto;
     background: var(--teacher-card);
+}
+
+/* Teacher information — main panel (always visible above questions) */
+.teq-teacher-info-card {
+    border: 1px solid var(--teacher-border);
+    border-radius: var(--teacher-radius-md);
+    overflow: hidden;
+    margin-bottom: 20px;
+    background: #fafcfb;
+}
+
+.teq-teacher-info-label {
+    background: #f4faf6;
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--teacher-text);
+    border-bottom: 1px solid var(--teacher-border);
+}
+
+.teq-teacher-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+}
+
+.teq-info-col {
+    padding: 14px 16px;
+    min-width: 0;
+}
+
+.teq-info-col-target {
+    border-left: 1px solid var(--teacher-border);
+    background: #fff;
+}
+
+.teq-info-heading {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--teacher-muted);
+    margin-bottom: 8px;
+}
+
+.teq-info-name {
+    margin: 0 0 4px;
+    font-size: 0.95rem;
+    color: var(--teacher-text);
+}
+
+.teq-info-meta {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--teacher-text-body);
+}
+
+.teq-info-id {
+    margin: 8px 0 0;
+    font-size: 0.72rem;
+    color: var(--teacher-muted);
+    font-family: ui-monospace, monospace;
+}
+
+@media (max-width: 768px) {
+    .teq-teacher-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .teq-info-col-target {
+        border-left: none;
+        border-top: 1px solid var(--teacher-border);
+    }
 }
 
 .section-title {
