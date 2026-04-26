@@ -16,6 +16,29 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    z-index: 0;
+}
+
+.dashboard-back-link {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #4caf50;
+    border: 1px solid #4caf50;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 200;
+    transition: 0.3s;
+}
+
+.dashboard-back-link:hover {
+    background: #4caf50;
+    color: white;
 }
 
 .top-logo-wrap { margin-bottom: 20px; }

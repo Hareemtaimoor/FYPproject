@@ -1,111 +1,190 @@
-/* EvaluateTeachers.css - Compact Dashboard Theme */
+@import "./TeacherTheme.css";
+
+/* EvaluateTeachers.css - compact faculty list */
 
 .compact-bg {
-    background-color: rgb(15, 59, 53);
-    height: 100vh;
-    width: 100vw;
+    background-color: var(--teacher-bg);
+    min-height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
-    overflow: hidden;
+    overflow-y: auto;
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: var(--teacher-font);
+    box-sizing: border-box;
 }
 
 .compact-content {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: 100vh;
     width: 100%;
-    max-width: 400px; /* Mobile Friendly */
-    padding: 5px 10px;
+    max-width: 400px;
+    padding: 8px 12px 20px;
     box-sizing: border-box;
 }
 
-/* Logo Section */
-.mini-logo-wrap { text-align: center; padding: 2px 0; flex-shrink: 0; }
-.mini-logo { width: 45px; height: 45px; }
-
-/* Mini Profile Card Styling */
-.mini-info-card {
-    background: white;
-    border-radius: 8px;
-    padding: 6px 12px;
-    margin-bottom: 8px;
+.mini-logo-wrap {
+    text-align: center;
+    padding: 4px 0;
     flex-shrink: 0;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
-.info-flex { display: flex; justify-content: space-between; align-items: center; }
-.p-name { font-size: 13px; margin: 0; color: #111; }
-.p-sub { font-size: 11px; margin: 1px 0; color: #555; }
-.mini-avatar { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #0f3b35; }
 
-/* Main List Card Styling */
+.mini-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    background: var(--teacher-card);
+    border-radius: 50%;
+    border: 2px solid var(--teacher-accent);
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.mini-info-card {
+    background: var(--teacher-card);
+    border-radius: var(--teacher-radius-md);
+    padding: 8px 14px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    box-shadow: var(--teacher-shadow);
+}
+
+.info-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.p-name {
+    font-size: 0.85rem;
+    margin: 0;
+    color: var(--teacher-text);
+}
+
+.p-sub {
+    font-size: 0.72rem;
+    margin: 2px 0 0;
+    color: var(--teacher-muted);
+}
+
+.mini-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--teacher-border);
+    object-fit: cover;
+}
+
 .mini-courses-card {
-    background: white;
-    border-radius: 12px;
-    padding: 10px;
-    flex: 0 1 60%; /* Card height control */
+    background: var(--teacher-card);
+    border-radius: var(--teacher-radius-lg);
+    padding: 12px;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     min-height: 0;
     margin-bottom: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: var(--teacher-shadow);
 }
 
-.mini-card-header { 
-    font-size: 14px; 
-    font-weight: bold; 
-    text-align: center; 
-    margin-bottom: 8px; 
-    color: rgb(15, 59, 53);
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
+.mini-card-header {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--teacher-text);
+    border-bottom: 1px solid var(--teacher-border);
+    padding-bottom: 6px;
 }
 
-.mini-scroll-box { overflow-y: auto; flex: 1; padding-right: 3px; }
-
-/* Row Styling */
-.mini-row { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 8px 0; 
-    border-bottom: 1px solid #f2f2f2; 
+.mini-scroll-box {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 3px;
 }
-.row-title { font-size: 12px; font-weight: 600; color: #222; }
-.row-sub { font-size: 10px; color: #777; display: block; }
 
-/* Button Styling */
+.mini-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.row-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--teacher-text-body);
+}
+
+.row-sub {
+    font-size: 0.65rem;
+    color: var(--teacher-muted);
+    display: block;
+}
+
 .mini-btn {
-    background: rgb(15, 59, 53);
-    color: white;
+    background: var(--teacher-bg-elevated);
+    color: var(--teacher-card);
     border: none;
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: var(--teacher-radius-md);
+    font-size: 0.72rem;
+    font-weight: 700;
     cursor: pointer;
+    font-family: var(--teacher-font);
+    transition: background-color 0.2s ease;
 }
 
-/* States */
-.btn-off { background: #999 !important; cursor: not-allowed; }
-.done-row { background: #f9f9f9; opacity: 0.8; }
-.ls-text-muted { color: #aaa !important; text-decoration: line-through; }
+.mini-btn:hover:not(:disabled) {
+    background: var(--teacher-accent);
+}
 
-/* Footer Section */
-.mini-footer { padding: 10px 0; text-align: center; flex-shrink: 0; }
+.btn-off {
+    background: #999 !important;
+    cursor: not-allowed;
+}
+
+.done-row {
+    background: #f9f9f9;
+    opacity: 0.85;
+}
+
+.ls-text-muted {
+    color: #aaa !important;
+    text-decoration: line-through;
+}
+
+.mini-footer {
+    padding: 12px 0;
+    text-align: center;
+    flex-shrink: 0;
+}
+
 .mini-logout {
-    background: white;
-    color: rgb(15, 59, 53);
+    background: var(--teacher-card);
+    color: var(--teacher-text);
     border: none;
-    padding: 10px 50px;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    padding: 10px 40px;
+    border-radius: var(--teacher-radius-pill);
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: var(--teacher-shadow);
     cursor: pointer;
+    font-family: var(--teacher-font);
+    transition: background-color 0.2s ease;
 }
 
-/* Scrollbar Styling */
-.mini-scroll-box::-webkit-scrollbar { width: 4px; }
-.mini-scroll-box::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+.mini-logout:hover {
+    background: var(--teacher-border);
+}
+
+.mini-scroll-box::-webkit-scrollbar {
+    width: 4px;
+}
+
+.mini-scroll-box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}

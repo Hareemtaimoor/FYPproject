@@ -9,7 +9,8 @@ import ApiEndPoint from '../unity.js';
 const ConfidentialQuestionsDashboard = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { courseNo, AridNo, teacherName, isLastSemester, teacherID } = location.state || {};
+    const { courseNo, AridNo, teacherName, teacherID, empNo, returnTo, returnState } = location.state || {};
+    const resolvedTeacherId = teacherID || empNo || "";
 
     const [studentProfile, setStudentProfile] = useState(null);
     const [questions, setQuestions] = useState([]);
@@ -32,10 +33,12 @@ const ConfidentialQuestionsDashboard = () => {
 
                 const qRes = await axios.get(`${ApiEndPoint}Student/GetQuestions`);
                 if (qRes.status === 200) {
-                    let fetchedQuestions = qRes.data;
-                    if (!isLastSemester) {
-                        fetchedQuestions = fetchedQuestions.filter(q => q.RawType !== 'S');
-                    }
+                    const type = (q) => String(q.RawType ?? "").trim().toUpperCase();
+                    // Confidential evaluation: only FT and FE type questions
+                    const fetchedQuestions = qRes.data.filter((q) => {
+                        const t = type(q);
+                        return t === "FT" || t === "FE";
+                    });
                     setQuestions(fetchedQuestions);
                 }
             } catch (err) { 
@@ -46,7 +49,15 @@ const ConfidentialQuestionsDashboard = () => {
             }
         };
         fetchData();
-    }, [AridNo, isLastSemester, navigate]);
+    }, [AridNo, navigate]);
+
+    const handleDashboardBack = () => {
+        if (returnTo) {
+            navigate(returnTo, { state: returnState ?? (AridNo ? { AridNo } : undefined) });
+            return;
+        }
+        navigate(-1);
+    };
 
     // ✨ NEW: Auto-next logic when selectedOption is updated
     useEffect(() => {
@@ -99,7 +110,7 @@ const ConfidentialQuestionsDashboard = () => {
         const finalAnswersList = { ...allAnswers, [qId]: selectedOption };
 
         const submissionData = {
-            Emp_no: teacherID || "", 
+            Emp_no: resolvedTeacherId,
             Reg_no: AridNo || "",
             Course_no: courseNo || "",
             Discipline: studentProfile?.Course || "BCS",
@@ -119,7 +130,7 @@ const ConfidentialQuestionsDashboard = () => {
             console.log(response);
             if (response.status === 200) {
                 alert("Evaluation stored successfully!");
-                navigate(-1); 
+                handleDashboardBack();
             }
         } catch (error) {
             const errorMsg = error.response?.data?.ExceptionMessage || error.response?.data?.Message || error.message;
@@ -132,9 +143,20 @@ const ConfidentialQuestionsDashboard = () => {
 
     if (loading) return <div className="questions-container"><div className="loading-text">Processing...</div></div>;
 
+    if (questions.length === 0) {
+        return (
+            <div className="questions-container">
+                <button type="button" className="dashboard-back-link" onClick={handleDashboardBack}>← Dashboard</button>
+                <div className="questions-scroll-area">
+                    <div className="loading-text">No FT/FE type questions available for confidential evaluation.</div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="questions-container">
-            <button className="dashboard-back-link" onClick={() => navigate(-1)}>← Dashboard</button>
+            <button type="button" className="dashboard-back-link" onClick={handleDashboardBack}>← Dashboard</button>
             <div className="questions-scroll-area">
                 <div className="top-logo-wrap"><img src={biitLogo} alt="Logo" className="header-logo-img" /></div>
                 

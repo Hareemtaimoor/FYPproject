@@ -118,7 +118,9 @@ const StudentDashboard = () => {
                                         courseName: course.CourseName, 
                                         teacherName: course.TeacherName, 
                                         teacherID: course.EmpNo,
-                                        AridNo: profile.AridNo 
+                                        AridNo: profile.AridNo,
+                                        returnTo: "/StudentDashboard",
+                                        returnState: { AridNo: profile.AridNo },
                                     } 
                                 })}
                             >
@@ -136,7 +138,7 @@ const StudentDashboard = () => {
                                 className={isConfDone ? "done-badge" : "evaluate-btn-solid"} 
                                 style={{ backgroundColor: isConfDone ? "" : "#b40f0f", width: '100%', cursor: isConfDone ? 'default' : 'pointer' }}
                                 disabled={isConfDone}
-                                onClick={() => navigate("/ConfidentalStudentEvaluationForm", { state: { AridNo } })}
+                                onClick={() => navigate("/ConfidentalStudentEvaluationForm", { state: { AridNo, backTo: "/StudentDashboard" } })}
                             >
                                 {isConfDone ? "✅ Confidential Done" : "🌟 Perform Confidential Evaluation"}
                             </button>

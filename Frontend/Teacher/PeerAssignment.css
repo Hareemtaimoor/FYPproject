@@ -1,169 +1,196 @@
+@import "./TeacherTheme.css";
+
 .peer-mobile-bg {
-  background-color: #1a2e28; /* Dark Green Background */
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--teacher-bg);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 12px 10px 24px;
+    font-family: var(--teacher-font);
+    box-sizing: border-box;
 }
 
 .peer-mobile-container {
-  width: 100%;
-  max-width: 450px; /* Mobile width constraint */
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .peer-header {
-  text-align: center;
-  padding: 10px 0;
+    text-align: center;
+    padding: 8px 0;
 }
 
 .peer-main-logo {
-  width: 70px;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    background: var(--teacher-card);
+    border-radius: 50%;
+    border: 3px solid var(--teacher-accent);
+    padding: 4px;
+    box-sizing: border-box;
 }
 
-/* Info Card Styling */
 .peer-info-card {
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    background: var(--teacher-card);
+    border-radius: var(--teacher-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--teacher-shadow);
 }
 
 .peer-card-label {
-  background: #f8f9fa;
-  padding: 8px;
-  text-align: center;
-  font-weight: bold;
-  color: #0f3b35;
-  border-bottom: 1px solid #eee;
+    background: #f4faf6;
+    padding: 10px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--teacher-text);
+    border-bottom: 1px solid var(--teacher-border);
+    font-size: 0.9rem;
 }
 
 .peer-info-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
 }
 
 .peer-text-details p {
-  margin: 4px 0;
-  color: #333;
-  font-size: 14px;
+    margin: 4px 0;
+    color: var(--teacher-text-body);
+    font-size: 0.88rem;
 }
 
 .peer-avatar-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #eee;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #eee;
+    border: 2px solid var(--teacher-border);
+    object-fit: cover;
 }
 
-/* Table Section Styling */
 .peer-data-card {
-  background: white;
-  border-radius: 15px;
-  border: 2px solid #2D463E;
-  overflow: hidden;
+    background: var(--teacher-card);
+    border-radius: var(--teacher-radius-lg);
+    border: 1px solid var(--teacher-border);
+    overflow: hidden;
+    box-shadow: var(--teacher-shadow);
 }
 
 .peer-table-header {
-  background: #0f3b35;
-  color: white;
-  padding: 12px;
-  text-align: center;
-  font-weight: bold;
+    background: var(--teacher-bg-elevated);
+    color: var(--teacher-card);
+    padding: 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95rem;
 }
 
 .peer-search-box {
-  padding: 10px;
-  background: #fff;
+    padding: 10px;
+    background: var(--teacher-card);
 }
 
 .peer-input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  text-align: center;
-  box-sizing: border-box;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--teacher-radius-pill);
+    border: 1px solid #ccc;
+    text-align: center;
+    box-sizing: border-box;
+    font-family: var(--teacher-font);
 }
 
 .peer-table-wrapper {
-  max-height: 300px;
-  overflow-y: auto;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .peer-main-table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .peer-main-table th {
-  background: #2D463E;
-  color: white;
-  padding: 10px;
-  font-size: 14px;
+    background: var(--teacher-bg-elevated);
+    color: var(--teacher-card);
+    padding: 10px;
+    font-size: 0.85rem;
 }
 
 .peer-main-table td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  text-align: center;
-  font-size: 14px;
-  color: #2D463E;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--teacher-text-body);
 }
 
-/* Custom Checkbox */
 .peer-checkbox {
-  width: 22px;
-  height: 22px;
-  border: 2px solid #0f3b35;
-  border-radius: 50%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--teacher-bg-elevated);
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
 }
 
 .peer-checkbox.checked {
-  background: #0f3b35;
+    background: var(--teacher-accent);
+    border-color: var(--teacher-accent);
 }
 
-/* Footer Buttons */
 .peer-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
 }
 
 .peer-submit-pill {
-  background: white;
-  color: #0f3b35;
-  border: none;
-  padding: 10px 40px;
-  border-radius: 25px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: var(--teacher-card);
+    color: var(--teacher-text);
+    border: none;
+    padding: 12px 40px;
+    border-radius: var(--teacher-radius-pill);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--teacher-shadow);
+    font-family: var(--teacher-font);
+    transition: background-color 0.2s ease;
+}
+
+.peer-submit-pill:hover:not(:disabled) {
+    background: var(--teacher-border);
 }
 
 .peer-submit-pill:disabled {
-  opacity: 0.6;
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
 .peer-home-btn {
-  background: white;
-  color: #0f3b35;
-  border: none;
-  padding: 8px 30px;
-  border-radius: 20px;
-  font-weight: bold;
-  cursor: pointer;
+    background: var(--teacher-card);
+    color: var(--teacher-text);
+    border: none;
+    padding: 10px 28px;
+    border-radius: var(--teacher-radius-pill);
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--teacher-font);
+    box-shadow: var(--teacher-shadow);
+    transition: background-color 0.2s ease;
+}
+
+.peer-home-btn:hover {
+    background: var(--teacher-border);
 }

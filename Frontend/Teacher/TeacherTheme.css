@@ -1,0 +1,19 @@
+/* Shared faculty UI tokens — aligned with Student / Director shells */
+:root {
+    --teacher-bg: #1a2e28;
+    --teacher-bg-elevated: #243d36;
+    --teacher-accent: #4caf50;
+    --teacher-accent-hover: #43a047;
+    --teacher-card: #ffffff;
+    --teacher-text: #1a2e28;
+    --teacher-text-body: #333333;
+    --teacher-muted: #666666;
+    --teacher-border: #e0e8e4;
+    --teacher-highlight: #d4af37;
+    --teacher-shadow: 0 4px 15px rgba(0, 0, 0, 0.28);
+    --teacher-radius-lg: 20px;
+    --teacher-radius-md: 14px;
+    --teacher-radius-pill: 25px;
+    --teacher-max: 420px;
+    --teacher-font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}

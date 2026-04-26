@@ -10,6 +10,7 @@ const ConfidentalStudentEvaluationForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const AridNo = location.state?.AridNo;
+    const backTo = location.state?.backTo || "/StudentDashboard";
 
     const [profile, setProfile] = useState(null);
     const [courses, setCourses] = useState([]);
@@ -60,6 +61,13 @@ const ConfidentalStudentEvaluationForm = () => {
 
     return (
         <div className="questions-container">
+            <button
+                type="button"
+                className="dashboard-back-link"
+                onClick={() => navigate(backTo, { state: { AridNo } })}
+            >
+                ← Back
+            </button>
             <div className="questions-scroll-area">
                 <div className="top-logo-wrap">
                     <img src={logo} alt="BIIT Logo" className="header-logo-img" />
@@ -124,7 +132,9 @@ const ConfidentalStudentEvaluationForm = () => {
                                         courseName: course.CourseName, 
                                         teacherName: course.TeacherName, 
                                         teacherID: course.EmpNo,
-                                        AridNo: profile.AridNo 
+                                        AridNo: profile.AridNo,
+                                        returnTo: "/ConfidentalStudentEvaluationForm",
+                                        returnState: { AridNo: profile.AridNo, backTo },
                                     } 
                                 })}
                             >

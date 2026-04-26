@@ -94,7 +94,11 @@ const SeniorTeacherCourse = () => {
         state: { 
             courseNo: teacher?.CourseCode, 
             AridNo: profile?.Reg_no,
-            empNo: teacher?.EmployeeID// Teacher ki ID jo humne API se li thi
+            empNo: teacher?.EmployeeID,
+            teacherID: teacher?.EmployeeID,
+            teacherName: teacher?.TeacherName || teacher?.Name || "",
+            returnTo: "/SeniorTeacherCourse",
+            returnState: { courseNo, AridNo },
         } 
     })}
                         >

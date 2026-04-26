@@ -1,111 +1,226 @@
+@import "./TeacherTheme.css";
+
 .chr-mobile-bg {
-    background-color: #0f3b35;
+    background-color: var(--teacher-bg);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 20px;
+    padding-bottom: 24px;
+    font-family: var(--teacher-font);
 }
 
 .chr-container {
     width: 100%;
-    max-width: 420px;
+    max-width: var(--teacher-max);
 }
 
 .chr-main-logo {
-    width: 80px;
-    margin: 20px auto;
+    width: 76px;
+    height: 76px;
+    margin: 18px auto;
     display: block;
+    object-fit: contain;
+    background: var(--teacher-card);
+    border-radius: 50%;
+    border: 3px solid var(--teacher-accent);
+    padding: 4px;
+    box-sizing: border-box;
 }
 
-/* History Dropdown Style */
 .chr-date-selector {
     padding: 0 15px;
     margin-bottom: 10px;
 }
-.dropdown-label { color: #ffd700; font-size: 0.8rem; margin-left: 5px; }
+
+.dropdown-label {
+    color: var(--teacher-highlight);
+    font-size: 0.8rem;
+    margin-left: 5px;
+}
+
 .history-dropdown {
     width: 100%;
     padding: 12px;
-    border-radius: 20px;
+    border-radius: var(--teacher-radius-pill);
     border: none;
-    font-weight: bold;
-    color: #0f3b35;
+    font-weight: 600;
+    color: var(--teacher-text);
+    font-family: var(--teacher-font);
+    box-sizing: border-box;
 }
 
-/* Teacher Card */
-/* Info Card Style - Compressed Height */
 .chr-info-card {
-    background-color: white;
-    width: 95%; /* Taake edges se touch na ho */
-    padding: 8px 15px; /* Padding kam kar di height choti karne ke liye */
-    margin: 10px auto; /* Margin kam kiya */
-    border-radius: 8px; /* Classic slim look */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: var(--teacher-card);
+    width: 95%;
+    padding: 8px 15px;
+    margin: 10px auto;
+    border-radius: var(--teacher-radius-md);
+    box-shadow: var(--teacher-shadow);
 }
 
 .chr-card-label {
     text-align: center;
-    font-size: 14px; /* Font size thora chota kiya */
-    margin: 0 0 5px 0; /* Spacing khatam ki */
-    color: #0f3b35;
-    font-weight: bold;
-    border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 2px;
+    font-size: 0.88rem;
+    margin: 0 0 5px 0;
+    color: var(--teacher-text);
+    font-weight: 700;
+    border-bottom: 1px solid var(--teacher-border);
+    padding-bottom: 4px;
 }
 
 .chr-info-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50px; /* Fix height taake card phele na */
+    height: 50px;
 }
 
 .chr-text-details p {
-    margin: 1px 0; /* Lines ke darmiyan space kam ki */
-    font-size: 12px;
-    color: #444;
+    margin: 1px 0;
+    font-size: 0.75rem;
+    color: var(--teacher-text-body);
 }
 
-.chr-avatar-img { 
-    width: 45px; /* Profile picture ka size thora chota kiya */
-    height: 45px; 
-    border-radius: 50%; 
-    border: 1px solid #0f3b35;
+.chr-avatar-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--teacher-border);
+    object-fit: cover;
 }
-/* White Table Design */
+
 .chr-report-card-white {
-    background: white;
+    background: var(--teacher-card);
     margin: 15px;
-    border-radius: 15px;
+    border-radius: var(--teacher-radius-lg);
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: var(--teacher-shadow);
 }
+
 .chr-table-header-dark {
-    background: #0f3b35;
-    color: white;
+    background: var(--teacher-bg-elevated);
+    color: var(--teacher-card);
     padding: 10px;
     text-align: center;
-}
-.chr-date-sub-gold { color: #ffd700; font-size: 0.8rem; }
-
-.chr-main-table-white { width: 100%; border-collapse: collapse; }
-.chr-main-table-white th { background: #f8f8f8; padding: 10px; font-size: 0.8rem; color: #0f3b35; border-bottom: 2px solid #0f3b35; }
-.chr-main-table-white td { padding: 12px 5px; text-align: center; font-size: 0.8rem; border-bottom: 1px solid #eee; }
-
-.status-red { color: red; font-weight: bold; }
-.status-green { color: green; font-weight: bold; }
-.mini-loader, .no-data { padding: 30px; text-align: center; color: #888; }
-
-/* Modal & Footer */
-.chr-footer { text-align: center; margin-top: 10px; }
-.chr-add-comment { color: #ffd700; cursor: pointer; text-decoration: underline; margin-bottom: 10px; }
-.chr-home-btn { 
-    background: white; color: #0f3b35; border: none; 
-    padding: 10px 40px; border-radius: 20px; font-weight: bold; cursor: pointer;
+    font-weight: 600;
 }
 
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; }
-.modal-content { background: white; padding: 20px; border-radius: 15px; width: 80%; }
-.modal-content textarea { width: 100%; height: 80px; margin: 10px 0; }
-.save-btn { background: #0f3b35; color: white; border: none; padding: 8px 15px; border-radius: 5px; }
+.chr-date-sub-gold {
+    color: var(--teacher-highlight);
+    font-size: 0.8rem;
+}
+
+.chr-main-table-white {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.chr-main-table-white th {
+    background: #f4faf6;
+    padding: 10px;
+    font-size: 0.8rem;
+    color: var(--teacher-text);
+    border-bottom: 2px solid var(--teacher-accent);
+}
+
+.chr-main-table-white td {
+    padding: 12px 5px;
+    text-align: center;
+    font-size: 0.8rem;
+    border-bottom: 1px solid #eee;
+}
+
+.status-red {
+    color: #c62828;
+    font-weight: bold;
+}
+
+.status-green {
+    color: var(--teacher-accent-hover);
+    font-weight: bold;
+}
+
+.mini-loader,
+.no-data {
+    padding: 30px;
+    text-align: center;
+    color: var(--teacher-muted);
+}
+
+.chr-footer {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.chr-add-comment {
+    color: var(--teacher-highlight);
+    cursor: pointer;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+
+.chr-home-btn {
+    background: var(--teacher-card);
+    color: var(--teacher-text);
+    border: none;
+    padding: 10px 40px;
+    border-radius: var(--teacher-radius-pill);
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--teacher-font);
+    box-shadow: var(--teacher-shadow);
+    transition: background-color 0.2s ease;
+}
+
+.chr-home-btn:hover {
+    background: var(--teacher-border);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--teacher-card);
+    padding: 20px;
+    border-radius: var(--teacher-radius-lg);
+    width: 80%;
+    max-width: 360px;
+    font-family: var(--teacher-font);
+}
+
+.modal-content textarea {
+    width: 100%;
+    height: 80px;
+    margin: 10px 0;
+    border-radius: var(--teacher-radius-md);
+    border: 1px solid #ccc;
+    padding: 8px;
+    box-sizing: border-box;
+    font-family: var(--teacher-font);
+}
+
+.save-btn {
+    background: var(--teacher-accent);
+    color: var(--teacher-card);
+    border: none;
+    padding: 8px 18px;
+    border-radius: var(--teacher-radius-pill);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--teacher-font);
+}
+
+.save-btn:hover {
+    background: var(--teacher-accent-hover);
+}

@@ -1,49 +1,215 @@
-.att-mobile-bg { background-color: #0f3b35; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-bottom: 20px; }
-.att-container { width: 100%; max-width: 420px; }
-.att-main-logo { width: 80px; margin: 20px auto; display: block; }
+@import "./TeacherTheme.css";
 
-.att-info-card { background: white; width: 95%; padding: 8px 15px; margin: 10px auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.att-card-label { text-align: center; font-size: 14px; color: #0f3b35; font-weight: bold; border-bottom: 1px solid #f0f0f0; padding-bottom: 2px; }
-.att-info-content { display: flex; justify-content: space-between; align-items: center; height: 50px; }
-.att-text-details p { margin: 1px 0; font-size: 12px; color: #444; }
-.att-avatar-img { width: 45px; height: 45px; border-radius: 50%; border: 1px solid #0f3b35; }
+.att-mobile-bg {
+    background-color: var(--teacher-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 24px;
+    font-family: var(--teacher-font);
+}
 
-.att-data-card-white { background: white; margin: 15px; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-.att-table-header-dark { background: #0f3b35; color: white; padding: 10px; text-align: center; font-weight: bold; }
-.att-date-sub-gold { color: #ffd700; font-size: 0.8rem; }
-.att-main-table-white { width: 100%; border-collapse: collapse; }
-.att-main-table-white th { background: #f8f8f8; padding: 10px; font-size: 0.8rem; color: #0f3b35; border-bottom: 2px solid #0f3b35; }
-.att-main-table-white td { padding: 12px 5px; text-align: center; font-size: 0.75rem; border-bottom: 1px solid #eee; }
+.att-container {
+    width: 100%;
+    max-width: var(--teacher-max);
+}
 
-.att-red { color: red; font-weight: bold; }
-.att-green { color: green; font-weight: bold; }
-.att-footer { text-align: center; margin-top: 10px; }
-.att-add-comment { color: #ffd700; text-decoration: underline; margin-bottom: 10px; display: block; cursor: pointer; }
-.att-home-btn { background: white; color: #0f3b35; border: none; padding: 10px 40px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+.att-main-logo {
+    width: 76px;
+    height: 76px;
+    margin: 18px auto;
+    display: block;
+    object-fit: contain;
+    background: var(--teacher-card);
+    border-radius: 50%;
+    border: 3px solid var(--teacher-accent);
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+.att-info-card {
+    background: var(--teacher-card);
+    width: 95%;
+    padding: 8px 15px;
+    margin: 10px auto;
+    border-radius: var(--teacher-radius-md);
+    box-shadow: var(--teacher-shadow);
+}
+
+.att-card-label {
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--teacher-text);
+    font-weight: 700;
+    border-bottom: 1px solid var(--teacher-border);
+    padding-bottom: 4px;
+}
+
+.att-info-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+.att-text-details p {
+    margin: 1px 0;
+    font-size: 0.75rem;
+    color: var(--teacher-text-body);
+}
+
+.att-avatar-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--teacher-border);
+    object-fit: cover;
+}
+
+.att-data-card-white {
+    background: var(--teacher-card);
+    margin: 15px;
+    border-radius: var(--teacher-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--teacher-shadow);
+}
+
+.att-table-header-dark {
+    background: var(--teacher-bg-elevated);
+    color: var(--teacher-card);
+    padding: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.att-date-sub-gold {
+    color: var(--teacher-highlight);
+    font-size: 0.8rem;
+}
+
+.att-main-table-white {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.att-main-table-white th {
+    background: #f4faf6;
+    padding: 10px;
+    font-size: 0.8rem;
+    color: var(--teacher-text);
+    border-bottom: 2px solid var(--teacher-accent);
+}
+
+.att-main-table-white td {
+    padding: 12px 5px;
+    text-align: center;
+    font-size: 0.75rem;
+    border-bottom: 1px solid #eee;
+}
+
+.att-red {
+    color: #c62828;
+    font-weight: bold;
+}
+
+.att-green {
+    color: var(--teacher-accent-hover);
+    font-weight: bold;
+}
+
+.att-footer {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.att-add-comment {
+    color: var(--teacher-highlight);
+    text-decoration: underline;
+    margin-bottom: 10px;
+    display: block;
+    cursor: pointer;
+}
+
+.att-home-btn {
+    background: var(--teacher-card);
+    color: var(--teacher-text);
+    border: none;
+    padding: 10px 40px;
+    border-radius: var(--teacher-radius-pill);
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--teacher-font);
+    box-shadow: var(--teacher-shadow);
+    transition: background-color 0.2s ease;
+}
+
+.att-home-btn:hover {
+    background: var(--teacher-border);
+}
+
 .att-modal-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
 }
+
 .att-modal-box {
-  background: white; padding: 20px; border-radius: 12px;
-  width: 85%; max-width: 350px; text-align: center;
+    background: var(--teacher-card);
+    padding: 20px;
+    border-radius: var(--teacher-radius-lg);
+    width: 85%;
+    max-width: 350px;
+    text-align: center;
+    font-family: var(--teacher-font);
 }
+
 .att-modal-input {
-  width: 100%; height: 80px; margin: 15px 0;
-  padding: 10px; border-radius: 8px; border: 1px solid #ccc;
-  box-sizing: border-box; resize: none;
+    width: 100%;
+    height: 80px;
+    margin: 15px 0;
+    padding: 10px;
+    border-radius: var(--teacher-radius-md);
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: none;
+    font-family: var(--teacher-font);
 }
+
 .att-modal-btns {
-  display: flex; justify-content: space-around;
+    display: flex;
+    justify-content: space-around;
 }
+
 .att-btn-save {
-  background: #0f3b35; color: white; border: none;
-  padding: 8px 25px; border-radius: 20px; cursor: pointer;
+    background: var(--teacher-accent);
+    color: var(--teacher-card);
+    border: none;
+    padding: 8px 25px;
+    border-radius: var(--teacher-radius-pill);
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--teacher-font);
 }
+
+.att-btn-save:hover {
+    background: var(--teacher-accent-hover);
+}
+
 .att-btn-cancel {
-  background: #ff4444; color: white; border: none;
-  padding: 8px 20px; border-radius: 20px; cursor: pointer;
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: var(--teacher-radius-pill);
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--teacher-font);
 }

@@ -1,24 +1,27 @@
+@import "./TeacherTheme.css";
+
 /* TeacherDashboard_HOD.css */
 
 .hod-dashboard-wrapper {
-    background-color: #0f3b35; /* Dark Green Background */
-    height: 100vh;
-    width: 100vw;
+    background-color: var(--teacher-bg);
+    min-height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
-    overflow-y: auto; /* Scroll if content is long */
+    overflow-y: auto;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: var(--teacher-font);
 }
 
 .hod-mobile-container {
     width: 100%;
-    max-width: 400px;
-    padding: 15px;
+    max-width: var(--teacher-max);
+    padding: 16px 15px 32px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .hod-logo-header {
@@ -27,102 +30,115 @@
 }
 
 .hod-main-logo {
-    width: 80px;
-    height: 80px;
+    width: 76px;
+    height: 76px;
     object-fit: contain;
+    background-color: var(--teacher-card);
+    border-radius: 50%;
+    border: 3px solid var(--teacher-accent);
+    padding: 4px;
+    box-sizing: border-box;
 }
 
-/* White Cards with Borders */
 .hod-section-card {
-    background-color: white;
+    background-color: var(--teacher-card);
     width: 100%;
-    border-radius: 12px;
+    border-radius: var(--teacher-radius-lg);
     overflow: hidden;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    margin-bottom: 16px;
+    box-shadow: var(--teacher-shadow);
 }
 
-/* Dark Green Header Inside Card */
 .hod-section-header {
-    background-color: #0d5c4b;
-    color: white;
+    background-color: var(--teacher-bg-elevated);
+    color: var(--teacher-card);
     text-align: center;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: 500;
+    padding: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
-/* Info Body Layout */
 .hod-info-body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: 16px 18px;
 }
 
 .hod-text-info p {
-    margin: 5px 0;
-    font-size: 15px;
-    color: #333;
+    margin: 6px 0;
+    font-size: 0.9rem;
+    color: var(--teacher-text-body);
 }
 
 .hod-profile-img {
-    width: 65px;
-    height: 65px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background-color: #eee;
+    border: 2px solid var(--teacher-border);
+    object-fit: cover;
 }
 
-/* Buttons List Styling */
 .hod-buttons-list {
-    padding: 20px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
 .hod-action-btn {
-    background-color: #0f3b35;
-    color: white;
+    background-color: var(--teacher-bg-elevated);
+    color: var(--teacher-card);
     border: none;
-    padding: 14px;
-    border-radius: 30px; /* Pill Shape */
-    font-size: 15px;
-    font-weight: bold;
+    padding: 14px 16px;
+    border-radius: var(--teacher-radius-pill);
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
     width: 100%;
-    transition: background 0.2s;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    font-family: var(--teacher-font);
+}
+
+.hod-action-btn:hover {
+    background-color: var(--teacher-accent);
 }
 
 .hod-action-btn:active {
-    background-color: #144d45;
+    transform: scale(0.99);
 }
 
-/* Logout Styling */
 .hod-footer {
-    margin-top: 10px;
-    padding-bottom: 30px;
+    margin-top: 8px;
+    padding-bottom: 16px;
 }
 
 .hod-logout-pill {
-    background: white;
-    color: #000;
+    background: var(--teacher-card);
+    color: var(--teacher-text);
     border: none;
-    padding: 10px 35px;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 16px;
+    padding: 10px 32px;
+    border-radius: var(--teacher-radius-pill);
+    font-weight: 700;
+    font-size: 0.95rem;
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: var(--teacher-shadow);
     cursor: pointer;
+    font-family: var(--teacher-font);
+    transition: background-color 0.2s ease;
+}
+
+.hod-logout-pill:hover {
+    background-color: var(--teacher-border);
 }
 
 .logout-icon {
-    background-color: #4da3ff;
-    color: white;
-    border-radius: 4px;
-    padding: 2px 5px;
+    background-color: var(--teacher-accent);
+    color: var(--teacher-card);
+    border-radius: 6px;
+    padding: 2px 6px;
     font-size: 12px;
 }

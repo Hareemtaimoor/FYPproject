@@ -118,7 +118,14 @@ const LastSemStudentDashboard = () => {
                                     className={`ls-eval-btn ${course.isDone ? "ls-btn-disabled" : ""}`}
                                     disabled={course.isDone}
                                     onClick={() => navigate("/StudentQuestionsDashboard", { 
-                                        state: { courseNo: course.CourseNo, AridNo: profile?.AridNo, teacherName: course.TeacherName,teacherID: course.EmpNo  } 
+                                        state: { 
+                                            courseNo: course.CourseNo, 
+                                            AridNo: profile?.AridNo, 
+                                            teacherName: course.TeacherName,
+                                            teacherID: course.EmpNo,
+                                            returnTo: "/LastSemStudentDashboard",
+                                            returnState: { AridNo: profile?.AridNo },
+                                        } 
                                     })}
                                 >
                                     {course.isDone ? "Done" : "Evaluate"}
@@ -139,7 +146,13 @@ const LastSemStudentDashboard = () => {
                                 className={`ls-eval-btn ${supervisor.isDone ? "ls-btn-disabled" : ""}`}
                                 disabled={supervisor.isDone}
                                 onClick={() => navigate("/StudentQuestionsDashboard", { 
-                                    state: { courseNo: "FYP-EVAL", AridNo: profile.AridNo.trim(), teacherName: supervisor.name } 
+                                    state: { 
+                                        courseNo: "FYP-EVAL", 
+                                        AridNo: profile.AridNo.trim(), 
+                                        teacherName: supervisor.name,
+                                        returnTo: "/LastSemStudentDashboard",
+                                        returnState: { AridNo: profile.AridNo.trim() },
+                                    } 
                                 })}
                             >
                                 {supervisor.isDone ? "Done" : "Evaluate"}

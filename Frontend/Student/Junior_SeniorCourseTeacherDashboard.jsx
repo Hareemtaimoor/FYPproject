@@ -96,9 +96,12 @@ const CourseTeacherDashboard = () => {
                     state: { 
                       AridNo: AridNo, 
                       courseNo: courseNo, 
-                      empNo: teacher.empNo, // Pass teacher ID
+                      empNo: teacher.empNo,
+                      teacherID: teacher.empNo,
                       teacherName: teacher.name,
-                      designation: teacher.role
+                      designation: teacher.role,
+                      returnTo: "/Junior_SeniorCourseTeacherDashboard",
+                      returnState: { AridNo, courseNo },
                     } 
                   })}
                 >

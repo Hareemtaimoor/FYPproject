@@ -1,118 +1,197 @@
-html, body, #root {
-  margin: 0; padding: 0;
-  width: 100%; height: 100%;
-  background-color: #0f3b35;
-  font-family: 'Segoe UI', sans-serif;
-}
+@import "./TeacherTheme.css";
 
 .web-main-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--teacher-bg);
+    font-family: var(--teacher-font);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 16px;
+    box-sizing: border-box;
 }
 
 .eval-rate-card {
-  background-color: #ffffff;
-  width: 100%;
-  max-width: 900px;
-  display: flex;
-  flex-direction: row;
-  border-radius: 30px;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    background-color: var(--teacher-card);
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: row;
+    border-radius: var(--teacher-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--teacher-shadow);
 }
 
-/* Sidebar */
 .eval-sidebar {
-  flex: 0.7;
-  background-color: #f8fcfb;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
-  border-right: 1px solid #eee;
+    flex: 0.7;
+    background-color: #f4faf6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 20px;
+    border-right: 1px solid var(--teacher-border);
 }
 
-.card-logo { width: 70px; margin-bottom: 20px; }
-.avatar-wrapper {
-  width: 100px; height: 100px;
-  border-radius: 50%; border: 3px solid #0f3b35;
-  overflow: hidden; margin-bottom: 15px;
-  display: flex; justify-content: center; align-items: center;
+.card-logo {
+    width: 68px;
+    margin-bottom: 18px;
+    border-radius: 50%;
+    border: 3px solid var(--teacher-accent);
+    padding: 4px;
+    background: white;
+    box-sizing: border-box;
 }
-.avatar-img { width: 100%; height: 100%; object-fit: cover; }
-.user-name { color: #1a1a1a; font-size: 1.2rem; font-weight: 700; text-align: center; }
-.user-role { color: #666; font-size: 0.9rem; }
+
+.avatar-wrapper {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 3px solid var(--teacher-accent);
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    text-align: center;
+}
+
+.user-name {
+    color: var(--teacher-text);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+
+.user-role {
+    color: var(--teacher-muted);
+    font-size: 0.9rem;
+    margin: 0;
+}
 
 .home-action-btn {
-  margin-top: auto;
-  background: #0f3b35; color: white;
-  border: none; padding: 12px 30px;
-  border-radius: 25px; cursor: pointer;
-  font-weight: 700; width: 100%;
+    margin-top: auto;
+    background: var(--teacher-bg-elevated);
+    color: var(--teacher-card);
+    border: none;
+    padding: 12px 28px;
+    border-radius: var(--teacher-radius-pill);
+    cursor: pointer;
+    font-weight: 700;
+    width: 100%;
+    font-family: var(--teacher-font);
+    transition: background-color 0.2s ease;
 }
 
-/* Content Area */
+.home-action-btn:hover {
+    background: var(--teacher-accent);
+}
+
 .eval-rate-content {
-  flex: 1.3;
-  padding: 40px;
-  background-color: #204d45; /* Dark Green Inner Card style */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    flex: 1.3;
+    padding: 36px;
+    background-color: var(--teacher-bg-elevated);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.content-title { color: #ffffff; font-size: 1.8rem; margin-bottom: 40px; text-align: center; }
+.content-title {
+    color: #ffffff;
+    font-size: 1.65rem;
+    margin-bottom: 32px;
+    text-align: center;
+}
 
-/* Stats Grid & Circles */
 .stats-grid {
-  display: flex;
-  justify-content: space-around;
-  gap: 20px;
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
 }
 
 .stat-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
 }
 
-.stat-label { color: #ffffff; font-size: 0.9rem; margin-bottom: 15px; font-weight: 500; }
+.stat-label {
+    color: #ffffff;
+    font-size: 0.88rem;
+    margin-bottom: 14px;
+    font-weight: 500;
+    text-align: center;
+}
 
 .progress-circle {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 8px solid #9fe0c3; /* Outer Ring */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent;
-  margin-bottom: 15px;
-  transition: transform 0.3s ease;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 8px solid rgba(76, 175, 80, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    margin-bottom: 14px;
+    transition: transform 0.3s ease;
 }
 
-.progress-circle:hover { transform: scale(1.1); }
+.progress-circle:hover {
+    transform: scale(1.05);
+}
 
-.percent-text { color: #ffffff; font-size: 1.2rem; font-weight: 800; }
-.rating-text { color: #c8f5dd; font-size: 0.9rem; font-weight: 600; }
+.percent-text {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.rating-text {
+    color: #c8f0d4;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
 
 .summary-footer {
-  margin-top: 40px;
-  text-align: center;
-  color: #c8f5dd;
-  font-size: 0.85rem;
-  line-height: 1.5;
+    margin-top: 36px;
+    text-align: center;
+    color: #c8f0d4;
+    font-size: 0.85rem;
+    line-height: 1.5;
 }
 
-/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
-  .eval-rate-card { flex-direction: column; height: auto; max-height: 95vh; overflow-y: auto; }
-  .eval-sidebar { border-right: none; border-bottom: 1px solid #eee; padding: 30px; }
-  .eval-rate-content { padding: 30px 15px; }
-  .stats-grid { flex-direction: column; gap: 40px; }
-  .progress-circle { width: 120px; height: 120px; }
+    .eval-rate-card {
+        flex-direction: column;
+        max-height: none;
+    }
+
+    .eval-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--teacher-border);
+        padding: 28px 20px;
+    }
+
+    .eval-rate-content {
+        padding: 28px 16px;
+    }
+
+    .stats-grid {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .progress-circle {
+        width: 112px;
+        height: 112px;
+    }
 }
