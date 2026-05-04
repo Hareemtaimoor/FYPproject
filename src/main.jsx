@@ -23,6 +23,7 @@ import CHR from '../Frontend/Teacher/CHR.jsx';
 import Attendance from '../Frontend/Teacher/Attendance.jsx';
 import RCEvaluation from '../Frontend/Director/TeacherPerfomance/RCEvaluation.jsx';
 import CompareScreenFrom_C_T from '../Frontend/Director/TeacherPerfomance/CompareScreenFrom_C_T.jsx';
+import GenderAnalytics from '../Frontend/Director/TeacherPerfomance/GenderAnalytics.jsx';
 import ConfidentalStudentEvaluationForm from '../Frontend/Student/ConfidentalStudentEvaluationForm.jsx';
 import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
 import ConfidentialDecryptor from '../Frontend/Director/ConfidentialDecryptor.jsx';
@@ -64,6 +65,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/TeacherPerformance" element={<TeacherPerfomance/>} /> {/* Spelling Match with Dashboard */}
         <Route path="/RCEvaluation" element={<RCEvaluation />} />
         <Route path="/CompareScreenFrom_C_T" element={<CompareScreenFrom_C_T />} />
+        <Route path="/GenderAnalytics" element={<GenderAnalytics />} />
         <Route path="/ConfidentialDecryptor" element={<ConfidentialDecryptor />} />
         <Route path="/ConfidentialDecryptorTable" element={<ConfidentialDecryptorTable />} />
         {/* <Route path="/AllAssignedCourseTeachers" element={<AllAssignedCourseTeachers />} /> */}
