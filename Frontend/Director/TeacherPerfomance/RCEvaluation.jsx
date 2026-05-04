@@ -1,188 +1,217 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// Assuming you have this file or a similar config
-import APIEndPoint from '../../unity.js';
+import APIEndPoint from "../../unity.js";
+import "./RCEvaluation.css";
+import logo from "../../Images/Biit_Logo.png";
+import avatar from "../../Images/maleAvatar.png";
 
-const RCEvaluation = ({ navigation }) => {
+const api = (path) => `${APIEndPoint}${path.replace(/^\//, "")}`;
+
+const RCEvaluation = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Teachers");
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState("");
   const [dataList, setDataList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [message, setMessage] = useState("");
 
-  // 1. Fetch Sessions for the Dropdown
-  const fetchSessions = async () => {
-    try {
-      const response = await axios.get(`${APIEndPoint}/Director/GetAllSessions`);
-      setSessions(response.data);
-      if (response.data.length > 0) {
-        setSelectedSession(response.data[0]);
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const response = await axios.get(api("Director/GetAllSessions"));
+        const list = Array.isArray(response.data) ? response.data : [];
+        setSessions(list);
+        if (list.length > 0) setSelectedSession(list[0]);
+      } catch (error) {
+        console.error("Session Load Error", error);
+        setMessage("Could not load sessions.");
       }
-    } catch (error) {
-      console.error("Could not load sessions.", error);
-    }
-  };
+    };
+    fetchSessions();
+  }, []);
 
-  // 2. Main Logic to Fetch and Merge Data (The "Friend's Logic")
-  const fetchData = async () => {
-    if (!selectedSession) return;
-    setLoading(true);
-    try {
-      let endpoint = "";
-      if (activeTab === "Teachers") {
-        endpoint = `${APIEndPoint}/Director/GetAllocatedTeachers?session=${encodeURIComponent(selectedSession)}`;
-      } else if (activeTab === "Courses") {
-        endpoint = `${APIEndPoint}/Director/GetAllocatedCourses?session=${encodeURIComponent(selectedSession)}`;
-      } else {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!selectedSession) return;
+      setLoading(true);
+      setSelectedItems([]);
+      setMessage("");
+
+      if (activeTab === "Confidential") {
         setDataList([]);
         setLoading(false);
+        setMessage("Confidential list will appear here after API integration.");
         return;
       }
 
-      // Step A: Fetch Main List
-      const response = await axios.get(endpoint);
-      let fetchedData = response.data;
+      try {
+        const endpoint =
+          activeTab === "Teachers"
+            ? api(`Director/GetAllocatedTeachers?session=${encodeURIComponent(selectedSession)}`)
+            : api(`Director/GetAllocatedCourses?session=${encodeURIComponent(selectedSession)}`);
 
-      // Step B: If Teachers Tab, fetch ratings and Merge (Extra logic added here)
-      if (activeTab === "Teachers") {
-        try {
-          const ratingRes = await axios.get(
-            `${APIEndPoint}/Director/GetTeacherAverageRatings?session=${encodeURIComponent(selectedSession)}`
-          );
-          const ratingsMap = ratingRes.data;
+        const response = await axios.get(endpoint);
+        let fetchedData = Array.isArray(response.data) ? response.data : [];
 
-          fetchedData = fetchedData.map((teacher) => {
-            const ratingObj = ratingsMap.find(
-              (r) => 
-                String(r.TeacherID).trim().toUpperCase() === 
-                String(teacher.TeacherID).trim().toUpperCase()
+        if (activeTab === "Teachers") {
+          try {
+            const ratingRes = await axios.get(
+              api(`Director/GetTeacherAverageRatings?session=${encodeURIComponent(selectedSession)}`)
             );
-            
-            return {
-              ...teacher,
-              AverageRating: ratingObj ? ratingObj.AverageRating.toFixed(1) : "N/A",
-            };
-          });
-        } catch (e) {
-          console.log("Ratings fetch failed, showing list without ratings.");
+            const ratingList = Array.isArray(ratingRes.data) ? ratingRes.data : [];
+            fetchedData = fetchedData.map((teacher) => {
+              const match = ratingList.find(
+                (r) =>
+                  String(r.TeacherID).trim().toUpperCase() ===
+                  String(teacher.TeacherID).trim().toUpperCase()
+              );
+              return {
+                ...teacher,
+                AverageRating:
+                  match && match.AverageRating != null ? Number(match.AverageRating).toFixed(1) : "N/A",
+              };
+            });
+          } catch {
+            // keep teacher list without ratings
+          }
         }
+
+        setDataList(fetchedData);
+        if (fetchedData.length === 0) setMessage("No records found for selected session.");
+      } catch (error) {
+        console.error("Data Load Error", error);
+        setDataList([]);
+        setMessage("Could not load records. Please check API connection.");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setDataList(fetchedData);
-    } catch (error) {
-      setDataList([]);
-      console.error("API Error:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { fetchSessions(); }, []);
-  useEffect(() => { fetchData(); }, [activeTab, selectedSession]);
+    fetchData();
+  }, [activeTab, selectedSession]);
 
   const toggleSelection = (id) => {
-    setSelectedItems(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
+    if (id == null) return;
+    setSelectedItems((prev) => (prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]));
+  };
+
+  const handleCompare = () => {
+    if (selectedItems.length < 2) return;
+    alert("Compare flow is ready. You can now wire this button to your compare screen.");
   };
 
   return (
-    <div className="min-h-screen bg-[#0f3b35] p-4 text-white font-sans">
-      {/* Header Card */}
-      <div className="bg-white text-black rounded-xl p-4 flex justify-between items-center mb-4 shadow-lg">
-        <div>
-          <h2 className="font-bold text-lg">Director Information</h2>
-          <p className="text-sm text-gray-600">Name: DR. MOHAMMAD JAMIL SAWAR</p>
-          <p className="text-sm text-gray-600">Designation: Administrative Head</p>
+    <div className="rc-page">
+      <div className="rc-container">
+        <div className="rc-logo-wrap">
+          <img src={logo} alt="BIIT Logo" className="rc-logo" />
         </div>
-        <img 
-          src="/path-to-your-avatar.png" 
-          alt="avatar" 
-          className="w-12 h-12 rounded-full border border-gray-200" 
-        />
-      </div>
 
-      {/* Tabs */}
-      <div className="flex bg-white/10 p-1 rounded-lg mb-4">
-        {["Teachers", "Courses", "Confidential"].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => { setActiveTab(tab); setSelectedItems([]); }}
-            className={`flex-1 py-2 rounded-md text-sm transition-all ${
-              activeTab === tab ? "bg-white text-[#0f3b35] font-bold" : "text-gray-300"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+        <div className="rc-card rc-profile-card">
+          <div className="rc-card-title">Director Information</div>
+          <div className="rc-profile-body">
+            <div className="rc-profile-text">
+              <p>
+                Name: <strong>Dr. Jamil Sawar</strong>
+              </p>
+              <p>Designation: Director</p>
+            </div>
+            <img src={avatar} alt="Director" className="rc-avatar" />
+          </div>
+        </div>
 
-      {/* Session Picker */}
-      <select 
-        value={selectedSession} 
-        onChange={(e) => setSelectedSession(e.target.value)}
-        className="w-full p-2 mb-4 rounded bg-white text-black focus:outline-none"
-      >
-        <option value="" disabled>Select Session</option>
-        {sessions.map((s, i) => <option key={i} value={s}>{s}</option>)}
-      </select>
+        <div className="rc-tabs">
+          {["Teachers", "Courses", "Confidential"].map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              className={`rc-tab-btn ${activeTab === tab ? "active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
 
-      {/* List Container */}
-      <div className="flex-1 overflow-y-auto mb-4" style={{ maxHeight: '60vh' }}>
-        {loading ? (
-          <div className="text-center py-10 italic">Loading data...</div>
-        ) : dataList.length === 0 ? (
-          <div className="text-center py-10 opacity-50">No data available</div>
-        ) : (
-          dataList.map((item, index) => {
-            const id = item.TeacherID || item.CourseNo;
-            const isSelected = selectedItems.includes(id);
-            return (
-              <div key={id || index} className="bg-white text-black p-3 rounded-lg mb-2 flex items-center justify-between">
-                <div className="flex items-center flex-1">
-                  <input 
-                    type="checkbox" 
-                    checked={isSelected} 
-                    onChange={() => toggleSelection(id)}
-                    className="w-5 h-5 mr-3 accent-[#0f3b35]"
-                  />
-                  <div>
-                    <p className="font-bold">{item.TeacherName || item.CourseName}</p>
-                    {item.Designation && <p className="text-xs text-gray-500">{item.Designation}</p>}
-                  </div>
-                </div>
+        <div className="rc-card rc-list-card">
+          <div className="rc-session-row">
+            <label htmlFor="rc-session">Session</label>
+            <select
+              id="rc-session"
+              className="rc-session-select"
+              value={selectedSession}
+              onChange={(e) => setSelectedSession(e.target.value)}
+            >
+              {sessions.length === 0 ? (
+                <option value="">No sessions</option>
+              ) : (
+                sessions.map((s, i) => (
+                  <option key={i} value={s}>
+                    {s}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
 
-                {activeTab === "Teachers" ? (
-                  <div className="bg-[#0f3b35] text-white p-2 rounded-md text-center min-w-[60px]">
-                    <p className="text-[10px] uppercase">Avg</p>
-                    <p className="font-bold text-sm">{item.AverageRating === "N/A" ? "--" : item.AverageRating}</p>
-                  </div>
-                ) : (
-                  <button className="text-[#0f3b35] text-xl font-bold">➔</button>
-                )}
+          <div className="rc-list-scroll">
+            {loading ? (
+              <div className="rc-status-msg">Loading records...</div>
+            ) : dataList.length === 0 ? (
+              <div className="rc-status-msg">{message || "No data found."}</div>
+            ) : (
+              <div className="rc-list">
+                {dataList.map((item, idx) => {
+                  const id = item.TeacherID ?? item.CourseNo ?? idx;
+                  const isSelected = selectedItems.includes(id);
+                  return (
+                    <button
+                      type="button"
+                      key={String(id)}
+                      onClick={() => toggleSelection(id)}
+                      className={`rc-row ${isSelected ? "selected" : ""}`}
+                    >
+                      <div className="rc-row-main">
+                        <div className={`rc-check ${isSelected ? "checked" : ""}`}>{isSelected ? "✓" : ""}</div>
+                        <div className="rc-row-text">
+                          <p className="rc-name">{item.TeacherName || item.CourseName || "Untitled"}</p>
+                          <p className="rc-sub">{item.Designation || item.CourseNo || "General"}</p>
+                        </div>
+                      </div>
+
+                      {activeTab === "Teachers" ? (
+                        <div className="rc-badge">
+                          <small>AVG</small>
+                          <strong>{item.AverageRating === "N/A" ? "--" : item.AverageRating}</strong>
+                        </div>
+                      ) : (
+                        <span className="rc-arrow">➔</span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
-            );
-          })
-        )}
+            )}
+          </div>
+        </div>
+
+        <div className="rc-footer">
+          <button
+            type="button"
+            className="rc-compare-btn"
+            disabled={selectedItems.length < 2 || activeTab !== "Teachers"}
+            onClick={handleCompare}
+          >
+            Compare Selected ({selectedItems.length})
+          </button>
+          <button type="button" className="rc-dash-btn" onClick={() => navigate("/DirectorDashboard")}>
+            Dashboard
+          </button>
+        </div>
       </div>
-
-      {/* Footer Buttons */}
-      <button 
-        disabled={selectedItems.length < 2}
-        className={`w-full py-4 rounded-lg font-bold mb-3 transition-opacity ${
-          selectedItems.length < 2 ? "bg-red-800 opacity-50" : "bg-red-600 hover:bg-red-700"
-        }`}
-      >
-        Compare Selected ({selectedItems.length})
-      </button>
-
-      <button 
-        onClick={() => window.history.back()}
-        className="w-full py-3 bg-white text-[#0f3b35] font-bold rounded-full shadow-md"
-      >
-        🏠 Dashboard
-      </button>
     </div>
   );
 };

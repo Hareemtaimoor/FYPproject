@@ -209,6 +209,7 @@
 
 /* Loader */
 .loader-flex {
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -227,4 +228,12 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.no-results {
+    margin: 0;
+    padding: 22px 14px;
+    text-align: center;
+    color: var(--teacher-muted);
+    font-size: 0.88rem;
 }

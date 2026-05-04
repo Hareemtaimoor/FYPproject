@@ -4,40 +4,40 @@ import axios from "axios";
 import "./NotPeerEvalutors.css"; 
 import logo from "../Images/Biit_Logo.png";
 import avatar from "../Images/avatar.png";
-import ApiEndPoint from '../unity.js'; 
+import ApiEndPoint from '../unity.js';
+import { extractTeacherDisplay, getStoredTeacherId, readUserFromStorage, unwrapProfilePayload } from "./teacherProfileDisplay.js";
 
 const NotPeerEvalutors = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState({ Name: "Loading...", Designation: "..." });
-  const userData = JSON.parse(localStorage.getItem("user")) || {};
+  const [profile, setProfile] = useState(null);
+  const teacherId = getStoredTeacherId();
 
   useEffect(() => {
-    // Security check: Agar userid nahi hai toh login screen par bhej dega
-    if (!userData.userid) {
+    if (!teacherId) {
       navigate("/", { replace: true });
       return;
     }
 
-    // Profile fetch karne ka function
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `${ApiEndPoint}Teacher/GetTeacherProfile?TeacherID=${userData.userid}`
+          `${ApiEndPoint}Teacher/GetTeacherProfile?TeacherID=${encodeURIComponent(teacherId)}`
         );
         if (response.status === 200) {
-          setProfile(response.data);
+          const raw = response.data;
+          const normalized = unwrapProfilePayload(raw) ?? raw;
+          setProfile(normalized && typeof normalized === "object" ? normalized : null);
         }
       } catch (error) {
         console.error("Fetch Error:", error);
-        setProfile({ 
-          Name: userData.userName || "Professor", 
-          Designation: userData.designation || "Faculty" 
-        });
+        setProfile(null);
       }
     };
 
     fetchProfile();
-  }, [userData.userid, navigate]);
+  }, [teacherId, navigate]);
+
+  const display = extractTeacherDisplay(profile, readUserFromStorage());
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
@@ -61,8 +61,8 @@ const NotPeerEvalutors = () => {
           <h3 className="pe-card-label">Teacher Information</h3>
           <div className="pe-info-content">
             <div className="pe-text-details">
-              <p>Name: <strong>{profile.Name}</strong></p>
-              <p>Designation: {profile.Designation}</p>
+              <p>Name: <strong>{display.name}</strong></p>
+              <p>Designation: {display.designation}</p>
             </div>
             <img src={avatar} alt="Avatar" className="pe-avatar-img" />
           </div>

@@ -13,6 +13,8 @@
 .chr-container {
     width: 100%;
     max-width: var(--teacher-max);
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .chr-main-logo {
@@ -48,6 +50,34 @@
     color: var(--teacher-text);
     font-family: var(--teacher-font);
     box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.chr-date-native-label {
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.chr-date-native {
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: var(--teacher-radius-pill);
+    border: none;
+    font-weight: 600;
+    color: var(--teacher-text);
+    font-family: var(--teacher-font);
+    box-sizing: border-box;
+    background: var(--teacher-card);
+    box-shadow: var(--teacher-shadow);
+}
+
+.chr-date-hint {
+    margin: 8px 0 0;
+    font-size: 0.72rem;
+    color: var(--teacher-muted);
+    line-height: 1.35;
+    text-align: center;
 }
 
 .chr-info-card {
@@ -73,7 +103,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
+    gap: 12px;
+    min-height: 52px;
 }
 
 .chr-text-details p {
@@ -109,6 +140,26 @@
 .chr-date-sub-gold {
     color: var(--teacher-highlight);
     font-size: 0.8rem;
+}
+
+.chr-table-wrapper-white {
+    position: relative;
+}
+
+.chr-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.chr-error-banner {
+    padding: 16px 14px;
+    margin: 0;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #b71c1c;
+    background: #ffebee;
+    border-top: 1px solid #ffcdd2;
 }
 
 .chr-main-table-white {
@@ -154,10 +205,20 @@
 }
 
 .chr-add-comment {
+    display: inline-block;
+    background: none;
+    border: none;
     color: var(--teacher-highlight);
     cursor: pointer;
     text-decoration: underline;
     margin-bottom: 10px;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0;
+}
+
+.chr-add-comment:hover {
+    color: var(--teacher-accent-hover);
 }
 
 .chr-home-btn {
@@ -197,6 +258,27 @@
     width: 80%;
     max-width: 360px;
     font-family: var(--teacher-font);
+}
+
+.modal-content h4 {
+    margin: 0 0 8px;
+    color: var(--teacher-text);
+}
+
+.modal-btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.modal-btns button {
+    font-family: var(--teacher-font);
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: var(--teacher-radius-pill);
+    border: 1px solid var(--teacher-border);
+    background: var(--teacher-card);
 }
 
 .modal-content textarea {

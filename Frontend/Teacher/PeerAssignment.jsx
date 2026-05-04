@@ -5,6 +5,7 @@ import "./PeerAssignment.css";
 import logo from "../Images/Biit_Logo.png";
 import avatar from "../Images/maleAvatar.png";
 import ApiEndPoint from '../unity.js';
+import { extractTeacherDisplay, getStoredTeacherId, readUserFromStorage, unwrapProfilePayload } from "./teacherProfileDisplay.js";
 
 const PeerAssignment = () => {
   const navigate = useNavigate();
@@ -12,6 +13,30 @@ const PeerAssignment = () => {
   const [allTeachers, setAllTeachers] = useState([]);
   const [selectedTeachers, setSelectedTeachers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hodProfile, setHodProfile] = useState(null);
+
+  useEffect(() => {
+    const teacherId = getStoredTeacherId();
+    if (!teacherId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await axios.get(
+          `${ApiEndPoint}Teacher/GetTeacherProfile?TeacherID=${encodeURIComponent(teacherId)}`
+        );
+        if (!cancelled && res.status === 200) {
+          const raw = res.data;
+          const normalized = unwrapProfilePayload(raw) ?? raw;
+          setHodProfile(normalized && typeof normalized === "object" ? normalized : null);
+        }
+      } catch {
+        if (!cancelled) setHodProfile(null);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -34,6 +59,8 @@ const PeerAssignment = () => {
     };
     fetchTeachers();
   }, []);
+
+  const hodDisplay = extractTeacherDisplay(hodProfile, readUserFromStorage());
 
   const filteredTeachers = allTeachers.filter((teacher) =>
     teacher.Name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -78,8 +105,10 @@ const PeerAssignment = () => {
           <div className="peer-card-label">Teacher Information</div>
           <div className="peer-info-content">
             <div className="peer-text-details">
-              <p>Name: <strong>Dr. Munir Ahmed</strong></p>
-              <p>Designation: HOD</p>
+              <p>
+                Name: <strong>{hodDisplay.name}</strong>
+              </p>
+              <p>Designation: {hodDisplay.designation}</p>
             </div>
             <img src={avatar} alt="Profile" className="peer-avatar-img" />
           </div>

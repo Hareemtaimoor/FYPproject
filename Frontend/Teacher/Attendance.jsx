@@ -4,7 +4,8 @@ import axios from "axios";
 import "./Attendance.css";
 import logo from "../Images/Biit_Logo.png";
 import avatar from "../Images/avatar.png";
-import ApiEndPoint from '../unity.js'; 
+import ApiEndPoint from '../unity.js';
+import { extractTeacherDisplay, getStoredTeacherId, readUserFromStorage, unwrapProfilePayload } from "./teacherProfileDisplay.js";
 
 const Attendance = () => {
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ const Attendance = () => {
   const [comment, setComment] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("user")) || {};
-  const TeacherID = user.userid;
+  const user = readUserFromStorage();
+  const TeacherID = getStoredTeacherId();
 
   useEffect(() => {
     if (TeacherID) fetchInitialData();
@@ -40,7 +41,9 @@ const Attendance = () => {
           axios.get(`${ApiEndPoint}Teacher/GetTeacherAttendanceRange?teacherId=${TeacherID}&start=${Start}&end=${End}`)
         ]);
 
-        setTeacherData(profileRes.data);
+        const raw = profileRes.data;
+        const normalized = unwrapProfilePayload(raw) ?? raw;
+        setTeacherData(normalized && typeof normalized === "object" ? normalized : null);
         setAttendanceData(attendanceRes.data || []);
       }
     } catch (err) { console.error(err); } 
@@ -74,6 +77,8 @@ const Attendance = () => {
     }
   };
 
+  const teacherDisplay = extractTeacherDisplay(teacherData, user);
+
   return (
     <div className="att-mobile-bg">
       <div className="att-container">
@@ -83,8 +88,10 @@ const Attendance = () => {
           <div className="att-card-label">Teacher Information</div>
           <div className="att-info-content">
             <div className="att-text-details">
-              <p>Name: <strong>{teacherData?.Name || "Malaika Noor"}</strong></p>
-              <p>Designation: {teacherData?.Designation || "Lecturer"}</p>
+              <p>
+                Name: <strong>{teacherDisplay.name}</strong>
+              </p>
+              <p>Designation: {teacherDisplay.designation}</p>
             </div>
             <img src={avatar} alt="Profile" className="att-avatar-img" />
           </div>

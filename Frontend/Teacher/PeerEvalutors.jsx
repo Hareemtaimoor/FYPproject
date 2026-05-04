@@ -4,15 +4,16 @@ import axios from "axios";
 import "./PeerEvalutors.css"; 
 import logo from "../Images/Biit_Logo.png";
 import avatar from "../Images/avatar.png";
-import ApiEndPoint from '../unity.js'; 
+import ApiEndPoint from '../unity.js';
+import { extractTeacherDisplay, getStoredTeacherId, readUserFromStorage, unwrapProfilePayload } from "./teacherProfileDisplay.js";
 
 const PeerEvalutors = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState({ Name: "Loading...", Designation: "..." });
-  const userData = JSON.parse(localStorage.getItem("user")) || {};
+  const [profile, setProfile] = useState(null);
+  const teacherId = getStoredTeacherId();
 
   useEffect(() => {
-    if (!userData.userid) {
+    if (!teacherId) {
       navigate("/", { replace: true });
       return;
     }
@@ -20,21 +21,22 @@ const PeerEvalutors = () => {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `${ApiEndPoint}Teacher/GetTeacherProfile?TeacherID=${userData.userid}`
+          `${ApiEndPoint}Teacher/GetTeacherProfile?TeacherID=${encodeURIComponent(teacherId)}`
         );
         if (response.status === 200) {
-          setProfile(response.data);
+          const raw = response.data;
+          const normalized = unwrapProfilePayload(raw) ?? raw;
+          setProfile(normalized && typeof normalized === "object" ? normalized : null);
         }
       } catch (error) {
         console.error("Error:", error);
-        setProfile({ 
-          Name: userData.userName || "Ms Nadia Arif", 
-          Designation: userData.designation || "Assistant Director" 
-        });
+        setProfile(null);
       }
     };
     fetchProfile();
-  }, [userData.userid, navigate]);
+  }, [teacherId, navigate]);
+
+  const display = extractTeacherDisplay(profile, readUserFromStorage());
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
@@ -57,8 +59,8 @@ const PeerEvalutors = () => {
           <h3 className="pe-card-label">Teacher Information</h3>
           <div className="pe-info-content">
             <div className="pe-text-details">
-              <p>Name: <strong>{profile.Name}</strong></p>
-              <p>Designation: {profile.Designation}</p>
+              <p>Name: <strong>{display.name}</strong></p>
+              <p>Designation: {display.designation}</p>
             </div>
             <img src={avatar} alt="Avatar" className="pe-avatar-img" />
           </div>
@@ -74,7 +76,12 @@ const PeerEvalutors = () => {
           <button className="pe-action-btn" onClick={() => navigate("/CHR")}>View CHR</button>
           <button className="pe-action-btn" onClick={() => navigate("/Attendance")}>View Attendance</button>
           <button className="pe-action-btn" onClick={() => navigate("/EvaluationRate")}>View Evaluation</button>
-          <button className="pe-action-btn" onClick={() => navigate("/EvaluateTeachers", { state: { TeacherID: userEmpNo } })}>Peer Evaluation</button>
+          <button
+            className="pe-action-btn"
+            onClick={() => navigate("/EvaluateTeachers", { state: { TeacherID: teacherId } })}
+          >
+            Peer Evaluation
+          </button>
         </div>
 
         {/* Logout Button */}
