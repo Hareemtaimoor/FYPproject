@@ -5,6 +5,7 @@ import "./StudentDashboard.css";
 import logo from "../Images/Biit_Logo.png";
 import avatar from "../Images/avatar.png";
 import ApiEndPoint from '../unity.js';
+import { getConfidentialCompletedCourseNos } from "./confidentialEvalTracking.js";
 
 const ConfidentalStudentEvaluationForm = () => {
     const navigate = useNavigate();
@@ -34,17 +35,15 @@ const ConfidentalStudentEvaluationForm = () => {
                     });
 
                     if (courseRes.status === 200) {
-                        const coursesWithStatus = await Promise.all(
-                            courseRes.data.map(async (course) => {
-                                try {
-                                    const check = await axios.get(`${ApiEndPoint}Student/CheckIfAlreadyEvaluated`, {
-                                        params: { AridNo: profileRes.data.AridNo.trim(), CourseCode: course.CourseNo }
-                                    });
-                                    return { ...course, isDone: check.data === true };
-                                } catch (e) { return { ...course, isDone: false }; }
-                            })
+                        const arid = profileRes.data.AridNo.trim();
+                        const completed = getConfidentialCompletedCourseNos(arid);
+                        const coursesWithStatus = (Array.isArray(courseRes.data) ? courseRes.data : []).map((course) => ({
+                            ...course,
+                            isDone: completed.has(String(course.CourseNo ?? course.courseNo ?? "").trim()),
+                        }));
+                        const sorted = coursesWithStatus.sort((a, b) =>
+                            a.isDone === b.isDone ? 0 : a.isDone ? 1 : -1
                         );
-                        const sorted = coursesWithStatus.sort((a, b) => (a.isDone === b.isDone ? 0 : a.isDone ? 1 : -1));
                         setCourses(sorted);
                     }
                 }
@@ -113,6 +112,9 @@ const ConfidentalStudentEvaluationForm = () => {
                 </div>
 
                 <div className="section-divider">Pending Evaluations</div>
+                <p style={{ fontSize: "0.72rem", color: "#b8d4c8", textAlign: "center", margin: "-8px 24px 14px", lineHeight: 1.35 }}>
+                    After you submit an evaluation, this course is marked complete on this browser only (no server check).
+                </p>
 
                 {courses.map((course, index) => (
                     <div key={index} className={`white-pill-card ${course.isDone ? "completed-card" : ""}`}>

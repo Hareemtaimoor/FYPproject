@@ -23,11 +23,16 @@ import CHR from '../Frontend/Teacher/CHR.jsx';
 import Attendance from '../Frontend/Teacher/Attendance.jsx';
 import RCEvaluation from '../Frontend/Director/TeacherPerfomance/RCEvaluation.jsx';
 import CompareScreenFrom_C_T from '../Frontend/Director/TeacherPerfomance/CompareScreenFrom_C_T.jsx';
+import CompareResults from '../Frontend/Director/TeacherPerfomance/CompareResults.jsx';
 import GenderAnalytics from '../Frontend/Director/TeacherPerfomance/GenderAnalytics.jsx';
+import AddLabEvalQuestions from '../Frontend/Director/Questions/AddLabEvalQuestions.jsx';
 import ConfidentalStudentEvaluationForm from '../Frontend/Student/ConfidentalStudentEvaluationForm.jsx';
 import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
 import ConfidentialDecryptor from '../Frontend/Director/ConfidentialDecryptor.jsx';
 import ConfidentialDecryptorTable from '../Frontend/Director/ConfidentialDecryptorTable.jsx';
+import AdminDashboard from '../Frontend/Admin/AdminDashboard.jsx';
+import UploadAttendance from '../Frontend/Admin/UploadAttendance.jsx';
+import UploadCHR from '../Frontend/Admin/UploadCHR.jsx';
 //import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
 //import AllAssignedCourseTeachers from '../Frontend/Director/TeacherPerfomance/AllAssignedCourseTeachers.jsx';
 //import ViewConfidentialEvaluation from '../Frontend/Director/TeacherPerfomance/ViewConfidentialEvaluation.jsx';
@@ -60,10 +65,17 @@ createRoot(document.getElementById('root')).render(
         <Route path="/Attendance" element={<Attendance/>} />
         <Route path="/EvaluationRate" element={<EvaluationRate/>} />
 
+        {/* Admin Routes */}
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/UploadAttendance" element={<UploadAttendance />} />
+        <Route path="/UploadCHR" element={<UploadCHR />} />
+
         {/* Director Routes */}
         <Route path="/DirectorDashboard" element={<DirectorDashboard />} />
+        <Route path="/ManageQuestions" element={<AddLabEvalQuestions />} />
         <Route path="/TeacherPerformance" element={<TeacherPerfomance/>} /> {/* Spelling Match with Dashboard */}
         <Route path="/RCEvaluation" element={<RCEvaluation />} />
+        <Route path="/CompareResults" element={<CompareResults />} />
         <Route path="/CompareScreenFrom_C_T" element={<CompareScreenFrom_C_T />} />
         <Route path="/GenderAnalytics" element={<GenderAnalytics />} />
         <Route path="/ConfidentialDecryptor" element={<ConfidentialDecryptor />} />

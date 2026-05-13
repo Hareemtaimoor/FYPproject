@@ -128,30 +128,45 @@ const PeerAssignment = () => {
 
           <div className="peer-table-wrapper">
             {loading && allTeachers.length === 0 ? (
-              <div style={{textAlign:'center', padding:'20px', color:'#0f3b35'}}>Loading Teachers...</div>
+              <div className="peer-table-loading" role="status">
+                Loading teachers…
+              </div>
             ) : (
               <table className="peer-main-table">
                 <thead>
                   <tr>
-                    <th>Teacher Name</th>
-                    <th>Select</th>
+                    <th scope="col">Teacher name</th>
+                    <th scope="col">Select</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTeachers.map((teacher) => (
-                    <tr 
-                      key={teacher.Emp_no} 
-                      onClick={() => toggleTeacher(teacher.Emp_no)}
-                      className={selectedTeachers.includes(teacher.Emp_no) ? "row-highlight" : ""}
-                    >
-                      <td>{teacher.Name}</td>
-                      <td>
-                        <div className={`peer-checkbox ${selectedTeachers.includes(teacher.Emp_no) ? "checked" : ""}`}>
-                          {selectedTeachers.includes(teacher.Emp_no) && "✓"}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {filteredTeachers.map((teacher) => {
+                    const selected = selectedTeachers.includes(teacher.Emp_no);
+                    return (
+                      <tr
+                        key={teacher.Emp_no}
+                        tabIndex={0}
+                        role="button"
+                        aria-pressed={selected}
+                        aria-label={`${selected ? "Deselect" : "Select"} ${teacher.Name}`}
+                        onClick={() => toggleTeacher(teacher.Emp_no)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            toggleTeacher(teacher.Emp_no);
+                          }
+                        }}
+                        className={selected ? "peer-row peer-row--selected" : "peer-row"}
+                      >
+                        <td data-label="Teacher">{teacher.Name}</td>
+                        <td data-label="Select">
+                          <div className={`peer-checkbox ${selected ? "checked" : ""}`}>
+                            {selected ? "✓" : ""}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             )}

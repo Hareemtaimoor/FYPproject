@@ -61,6 +61,11 @@ else if (userType.includes("teacher")) {
             else if (userType.includes("director")) {
                 nav("/DirectorDashboard", { replace: true });
             }
+
+            // 4. ADMIN LOGIC
+            else if (userType.includes("admin")) {
+                nav("/AdminDashboard", { state: { TeacherID: currentUserId }, replace: true });
+            }
         }
     } catch (error) {
         console.error("Login Error:", error);

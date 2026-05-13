@@ -1,197 +1,285 @@
-@import "./TeacherTheme.css";
+/* EvaluationRate — RN-aligned (#0d2e27), responsive */
 
-.web-main-container {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100vh;
-    background-color: var(--teacher-bg);
-    font-family: var(--teacher-font);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 20px 16px;
-    box-sizing: border-box;
+.er-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  background-color: #0d2e27;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) max(20px, env(safe-area-inset-bottom, 0))
+    env(safe-area-inset-left, 0);
+  overflow-x: hidden;
 }
 
-.eval-rate-card {
-    background-color: var(--teacher-card);
-    width: 100%;
-    max-width: 900px;
-    display: flex;
-    flex-direction: row;
-    border-radius: var(--teacher-radius-lg);
-    overflow: hidden;
-    box-shadow: var(--teacher-shadow);
+.er-inner {
+  width: 100%;
+  max-width: min(100%, 480px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(16px, 4vw, 20px);
+  box-sizing: border-box;
 }
 
-.eval-sidebar {
-    flex: 0.7;
-    background-color: #f4faf6;
-    display: flex;
+@media (min-width: 768px) {
+  .er-inner {
+    max-width: 520px;
+    padding: 24px 28px 32px;
+  }
+}
+
+.er-loader-container {
+  flex: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #0d2e27;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.er-spinner {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(40, 167, 69, 0.25);
+  border-top-color: #28a745;
+  animation: er-spin 0.85s linear infinite;
+}
+
+@keyframes er-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .er-spinner {
+    animation: none;
+    border-color: #28a745;
+  }
+}
+
+.er-logo-container {
+  margin: clamp(10px, 3vw, 15px) 0;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.er-logo {
+  width: clamp(60px, 18vw, 70px);
+  height: clamp(60px, 18vw, 70px);
+  object-fit: contain;
+  display: block;
+}
+
+.er-profile-card {
+  background-color: #fff;
+  width: 100%;
+  border-radius: 20px;
+  padding: clamp(16px, 4vw, 20px);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  gap: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+}
+
+.er-profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.er-p-text {
+  font-size: clamp(15px, 3.8vw, 16px);
+  color: #333;
+  margin: 0 0 6px;
+  line-height: 1.4;
+}
+
+.er-p-sub {
+  color: #28a745;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 4px 0 0;
+}
+
+.er-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #eee;
+}
+
+.er-dropdown-card {
+  width: 100%;
+  background-color: #1a4a3e;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.er-dropdown-label {
+  display: block;
+  color: #fff;
+  font-size: 13px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.er-picker-wrapper {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.er-picker {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: #000;
+  font-family: inherit;
+  font-weight: 500;
+  border: none;
+  background: #fff;
+  cursor: pointer;
+  min-height: 50px;
+}
+
+.er-picker:focus-visible {
+  outline: 2px solid #28a745;
+  outline-offset: 2px;
+}
+
+.er-picker:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.er-section-title {
+  color: #28a745;
+  font-size: clamp(14px, 3.6vw, 15px);
+  font-weight: 700;
+  margin: 0 0 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.er-analytics-card {
+  background-color: #fff;
+  width: 100%;
+  border-radius: 25px;
+  padding: clamp(28px, 6vw, 35px) clamp(12px, 3vw, 20px);
+  margin-bottom: 25px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.er-stats-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.er-circle-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 120px;
+  min-width: 0;
+}
+
+.er-progress-circle {
+  width: clamp(80px, 24vw, 90px);
+  height: clamp(80px, 24vw, 90px);
+  border-radius: 50%;
+  border-width: 8px;
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafafa;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.er-progress-circle--student {
+  border-color: #00c853;
+}
+
+.er-progress-circle--peer {
+  border-color: #2196f3;
+}
+
+.er-percent-text {
+  font-size: clamp(16px, 4.5vw, 18px);
+  font-weight: 700;
+  color: #222;
+}
+
+.er-circle-label {
+  font-size: clamp(10px, 2.8vw, 11px);
+  font-weight: 700;
+  color: #666;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  max-width: 140px;
+}
+
+.er-back-btn {
+  background-color: #fff;
+  padding: 14px 24px;
+  border-radius: 30px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: none;
+  color: #0d2e27;
+  font-size: clamp(15px, 4vw, 16px);
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  min-height: 48px;
+  width: 100%;
+  max-width: 320px;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.er-back-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.er-back-btn:focus-visible {
+  outline: 2px solid #28a745;
+  outline-offset: 3px;
+}
+
+@media (max-width: 360px) {
+  .er-stats-row {
     flex-direction: column;
     align-items: center;
-    padding: 36px 20px;
-    border-right: 1px solid var(--teacher-border);
-}
+  }
 
-.card-logo {
-    width: 68px;
-    margin-bottom: 18px;
-    border-radius: 50%;
-    border: 3px solid var(--teacher-accent);
-    padding: 4px;
-    background: white;
-    box-sizing: border-box;
-}
-
-.avatar-wrapper {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    border: 3px solid var(--teacher-accent);
-    overflow: hidden;
-    margin-bottom: 12px;
-}
-
-.avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.profile-info {
-    text-align: center;
-}
-
-.user-name {
-    color: var(--teacher-text);
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin: 0 0 4px;
-}
-
-.user-role {
-    color: var(--teacher-muted);
-    font-size: 0.9rem;
-    margin: 0;
-}
-
-.home-action-btn {
-    margin-top: auto;
-    background: var(--teacher-bg-elevated);
-    color: var(--teacher-card);
-    border: none;
-    padding: 12px 28px;
-    border-radius: var(--teacher-radius-pill);
-    cursor: pointer;
-    font-weight: 700;
-    width: 100%;
-    font-family: var(--teacher-font);
-    transition: background-color 0.2s ease;
-}
-
-.home-action-btn:hover {
-    background: var(--teacher-accent);
-}
-
-.eval-rate-content {
-    flex: 1.3;
-    padding: 36px;
-    background-color: var(--teacher-bg-elevated);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.content-title {
-    color: #ffffff;
-    font-size: 1.65rem;
-    margin-bottom: 32px;
-    text-align: center;
-}
-
-.stats-grid {
-    display: flex;
-    justify-content: space-around;
-    gap: 20px;
-}
-
-.stat-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-}
-
-.stat-label {
-    color: #ffffff;
-    font-size: 0.88rem;
-    margin-bottom: 14px;
-    font-weight: 500;
-    text-align: center;
-}
-
-.progress-circle {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 8px solid rgba(76, 175, 80, 0.45);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    margin-bottom: 14px;
-    transition: transform 0.3s ease;
-}
-
-.progress-circle:hover {
-    transform: scale(1.05);
-}
-
-.percent-text {
-    color: #ffffff;
-    font-size: 1.15rem;
-    font-weight: 800;
-}
-
-.rating-text {
-    color: #c8f0d4;
-    font-size: 0.88rem;
-    font-weight: 600;
-}
-
-.summary-footer {
-    margin-top: 36px;
-    text-align: center;
-    color: #c8f0d4;
-    font-size: 0.85rem;
-    line-height: 1.5;
-}
-
-@media (max-width: 768px) {
-    .eval-rate-card {
-        flex-direction: column;
-        max-height: none;
-    }
-
-    .eval-sidebar {
-        border-right: none;
-        border-bottom: 1px solid var(--teacher-border);
-        padding: 28px 20px;
-    }
-
-    .eval-rate-content {
-        padding: 28px 16px;
-    }
-
-    .stats-grid {
-        flex-direction: column;
-        gap: 32px;
-    }
-
-    .progress-circle {
-        width: 112px;
-        height: 112px;
-    }
+  .er-circle-wrapper {
+    flex: none;
+  }
 }

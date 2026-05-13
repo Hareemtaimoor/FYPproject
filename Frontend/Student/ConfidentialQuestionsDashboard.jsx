@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./StudentQuestionsDashboard.css";
+import "./ConfidentialQuestionsDashboard.css";
 import biitLogo from "../Images/Biit_Logo.png";
 import avatar from "../Images/avatar.png";
 import ApiEndPoint from '../unity.js';
+import { markConfidentialCourseCompleted } from "./confidentialEvalTracking.js";
 
 const ConfidentialQuestionsDashboard = () => {
     const navigate = useNavigate();
@@ -18,6 +20,8 @@ const ConfidentialQuestionsDashboard = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
     const [allAnswers, setAllAnswers] = useState({});
+    /** Shown only on the last question; sent as `Comment` on that question's answer row. */
+    const [lastQuestionComment, setLastQuestionComment] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -108,16 +112,26 @@ const ConfidentialQuestionsDashboard = () => {
         
         const qId = questions[currentIndex].Question_Id;
         const finalAnswersList = { ...allAnswers, [qId]: selectedOption };
+        const lastQId = questions[questions.length - 1].Question_Id;
+        const commentTrimmed = lastQuestionComment.trim();
+
+        const questionList = questions.map((q) => ({
+            Question_ID: parseInt(q.Question_Id ?? q.Question_ID, 10),
+            QuestionText: String(q.Question1 ?? q.Question ?? "").trim(),
+            RawType: String(q.RawType ?? "").trim(),
+        }));
 
         const submissionData = {
             Emp_no: resolvedTeacherId,
             Reg_no: AridNo || "",
             Course_no: courseNo || "",
             Discipline: studentProfile?.Course || "BCS",
-            Answers: Object.keys(finalAnswersList).map(id => ({
-                Question_ID: parseInt(id),
-                Rating: finalAnswersList[id]
-            }))
+            QuestionList: questionList,
+            Answers: Object.keys(finalAnswersList).map((id) => ({
+                Question_ID: parseInt(id, 10),
+                Rating: finalAnswersList[id],
+                Comment: String(id) === String(lastQId) ? commentTrimmed : "",
+            })),
         };
 
         try {
@@ -129,6 +143,9 @@ const ConfidentialQuestionsDashboard = () => {
             });
             console.log(response);
             if (response.status === 200) {
+                if (AridNo && courseNo) {
+                    markConfidentialCourseCompleted(String(AridNo).trim(), String(courseNo).trim());
+                }
                 alert("Evaluation stored successfully!");
                 handleDashboardBack();
             }
@@ -195,6 +212,21 @@ const ConfidentialQuestionsDashboard = () => {
                                 onClick={() => setSelectedOption(num)}>{num}</button>
                         ))}
                     </div>
+                    {currentIndex === questions.length - 1 && (
+                        <>
+                            <label className="conf-q-comment-label" htmlFor="conf-q-comment">
+                                Comment <span className="conf-q-comment-optional">(optional)</span>
+                            </label>
+                            <textarea
+                                id="conf-q-comment"
+                                className="conf-q-comment-input"
+                                rows={3}
+                                placeholder="Add a short comment before submitting…"
+                                value={lastQuestionComment}
+                                onChange={(e) => setLastQuestionComment(e.target.value)}
+                            />
+                        </>
+                    )}
                 </div>
             </div>
 

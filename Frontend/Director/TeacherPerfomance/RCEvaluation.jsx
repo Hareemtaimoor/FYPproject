@@ -8,15 +8,17 @@ import avatar from "../../Images/maleAvatar.png";
 
 const api = (path) => `${APIEndPoint}${path.replace(/^\//, "")}`;
 
+const rowId = (item) => item.TeacherID ?? item.CourseNo ?? item.courseNo ?? item.teacherId;
+
 const RCEvaluation = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Teachers");
+  const [evalType, setEvalType] = useState("Student");
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState("");
   const [dataList, setDataList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -25,9 +27,8 @@ const RCEvaluation = () => {
         const list = Array.isArray(response.data) ? response.data : [];
         setSessions(list);
         if (list.length > 0) setSelectedSession(list[0]);
-      } catch (error) {
-        console.error("Session Load Error", error);
-        setMessage("Could not load sessions.");
+      } catch {
+        window.alert("Could not load sessions.");
       }
     };
     fetchSessions();
@@ -37,15 +38,6 @@ const RCEvaluation = () => {
     const fetchData = async () => {
       if (!selectedSession) return;
       setLoading(true);
-      setSelectedItems([]);
-      setMessage("");
-
-      if (activeTab === "Confidential") {
-        setDataList([]);
-        setLoading(false);
-        setMessage("Confidential list will appear here after API integration.");
-        return;
-      }
 
       try {
         const endpoint =
@@ -58,49 +50,89 @@ const RCEvaluation = () => {
 
         if (activeTab === "Teachers") {
           try {
-            const ratingRes = await axios.get(
-              api(`Director/GetTeacherAverageRatings?session=${encodeURIComponent(selectedSession)}`)
-            );
-            const ratingList = Array.isArray(ratingRes.data) ? ratingRes.data : [];
+            const ratingEndpoint =
+              evalType === "Student"
+                ? api(`Director/GetTeacherAverageRatings?session=${encodeURIComponent(selectedSession)}`)
+                : api(`Director/GetPeerAverageRatings?session=${encodeURIComponent(selectedSession)}`);
+
+            const ratingRes = await axios.get(ratingEndpoint);
+            const ratingsMap = Array.isArray(ratingRes.data) ? ratingRes.data : [];
+
             fetchedData = fetchedData.map((teacher) => {
-              const match = ratingList.find(
+              const ratingObj = ratingsMap.find(
                 (r) =>
-                  String(r.TeacherID).trim().toUpperCase() ===
-                  String(teacher.TeacherID).trim().toUpperCase()
+                  String(r.TeacherID ?? r.teacherID ?? "")
+                    .trim()
+                    .toUpperCase() ===
+                  String(teacher.TeacherID ?? teacher.teacherID ?? "")
+                    .trim()
+                    .toUpperCase()
               );
               return {
                 ...teacher,
                 AverageRating:
-                  match && match.AverageRating != null ? Number(match.AverageRating).toFixed(1) : "N/A",
+                  ratingObj != null && ratingObj.AverageRating != null
+                    ? Number(ratingObj.AverageRating).toFixed(1)
+                    : "N/A",
               };
             });
           } catch {
-            // keep teacher list without ratings
+            /* keep list without ratings */
           }
         }
 
         setDataList(fetchedData);
-        if (fetchedData.length === 0) setMessage("No records found for selected session.");
-      } catch (error) {
-        console.error("Data Load Error", error);
+      } catch {
         setDataList([]);
-        setMessage("Could not load records. Please check API connection.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [activeTab, selectedSession]);
+  }, [activeTab, selectedSession, evalType]);
+
+  const setTab = (tab) => {
+    setActiveTab(tab);
+    setSelectedItems([]);
+  };
 
   const toggleSelection = (id) => {
     if (id == null) return;
-    setSelectedItems((prev) => (prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]));
+    const sid = String(id);
+    setSelectedItems((prev) => (prev.some((x) => String(x) === sid) ? prev.filter((v) => String(v) !== sid) : [...prev, id]));
   };
+
+  const isSelected = (id) => selectedItems.some((x) => String(x) === String(id));
 
   const handleCompare = () => {
     if (selectedItems.length < 2) return;
-    alert("Compare flow is ready. You can now wire this button to your compare screen.");
+    const items = dataList.filter((it) => isSelected(rowId(it)));
+    navigate("/CompareResults", {
+      state: {
+        selectedIds: selectedItems,
+        type: evalType,
+        session: selectedSession,
+        mode: activeTab === "Teachers" ? "teachers" : "courses",
+        items,
+      },
+    });
+  };
+
+  const goCourseCompare = (item) => {
+    const courseId = item.CourseNo ?? item.courseNo ?? item.CourseID ?? item.CourseId;
+    const courseName = item.CourseName ?? item.courseName ?? "Course";
+    if (!courseId) {
+      window.alert("Missing course id for this row.");
+      return;
+    }
+    navigate("/CompareScreenFrom_C_T", {
+      state: {
+        courseId,
+        courseName,
+        session: selectedSession,
+      },
+    });
   };
 
   return (
@@ -111,25 +143,28 @@ const RCEvaluation = () => {
         </div>
 
         <div className="rc-card rc-profile-card">
-          <div className="rc-card-title">Director Information</div>
+          <div className="rc-card-title">Director information</div>
           <div className="rc-profile-body">
             <div className="rc-profile-text">
               <p>
                 Name: <strong>Dr. Jamil Sawar</strong>
               </p>
-              <p>Designation: Director</p>
+              <p>Role: Director</p>
+              <p className="rc-p-sub">BIIT administration</p>
             </div>
             <img src={avatar} alt="Director" className="rc-avatar" />
           </div>
         </div>
 
-        <div className="rc-tabs">
-          {["Teachers", "Courses", "Confidential"].map((tab) => (
+        <h2 className="rc-dashboard-title">Analytics &amp; feedback</h2>
+
+        <div className="rc-tabs rc-tabs--two">
+          {["Teachers", "Courses"].map((tab) => (
             <button
               key={tab}
               type="button"
               className={`rc-tab-btn ${activeTab === tab ? "active" : ""}`}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => setTab(tab)}
             >
               {tab}
             </button>
@@ -157,40 +192,77 @@ const RCEvaluation = () => {
             </select>
           </div>
 
+          {activeTab === "Teachers" && (
+            <div className="rc-sub-tabs">
+              <button
+                type="button"
+                className={`rc-sub-tab ${evalType === "Student" ? "active" : ""}`}
+                onClick={() => setEvalType("Student")}
+              >
+                Student eval
+              </button>
+              <button
+                type="button"
+                className={`rc-sub-tab ${evalType === "Peer" ? "active" : ""}`}
+                onClick={() => setEvalType("Peer")}
+              >
+                Peer eval
+              </button>
+            </div>
+          )}
+
           <div className="rc-list-scroll">
             {loading ? (
-              <div className="rc-status-msg">Loading records...</div>
+              <div className="rc-status-msg">Loading records…</div>
             ) : dataList.length === 0 ? (
-              <div className="rc-status-msg">{message || "No data found."}</div>
+              <div className="rc-status-msg">No records found</div>
             ) : (
               <div className="rc-list">
                 {dataList.map((item, idx) => {
-                  const id = item.TeacherID ?? item.CourseNo ?? idx;
-                  const isSelected = selectedItems.includes(id);
+                  const id = rowId(item);
+                  const displayName = item.TeacherName || item.CourseName || "Untitled";
+                  const isTeacherTab = activeTab === "Teachers";
+                  const selected = isSelected(id);
+
                   return (
-                    <button
-                      type="button"
-                      key={String(id)}
-                      onClick={() => toggleSelection(id)}
-                      className={`rc-row ${isSelected ? "selected" : ""}`}
+                    <div
+                      key={String(id ?? idx)}
+                      className={`rc-row ${idx !== dataList.length - 1 ? "rc-row-border" : ""} ${selected ? "selected" : ""}`}
                     >
                       <div className="rc-row-main">
-                        <div className={`rc-check ${isSelected ? "checked" : ""}`}>{isSelected ? "✓" : ""}</div>
+                        <button
+                          type="button"
+                          className={`rc-check ${selected ? "checked" : ""}`}
+                          onClick={() => toggleSelection(id)}
+                          aria-pressed={selected}
+                          aria-label={selected ? "Deselect" : "Select"}
+                        >
+                          {selected ? "✓" : ""}
+                        </button>
                         <div className="rc-row-text">
-                          <p className="rc-name">{item.TeacherName || item.CourseName || "Untitled"}</p>
-                          <p className="rc-sub">{item.Designation || item.CourseNo || "General"}</p>
+                          <p className="rc-name">{displayName}</p>
+                          {isTeacherTab && item.Designation && (
+                            <p className="rc-sub rc-sub-green">{item.Designation}</p>
+                          )}
+                          {!isTeacherTab && (
+                            <p className="rc-sub">{item.CourseNo ?? item.courseNo ?? ""}</p>
+                          )}
                         </div>
                       </div>
 
-                      {activeTab === "Teachers" ? (
-                        <div className="rc-badge">
-                          <small>AVG</small>
-                          <strong>{item.AverageRating === "N/A" ? "--" : item.AverageRating}</strong>
+                      {isTeacherTab ? (
+                        <div className="rc-rating-box">
+                          <span className="rc-rating-label">{evalType.toUpperCase()}</span>
+                          <span className="rc-rating-value">
+                            {item.AverageRating === "N/A" ? "--" : item.AverageRating}
+                          </span>
                         </div>
                       ) : (
-                        <span className="rc-arrow">➔</span>
+                        <button type="button" className="rc-arrow-btn" onClick={() => goCourseCompare(item)} aria-label="Open course comparison">
+                          ➔
+                        </button>
                       )}
-                    </button>
+                    </div>
                   );
                 })}
               </div>
@@ -202,13 +274,13 @@ const RCEvaluation = () => {
           <button
             type="button"
             className="rc-compare-btn"
-            disabled={selectedItems.length < 2 || activeTab !== "Teachers"}
+            disabled={selectedItems.length < 2}
             onClick={handleCompare}
           >
-            Compare Selected ({selectedItems.length})
+            Compare selected ({selectedItems.length})
           </button>
           <button type="button" className="rc-dash-btn" onClick={() => navigate("/DirectorDashboard")}>
-            Dashboard
+            Back to dashboard
           </button>
         </div>
       </div>

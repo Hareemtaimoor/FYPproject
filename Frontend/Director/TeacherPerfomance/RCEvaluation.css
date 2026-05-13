@@ -65,6 +65,23 @@
     color: var(--teacher-text-body);
 }
 
+.rc-p-sub {
+    margin: 8px 0 0;
+    font-size: 0.78rem;
+    color: var(--teacher-accent);
+    font-weight: 600;
+}
+
+.rc-dashboard-title {
+    margin: 0;
+    text-align: center;
+    color: var(--teacher-accent);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
 .rc-avatar {
     width: 52px;
     height: 52px;
@@ -75,28 +92,70 @@
 
 .rc-tabs {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.rc-tabs--two {
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .rc-tab-btn {
     border: none;
-    border-radius: 999px;
+    border-radius: 10px;
     padding: 9px 8px;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: var(--teacher-card);
-    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    background: transparent;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.15s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .rc-tab-btn.active {
-    background: var(--teacher-accent);
+    background: #fff;
+    color: #0d2e27;
 }
 
-.rc-tab-btn:hover {
-    background: var(--teacher-accent-hover);
+.rc-tab-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.rc-sub-tabs {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    padding: 10px 12px;
+    background: #fbfbfb;
+    border-bottom: 1px solid var(--teacher-border);
+    justify-content: center;
+}
+
+.rc-sub-tab {
+    flex: 1;
+    max-width: 160px;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--teacher-font);
+    background: transparent;
+    color: var(--teacher-accent);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.rc-sub-tab.active {
+    background: #062e0f;
+    color: #fff;
+}
+
+.rc-sub-tab:hover:not(.active) {
+    background: #eef5f0;
 }
 
 .rc-list-card {
@@ -149,7 +208,7 @@
 .rc-row {
     width: 100%;
     border: none;
-    border-bottom: 1px solid #eee;
+    border-bottom: none;
     background: #fff;
     padding: 11px 12px;
     text-align: left;
@@ -157,7 +216,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.rc-row-border {
+    border-bottom: 1px solid #eee;
 }
 
 .rc-row.selected {
@@ -176,12 +239,16 @@
     width: 22px;
     height: 22px;
     border: 2px solid var(--teacher-bg-elevated);
-    border-radius: 50%;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.78rem;
     flex-shrink: 0;
+    cursor: pointer;
+    background: #fff;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .rc-check.checked {
@@ -208,33 +275,54 @@
     color: var(--teacher-muted);
 }
 
-.rc-badge {
-    background: #e8f6eb;
-    border: 1px solid #cfe8d5;
+.rc-sub-green {
+    color: var(--teacher-accent);
+    font-weight: 500;
+}
+
+.rc-rating-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #0d2e27;
+    padding: 6px 10px;
     border-radius: 10px;
-    min-width: 54px;
-    padding: 6px 8px;
-    text-align: center;
+    min-width: 68px;
     flex-shrink: 0;
 }
 
-.rc-badge small {
-    display: block;
-    color: var(--teacher-muted);
-    font-size: 0.6rem;
-    font-weight: 700;
+.rc-rating-label {
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.04em;
 }
 
-.rc-badge strong {
-    display: block;
+.rc-rating-value {
     font-size: 0.88rem;
-    color: var(--teacher-text);
+    font-weight: 800;
+    color: #fff;
 }
 
-.rc-arrow {
-    font-size: 1.1rem;
-    color: var(--teacher-bg-elevated);
-    padding-right: 4px;
+.rc-arrow-btn {
+    border: none;
+    background: #0d2e27;
+    color: #fff;
+    font-weight: 800;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rc-arrow-btn:hover {
+    filter: brightness(1.1);
 }
 
 .rc-footer {
@@ -257,13 +345,18 @@
 }
 
 .rc-compare-btn {
-    background: var(--teacher-accent);
+    background: #d32f2f;
     color: #fff;
 }
 
+.rc-compare-btn:hover:not(:disabled) {
+    filter: brightness(1.05);
+}
+
 .rc-compare-btn:disabled {
-    background: #99a9a2;
+    opacity: 0.5;
     cursor: not-allowed;
+    filter: none;
 }
 
 .rc-dash-btn {

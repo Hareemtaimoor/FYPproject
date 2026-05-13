@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   LineChart,
@@ -7,252 +8,339 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import APIEndPoint from "../../unity.js";
+import "./CompareScreenFrom_C_T.css";
+import logo from "../../Images/Biit_Logo.png";
+import avatar from "../../Images/maleAvatar.png";
 
-const CompareScreenWeb = ({ courseId, courseName, session, onBack }) => {
+const api = (path) => `${APIEndPoint}${String(path).replace(/^\//, "")}`;
+
+const CompareScreenFrom_C_T = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = location.state || {};
+
+  const courseId = params.courseId;
+  const courseName = params.courseName;
+  const session = params.session;
+
   const [loading, setLoading] = useState(false);
   const [teacherList, setTeacherList] = useState([]);
   const [selectedTeachers, setSelectedTeachers] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [graphData, setGraphData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
+    if (!courseId || !session) return;
     loadInitialData();
-  }, []);
+  }, [courseId, session]);
+
+  const filteredQuestions = useMemo(() => {
+    return allQuestions.filter((q) => {
+      const idOk = String(q.Question_ID || "").includes(searchQuery);
+      const textOk = String(q.Question || "").toLowerCase().includes(searchQuery.toLowerCase());
+      return idOk || textOk;
+    });
+  }, [allQuestions, searchQuery]);
 
   const loadInitialData = async () => {
     setLoading(true);
     try {
-      const resT = await axios.get(`${APIEndPoint}/Director/GetTeachersByCourse?courseId=${courseId}&session=${session}`);
-      setTeacherList(resT.data);
+      const resT = await axios.get(
+        api(`Director/GetTeachersByCourse?courseId=${encodeURIComponent(courseId)}&session=${encodeURIComponent(session)}`)
+      );
+      const tList = Array.isArray(resT.data) ? resT.data : [];
+      const uniqueTeachers = Array.from(new Map(tList.map((item) => [String(item.TeacherID), item])).values());
+      setTeacherList(uniqueTeachers);
 
-      const resQ = await axios.get(`${APIEndPoint}/Director/GetQuestionsList`);
-      setAllQuestions(resQ.data);
-      setSelectedQuestions(resQ.data.map((q) => q.Question_ID));
+      const resQ = await axios.get(api("Director/GetQuestionsList"));
+      const qList = Array.isArray(resQ.data) ? resQ.data : [];
+      const uniqueQuestions = Array.from(new Map(qList.map((item) => [String(item.Question_ID), item])).values());
+      setAllQuestions(uniqueQuestions);
+      setSelectedQuestions(uniqueQuestions.map((q) => q.Question_ID));
     } catch (e) {
-      console.error("Error loading initial data:", e);
+      window.alert("Data Error: Failed to load teachers or questions.");
     } finally {
       setLoading(false);
     }
   };
 
-  const getTeacherColor = (name, index) => {
-    const normalizedName = name.toLowerCase();
-    if (normalizedName.includes("jannat")) return "#FF0000";
-    if (normalizedName.includes("mohsin")) return "#FFD700";
-    if (normalizedName.includes("azeem")) return "#008000";
-    const palette = ["#007AFF", "#FF9500", "#AF52DE", "#FF2D55", "#5856D6", "#34C759"];
+  const getTeacherColor = (index) => {
+    const palette = ["#FFD700", "#FF8C00", "#AF52DE", "#FF2D55", "#5856D6", "#34C759"];
     return palette[index % palette.length];
+  };
+
+  const teacherKey = (t) => String(t.TeacherID ?? t.teacherID ?? "");
+
+  const toggleTeacher = (teacherId) => {
+    const key = String(teacherId);
+    setSelectedTeachers((prev) =>
+      prev.some((x) => String(x) === key) ? prev.filter((x) => String(x) !== key) : [...prev, teacherId]
+    );
+  };
+
+  const isTeacherSelected = (t) => selectedTeachers.some((x) => String(x) === teacherKey(t));
+
+  const toggleQuestion = (questionId) => {
+    const key = String(questionId);
+    setSelectedQuestions((prev) =>
+      prev.some((x) => String(x) === key) ? prev.filter((x) => String(x) !== key) : [...prev, questionId]
+    );
   };
 
   const handleShowEvaluation = async () => {
     if (selectedTeachers.length === 0) {
-      alert("Please select at least one teacher.");
+      window.alert("Selection Missing: Please select at least one teacher.");
+      return;
+    }
+    if (!selectedQuestions.length) {
+      window.alert("Please select at least one question (use Edit questions).");
       return;
     }
 
     setLoading(true);
     try {
-      const response = await axios.post(`${APIEndPoint}/Director/GetComparisonData`, {
+      const response = await axios.post(api("Director/GetComparisonData"), {
         TeacherIds: selectedTeachers,
         QuestionIds: selectedQuestions,
         CourseId: courseId,
         Session: session,
       });
-      formatGraphDataForWeb(response.data);
+      formatGraphData(Array.isArray(response.data) ? response.data : []);
     } catch (e) {
-      alert("Could not fetch evaluation data.");
+      window.alert("Error: Could not fetch evaluation data.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Recharts requires data in a format: [{ name: 'Q1', TeacherA: 4, TeacherB: 3 }]
-  const formatGraphDataForWeb = (apiData) => {
-    const sortedQIds = [...selectedQuestions].sort((a, b) => a - b);
-    
-    const formattedData = sortedQIds.map((qId) => {
-      const dataPoint = { name: `Q${qId}` };
-      selectedTeachers.forEach((tId) => {
-        const teacher = teacherList.find((t) => t.TeacherID === tId);
+  const formatGraphData = (apiData) => {
+    if (!selectedQuestions.length) {
+      setGraphData([]);
+      return;
+    }
+    const sortedQIds = [...selectedQuestions].sort((a, b) => Number(a) - Number(b));
+    const points = sortedQIds.map((qId) => {
+      const row = { label: `Q${qId}` };
+      selectedTeachers.forEach((tId, idx) => {
+        const key = `t_${tId}`;
         const match = apiData.find(
-          (d) => d.TeacherID.toString() === tId.toString() && parseInt(d.QuestionNo) === parseInt(qId)
+          (d) => String(d.TeacherID) === String(tId) && parseInt(d.QuestionNo, 10) === parseInt(qId, 10)
         );
-        dataPoint[teacher?.TeacherName || tId] = match ? match.AverageRating : null;
+        row[key] = match ? Number(match.AverageRating) : 0;
+        row[`c_${tId}`] = getTeacherColor(idx);
       });
-      return dataPoint;
+      return row;
     });
-
-    setGraphData(formattedData);
+    setGraphData(points);
   };
 
-  return (
-    <div className="min-h-screen bg-[#0f3b35] p-4 md:p-8 text-gray-800">
-      <div className="max-w-6xl mx-auto space-y-6">
-        
-        {/* Header Card */}
-        <div className="bg-white rounded-xl shadow-lg p-6 flex justify-between items-center">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 border-b-2 border-gray-100 pb-2">Director Information</h2>
-            <p className="text-gray-600 mt-2 font-medium">Name: Dr. Jamil Sawar</p>
-            <p className="text-gray-500 text-sm">Designation: Admin Head</p>
-          </div>
-          <img 
-            src="/path-to-your-avatar.png" 
-            alt="Avatar" 
-            className="w-20 h-20 rounded-full border-2 border-gray-200"
-          />
-        </div>
-
-        {/* Info Bar */}
-        <div className="bg-white rounded-lg p-4 flex flex-col md:flex-row justify-around items-center font-bold shadow-sm">
-          <p>Subject: <span className="text-blue-600">{courseName}</span></p>
-          <p>Session: <span className="text-blue-600">{session}</span></p>
-        </div>
-
-        {/* Selection Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-4 bg-white rounded-xl p-6 shadow-md">
-            <h3 className="font-bold mb-4 text-[#0f3b35]">Select Teachers:</h3>
-            <div className="max-h-64 overflow-y-auto border rounded-md">
-              {teacherList.map((t) => (
-                <div 
-                  key={t.TeacherID}
-                  onClick={() => setSelectedTeachers(prev => 
-                    prev.includes(t.TeacherID) ? prev.filter(x => x !== t.TeacherID) : [...prev, t.TeacherID]
-                  )}
-                  className="flex items-center p-3 border-b hover:bg-gray-50 cursor-pointer transition"
-                >
-                  <input 
-                    type="checkbox" 
-                    checked={selectedTeachers.includes(t.TeacherID)} 
-                    readOnly 
-                    className="w-5 h-5 mr-3 accent-[#0f3b35]"
-                  />
-                  <span className="text-sm font-medium">{t.TeacherName}</span>
-                </div>
-              ))}
-            </div>
-            <button 
-              onClick={handleShowEvaluation}
-              className="w-full mt-6 bg-[#c91212] text-white font-bold py-3 rounded-lg hover:bg-red-700 transition"
-            >
-              Show Evaluation
+  if (!courseId || !session) {
+    return (
+      <div className="cct-main">
+        <div className="cct-wrap">
+          <div className="cct-missing">
+            <h2>Missing course/session</h2>
+            <p>Please open this screen from course selection in RC Evaluation.</p>
+            <button type="button" className="cct-back-btn" onClick={() => navigate("/RCEvaluation")}>
+              Back
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
 
-          {/* Graph Area */}
-          <div className="lg:col-span-8 bg-white rounded-xl p-6 shadow-md">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-bold text-[#0f3b35]">Performance Comparison</h3>
-              <button 
-                onClick={() => setShowEditModal(true)}
-                className="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
-              >
-                ⚙️ Edit Questions
-              </button>
+  return (
+    <div className="cct-main">
+      <div className="cct-wrap">
+        <div className="cct-top-wrapper">
+          <div className="cct-logo-container">
+            <img src={logo} className="cct-logo" alt="BIIT" />
+          </div>
+
+          <div className="cct-profile-card">
+            <div className="cct-profile-info">
+              <p className="cct-p-text">
+                Name: <span className="cct-bold">DR. MOHAMMAD JAMIL SAWAR</span>
+              </p>
+              <p className="cct-p-text">
+                Role: <span className="cct-bold">Director</span>
+              </p>
+              <p className="cct-p-sub">BIIT Administration</p>
             </div>
+            <img src={avatar} alt="" className="cct-avatar" />
+          </div>
+        </div>
 
-            {graphData.length > 0 ? (
-              <div className="h-[400px] w-full">
+        <div className="cct-info-card">
+          <div className="cct-info-row">
+            <span className="cct-label-bold">COURSE: </span>
+            <span className="cct-value-normal">{courseName || "N/A"}</span>
+          </div>
+          <div className="cct-divider" />
+          <div className="cct-info-row">
+            <span className="cct-label-bold">SESSION: </span>
+            <span className="cct-value-normal">{session}</span>
+          </div>
+        </div>
+
+        <h3 className="cct-section-title">Select Teachers to Compare:</h3>
+
+        <div className="cct-list-wrapper">
+          {teacherList.map((t) => {
+            const tid = t.TeacherID ?? t.teacherID;
+            const isSelected = isTeacherSelected(t);
+            return (
+              <button
+                type="button"
+                key={`t-${tid}`}
+                className="cct-list-item"
+                onClick={() => toggleTeacher(tid)}
+              >
+                <div className={`cct-checkbox ${isSelected ? "checked" : ""}`}>{isSelected ? "✓" : ""}</div>
+                <img src={avatar} alt="" className="cct-list-avatar" />
+                <div className="cct-list-content">
+                  <p className="cct-item-label">TEACHER</p>
+                  <p className="cct-item-title">{t.TeacherName}</p>
+                  <p className="cct-sub-text">{t.Designation || "Lecturer"}</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <button type="button" className="cct-eval-btn" onClick={handleShowEvaluation}>
+          Show Evaluation
+        </button>
+
+        {graphData.length > 0 && (
+          <div className="cct-graph-card">
+            <h4 className="cct-graph-header">Performance Comparison</h4>
+            <div className="cct-chart-scroll">
+              <div style={{ width: Math.max(380, graphData.length * 60), height: 280 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={graphData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="name" />
-                    <YAxis domain={[0, 5]} tickCount={6} />
+                    <CartesianGrid stroke="#e3e3e3" strokeDasharray="" />
+                    <XAxis dataKey="label" />
+                    <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} />
                     <Tooltip />
-                    <Legend />
-                    {selectedTeachers.map((tId, idx) => {
-                      const teacher = teacherList.find(t => t.TeacherID === tId);
-                      const name = teacher?.TeacherName || tId;
+                    {selectedTeachers.map((tId, index) => {
+                      const teacher = teacherList.find((tt) => String(tt.TeacherID) === String(tId));
                       return (
                         <Line
-                          key={tId}
+                          key={String(tId)}
                           type="monotone"
-                          dataKey={name}
-                          stroke={getTeacherColor(name, idx)}
+                          dataKey={`t_${tId}`}
+                          name={(teacher?.TeacherName || "TEACHER").toUpperCase()}
+                          stroke={getTeacherColor(index)}
                           strokeWidth={3}
                           dot={{ r: 4 }}
-                          activeDot={{ r: 8 }}
                         />
                       );
                     })}
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-            ) : (
-              <div className="h-[400px] flex items-center justify-center text-gray-400 italic">
-                Select teachers and click "Show Evaluation" to view graph
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Back Button */}
-        <button 
-          onClick={onBack}
-          className="w-full bg-gray-200 text-[#0f3b35] font-bold py-3 rounded-lg hover:bg-gray-300 transition"
-        >
-          ⬅️ Back
-        </button>
-
-        {/* Modal Replacement (Standard Div Overlay) */}
-        {showEditModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
-              <div className="p-6 border-b">
-                <h2 className="text-xl font-bold">Edit Questions</h2>
-              </div>
-              <div className="flex-1 overflow-y-auto p-6">
-                {allQuestions.map(item => (
-                  <div 
-                    key={item.Question_ID}
-                    onClick={() => setSelectedQuestions(prev => 
-                      prev.includes(item.Question_ID) ? prev.filter(x => x !== item.Question_ID) : [...prev, item.Question_ID]
-                    )}
-                    className="flex items-center p-3 border-b hover:bg-gray-50 cursor-pointer"
-                  >
-                    <input 
-                      type="checkbox" 
-                      checked={selectedQuestions.includes(item.Question_ID)} 
-                      readOnly 
-                      className="w-5 h-5 mr-3 accent-[#0f3b35]"
-                    />
-                    <span className="text-sm">{item.Question}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="p-6 border-t flex gap-4">
-                <button 
-                  onClick={() => setShowEditModal(false)}
-                  className="flex-1 bg-gray-200 py-3 rounded-lg font-bold"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={() => { setShowEditModal(false); handleShowEvaluation(); }}
-                  className="flex-1 bg-[#0f3b35] text-white py-3 rounded-lg font-bold"
-                >
-                  Apply Filter
-                </button>
-              </div>
             </div>
+
+            <div className="cct-legend-container">
+              {selectedTeachers.map((tId, index) => {
+                const teacher = teacherList.find((t) => String(t.TeacherID) === String(tId));
+                return (
+                  <div key={String(tId)} className="cct-legend-item">
+                    <span className="cct-legend-dot" style={{ backgroundColor: getTeacherColor(index) }} />
+                    <span className="cct-legend-text">{(teacher?.TeacherName || "TEACHER").toUpperCase()}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <button type="button" className="cct-edit-btn" onClick={() => setShowEditModal(true)}>
+              Edit Questions
+            </button>
           </div>
         )}
+
+        {loading && <div className="cct-loading">Loading...</div>}
+
+        <button type="button" className="cct-back-btn" onClick={() => navigate(-1)}>
+          Back to Dashboard
+        </button>
       </div>
-      
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-[60]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+
+      {showEditModal && (
+        <div className="cct-modal-overlay">
+          <div className="cct-modal-body">
+            <div className="cct-modal-header-row">
+              <h3 className="cct-modal-header">Select Questions</h3>
+              <span className="cct-total-count">Total: {allQuestions.length}</span>
+            </div>
+
+            <div className="cct-search-container">
+              <span className="cct-search-icon">🔍</span>
+              <input
+                className="cct-search-input"
+                placeholder="Search Question No. or Text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <div className="cct-control-row">
+              <button type="button" className="cct-deselect-btn" onClick={() => setSelectedQuestions([])}>
+                Deselect All
+              </button>
+              <button
+                type="button"
+                className="cct-select-btn"
+                onClick={() => setSelectedQuestions(allQuestions.map((q) => q.Question_ID))}
+              >
+                Select All
+              </button>
+            </div>
+
+            <div className="cct-modal-list">
+              {filteredQuestions.map((item) => {
+                const qid = item.Question_ID;
+                const isSelected = selectedQuestions.some((x) => String(x) === String(qid));
+                return (
+                  <button
+                    key={String(item.Question_ID)}
+                    type="button"
+                    className="cct-modal-item"
+                    onClick={() => toggleQuestion(item.Question_ID)}
+                  >
+                    <div className={`cct-checkbox ${isSelected ? "checked" : ""}`}>{isSelected ? "✓" : ""}</div>
+                    <p className="cct-modal-item-txt">
+                      <strong>Q{item.Question_ID}: </strong>
+                      {item.Question}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              className="cct-apply-btn"
+              onClick={() => {
+                setShowEditModal(false);
+                handleShowEvaluation();
+              }}
+            >
+              Apply Filter ({selectedQuestions.length})
+            </button>
+          </div>
         </div>
       )}
     </div>
   );
 };
 
-export default CompareScreenWeb;
+export default CompareScreenFrom_C_T;

@@ -1,225 +1,220 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./TeacherEvalutionQuestions.css";
+import "./EvaluationRate.css";
 import logo from "../Images/Biit_Logo.png";
-import avatar from "../Images/avatar.png";
+import avatarImg from "../Images/avatar.png";
+import maleAvatar from "../Images/maleAvatar.png";
 import APIEndPoint from "../unity.js";
+import { getStoredTeacherId } from "./teacherProfileDisplay.js";
 
-const TeacherEvaluationQuestions = () => {
+const api = (path) => `${APIEndPoint}${path.replace(/^\//, "")}`;
+
+/** Same list as React Native — special profile image for these IDs. */
+const AVATAR_IDS = [
+  "BIIT167", "BIIT189", "BIIT212", "BIIT213", "BIIT346", "BIIT359",
+  "BIIT365", "BIIT368", "BIIT222", "BIIT202", "BIIT386", "BIIT422",
+  "BIIT394", "BIIT397", "BIIT395", "BIIT393", "BIIT400", "BIIT402",
+  "BIIT403", "BIIT404", "BIIT407", "BIIT409", "BIIT411", "BIIT412",
+  "BIIT416", "BIIT417", "BIIT418", "BIIT421", "BIIT424", "BIIT425",
+  "BIIT427", "BIIT429",
+];
+
+const sessionApiParam = (session) =>
+  String(session || "").startsWith("SOS") ? String(session).replace(/^SOS/i, "") : String(session || "");
+
+const EvaluationRate = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Extract params passed from the previous list page
-  const { EvaluatorID, TargetID, TargetName, Qtype, Designation } = location.state || {};
-  const formattedID = EvaluatorID ? String(EvaluatorID).trim() : "";
+  const TeacherID =
+    (location.state?.TeacherID && String(location.state.TeacherID).trim()) || getStoredTeacherId();
 
-  const [questions, setQuestions] = useState([]);
+  const [teacherData, setTeacherData] = useState(null);
+  const [sessions, setSessions] = useState([]);
+  const [selectedSession, setSelectedSession] = useState("");
+  const [studentScore, setStudentScore] = useState(0);
+  const [peerScore, setPeerScore] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState(null);
-  const [count, setCount] = useState(1);
-  const [selectedRatings, setSelectedRatings] = useState({}); // Stores { questionId: ratingValue }
-  const [suggestion, setSuggestion] = useState("");
 
-  const ratingMap = {
-    "Excellent": 5,
-    "Good": 4,
-    "Satisfactory": 3,
-    "Below Average": 2,
-    "Poor": 1
-  };
+  const profileImage = AVATAR_IDS.includes(String(TeacherID).toUpperCase()) ? avatarImg : maleAvatar;
 
-  const options = Object.keys(ratingMap);
+  const fetchScores = useCallback(
+    async (session) => {
+      if (!TeacherID || !session) return;
+      const apiSessionParam = sessionApiParam(session);
+
+      try {
+        const stdRes = await fetch(api(`Director/GetTeacherAverageRatings?session=${encodeURIComponent(apiSessionParam)}`));
+        const stdList = stdRes.ok ? await stdRes.json().catch(() => []) : [];
+        const listStd = Array.isArray(stdList) ? stdList : [];
+
+        const stdMatch = listStd.find((t) =>
+          String(t.TeacherID ?? t.teacherID ?? "")
+            .toLowerCase()
+            .includes(String(TeacherID).toLowerCase())
+        );
+
+        if (stdMatch) {
+          const ratingNum = parseFloat(stdMatch.AverageRating ?? stdMatch.averageRating);
+          setStudentScore(Number.isFinite(ratingNum) ? Math.round((ratingNum / 5) * 100) : 0);
+        } else {
+          setStudentScore(0);
+        }
+
+        const peerRes = await fetch(api(`Director/GetPeerAverageRatings?session=${encodeURIComponent(apiSessionParam)}`));
+        const peerList = peerRes.ok ? await peerRes.json().catch(() => []) : [];
+        const listPeer = Array.isArray(peerList) ? peerList : [];
+
+        const peerMatch = listPeer.find((t) =>
+          String(t.TeacherID ?? t.teacherID ?? "")
+            .toLowerCase()
+            .includes(String(TeacherID).toLowerCase())
+        );
+
+        if (peerMatch) {
+          const peerRatingNum = parseFloat(peerMatch.AverageRating ?? peerMatch.averageRating);
+          setPeerScore(Number.isFinite(peerRatingNum) ? Math.round((peerRatingNum / 5) * 100) : 0);
+        } else {
+          setPeerScore(0);
+        }
+      } catch (e) {
+        console.error("Score fetch error:", e);
+        setStudentScore(0);
+        setPeerScore(0);
+      }
+    },
+    [TeacherID]
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        // 1. Fetch Evaluator Profile
-        if (formattedID) {
-          const profileResp = await fetch(`${APIEndPoint}/Teacher/GetTeacherProfile?TeacherID=${encodeURIComponent(formattedID)}`);
-          if (profileResp.ok) {
-            const profileData = await profileResp.json();
-            setProfile(profileData);
-          }
-        }
-
-        // 2. Fetch Questions and Filter
-        const qResp = await fetch(`${APIEndPoint}/Student/GetQuestions`);
-        if (qResp.ok) {
-          const qData = await qResp.json();
-          
-          let targetType = "C"; // Default Common
-          const cleanDesignation = Designation ? Designation.trim().toLowerCase() : "";
-          const qtypeLower = Qtype ? Qtype.toLowerCase() : "";
-
-          if (qtypeLower.includes("peer")) {
-            if (cleanDesignation.includes("junior") || cleanDesignation.includes("jr")) {
-              targetType = "PTJ"; // Peer Teacher Junior
-            } else {
-              targetType = "PTS"; // Peer Teacher Senior
-            }
-          }
-
-          const filtered = qData.filter(q => q.RawType === targetType);
-          setQuestions(filtered.length > 0 ? filtered : qData);
-        }
-      } catch (error) {
-        console.error("Fetch Error:", error);
-        alert("Check server connection.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [formattedID, Qtype, Designation]);
-
-  const handleSelectOption = (opt) => {
-    const currentQId = questions[count - 1]?.Question_Id;
-    if (!currentQId) return;
-
-    setSelectedRatings(prev => ({
-      ...prev,
-      [currentQId]: ratingMap[opt]
-    }));
-  };
-
-  const handleSubmit = async () => {
-    if (Object.keys(selectedRatings).length < questions.length) {
-      alert("Please answer all questions before submitting.");
+    if (!TeacherID) {
+      setLoading(false);
+      navigate("/", { replace: true });
       return;
     }
 
-    const payload = {
-      Evaluator_Emp_no: formattedID,
-      Target_Emp_no: TargetID,
-      Suggestion: suggestion,
-      Answers: Object.entries(selectedRatings).map(([id, rating]) => ({
-        Question_ID: parseInt(id),
-        Rating: rating
-      }))
+    let cancelled = false;
+
+    const fetchInitialData = async () => {
+      try {
+        const profRes = await fetch(api(`Teacher/GetTeacherProfile?TeacherID=${encodeURIComponent(TeacherID)}`));
+        const profJson = profRes.ok ? await profRes.json().catch(() => null) : null;
+        if (!cancelled) setTeacherData(profJson);
+
+        const sessionRes = await fetch(api("Director/GetAllSessions"));
+        const sessionJson = sessionRes.ok ? await sessionRes.json().catch(() => []) : [];
+        const list = Array.isArray(sessionJson) ? sessionJson : [];
+
+        if (!cancelled) {
+          setSessions(list);
+          if (list.length > 0) {
+            const first = list[0];
+            setSelectedSession(first);
+            fetchScores(first);
+          } else {
+            setSelectedSession("");
+            setStudentScore(0);
+            setPeerScore(0);
+          }
+        }
+      } catch (e) {
+        console.error("Initial load error:", e);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     };
 
-    try {
-      setLoading(true);
-      const response = await fetch(`${APIEndPoint}/Evaluation/SubmitPeer`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+    fetchInitialData();
+    return () => {
+      cancelled = true;
+    };
+  }, [TeacherID, navigate, fetchScores]);
 
-      if (response.ok) {
-        alert("Evaluation submitted successfully!");
-        navigate(-1);
-      } else {
-        const result = await response.json();
-        alert(result.message || "Failed to save data.");
-      }
-    } catch (error) {
-      alert("Network error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+  const onSessionChange = (e) => {
+    const val = e.target.value;
+    setSelectedSession(val);
+    if (val) fetchScores(val);
   };
 
-  if (loading) return <div className="web-loader">Loading...</div>;
-
-  const currentQuestion = questions[count - 1];
-  const total_ques = questions.length;
+  if (loading && !teacherData) {
+    return (
+      <div className="er-loader-container">
+        <div className="er-spinner" aria-busy="true" />
+      </div>
+    );
+  }
 
   return (
-    <div className="web-main-container">
-      <div className="evaluation-card">
-        
-        {/* Sidebar */}
-        <div className="evaluation-sidebar">
-          <img src={logo} alt="BIIT Logo" className="card-logo" />
-          <div className="avatar-wrapper">
-            <img src={avatar} alt="Avatar" className="avatar-img" />
+    <div className="er-page">
+      <div className="er-inner">
+        <div className="er-logo-container">
+          <img src={logo} alt="BIIT" className="er-logo" />
+        </div>
+
+        <div className="er-profile-card">
+          <div className="er-profile-info">
+            <p className="er-p-text">
+              Name: <strong>{teacherData?.Name || teacherData?.name || "N/A"}</strong>
+            </p>
+            <p className="er-p-text">
+              Designation:{" "}
+              <strong>{teacherData?.Designation || teacherData?.designation || "Faculty"}</strong>
+            </p>
+            <p className="er-p-sub">BIIT Academic Staff</p>
           </div>
-          <div className="info-box">
-            <p className="info-title">Evaluating Teacher</p>
-            <h3 className="teacher-name">{TargetName}</h3>
-            <p className="teacher-desig">{Designation}</p>
+          <img src={profileImage} alt="" className="er-avatar" />
+        </div>
+
+        <div className="er-dropdown-card">
+          <label htmlFor="er-session-select" className="er-dropdown-label">
+            Select session:
+          </label>
+          <div className="er-picker-wrapper">
+            <select
+              id="er-session-select"
+              className="er-picker"
+              value={selectedSession}
+              onChange={onSessionChange}
+              disabled={sessions.length === 0}
+            >
+              {sessions.length === 0 ? (
+                <option value="">No sessions</option>
+              ) : (
+                sessions.map((s, index) => (
+                  <option key={`${s}-${index}`} value={s}>
+                    {s}
+                  </option>
+                ))
+              )}
+            </select>
           </div>
-          
-          <div className="progress-section">
-            <p>Q {count} of {total_ques}</p>
-            <div className="progress-bar-bg">
-              <div className="progress-bar-fill" style={{ width: `${(count / total_ques) * 100}%` }}></div>
+        </div>
+
+        <h2 className="er-section-title">Evaluation summary</h2>
+
+        <div className="er-analytics-card">
+          <div className="er-stats-row">
+            <div className="er-circle-wrapper">
+              <div className="er-progress-circle er-progress-circle--student">
+                <span className="er-percent-text">{studentScore}%</span>
+              </div>
+              <span className="er-circle-label">Student feedback</span>
+            </div>
+            <div className="er-circle-wrapper">
+              <div className="er-progress-circle er-progress-circle--peer">
+                <span className="er-percent-text">{peerScore}%</span>
+              </div>
+              <span className="er-circle-label">Peer evaluation</span>
             </div>
           </div>
-
-          <button className="sidebar-back-btn" onClick={() => navigate(-1)}>⬅ Back</button>
         </div>
 
-        {/* Question Area */}
-        <div className="question-content">
-          <h2 className="section-title">Peer Evaluation</h2>
-          
-          <div className="question-box">
-            {questions.length > 0 ? (
-              <>
-                <p className="question-text">
-                  <span className="q-number">{count}.</span> 
-                  {currentQuestion?.Question1}
-                </p>
-
-                <div className="options-container">
-                  {options.map((option) => (
-                    <div 
-                      key={option} 
-                      className={`option-item ${selectedRatings[currentQuestion?.Question_Id] === ratingMap[option] ? "selected" : ""}`}
-                      onClick={() => handleSelectOption(option)}
-                    >
-                      <span>{option}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {count === total_ques && (
-                  <div className="suggestion-box">
-                    <label>Suggestions for {TargetName}:</label>
-                    <textarea 
-                      className="suggestion-input" 
-                      placeholder="Write your feedback here..."
-                      value={suggestion}
-                      onChange={(e) => setSuggestion(e.target.value)}
-                    />
-                  </div>
-                )}
-
-                <div className="nav-buttons">
-                  <button 
-                    className="nav-btn-back" 
-                    disabled={count === 1} 
-                    onClick={() => setCount(count - 1)}
-                    style={{ visibility: count === 1 ? 'hidden' : 'visible' }}
-                  >
-                    Back
-                  </button>
-                  
-                  {count < total_ques ? (
-                    <button className="nav-btn-next" onClick={() => {
-                        if (selectedRatings[currentQuestion?.Question_Id]) setCount(count + 1);
-                        else alert("Please select an option");
-                    }}>
-                      Next
-                    </button>
-                  ) : (
-                    <button className="nav-btn-submit" onClick={handleSubmit}>Submit Feedback</button>
-                  )}
-                </div>
-              </>
-            ) : (
-              <p>No questions found for this category.</p>
-            )}
-          </div>
-        </div>
+        <button type="button" className="er-back-btn" onClick={() => navigate(-1)}>
+          Back to dashboard
+        </button>
       </div>
     </div>
   );
 };
 
-export default TeacherEvaluationQuestions;
+export default EvaluationRate;
