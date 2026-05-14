@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace FinalBackend
 {
@@ -17,6 +19,11 @@ namespace FinalBackend
             var cors = new System.Web.Http.Cors.EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
             config.MapHttpAttributeRoutes();
+
+            // JSON: camelCase from browsers (axios) maps to PascalCase C# properties
+            var json = config.Formatters.JsonFormatter;
+            json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            json.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
 
             config.Routes.MapHttpRoute(
     name: "DefaultApi",
