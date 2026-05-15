@@ -22,9 +22,13 @@ import TeacherPerfomance from '../Frontend/Director/TeacherPerfomance/TeacherPer
 import CHR from '../Frontend/Teacher/CHR.jsx';
 import Attendance from '../Frontend/Teacher/Attendance.jsx';
 import RCEvaluation from '../Frontend/Director/TeacherPerfomance/RCEvaluation.jsx';
+import ConfidentialRCEvaluation from '../Frontend/Director/TeacherPerfomance/ConfidentialRCEvaluation.jsx';
 import CompareScreenFrom_C_T from '../Frontend/Director/TeacherPerfomance/CompareScreenFrom_C_T.jsx';
+import ConfidentialCompareScreen from '../Frontend/Director/TeacherPerfomance/ConfidentialCompareScreen.jsx';
+import TeacherPerformanceDashboard from '../Frontend/Director/TeacherPerfomance/TeacherPerformanceDashboard.jsx';
 import CompareResults from '../Frontend/Director/TeacherPerfomance/CompareResults.jsx';
 import GenderAnalytics from '../Frontend/Director/TeacherPerfomance/GenderAnalytics.jsx';
+import TeacherGradeDashboard from '../Frontend/Director/TeacherPerfomance/TeacherGradeDashboard.jsx';
 import AddLabEvalQuestions from '../Frontend/Director/Questions/AddLabEvalQuestions.jsx';
 import ConfidentalStudentEvaluationForm from '../Frontend/Student/ConfidentalStudentEvaluationForm.jsx';
 import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
@@ -33,6 +37,9 @@ import ConfidentialDecryptorTable from '../Frontend/Director/ConfidentialDecrypt
 import AdminDashboard from '../Frontend/Admin/AdminDashboard.jsx';
 import UploadAttendance from '../Frontend/Admin/UploadAttendance.jsx';
 import UploadCHR from '../Frontend/Admin/UploadCHR.jsx';
+import ManagerDashboard from '../Frontend/Manager/ManagerDashboard.jsx';
+import ManageStudent from '../Frontend/Manager/ManageStudent.jsx';
+import UpdateFaculty from '../Frontend/Manager/UpdateFaculty.jsx';
 //import ConfidentialQuestionsDashboard from '../Frontend/Student/ConfidentialQuestionsDashboard.jsx';
 //import AllAssignedCourseTeachers from '../Frontend/Director/TeacherPerfomance/AllAssignedCourseTeachers.jsx';
 //import ViewConfidentialEvaluation from '../Frontend/Director/TeacherPerfomance/ViewConfidentialEvaluation.jsx';
@@ -65,6 +72,11 @@ createRoot(document.getElementById('root')).render(
         <Route path="/Attendance" element={<Attendance/>} />
         <Route path="/EvaluationRate" element={<EvaluationRate/>} />
 
+        {/* Manager Routes */}
+        <Route path="/ManagerDashboard" element={<ManagerDashboard />} />
+        <Route path="/ManagerManageStudent" element={<ManageStudent />} />
+        <Route path="/ManagerUpdateStudent" element={<UpdateFaculty />} />
+
         {/* Admin Routes */}
         <Route path="/AdminDashboard" element={<AdminDashboard />} />
         <Route path="/UploadAttendance" element={<UploadAttendance />} />
@@ -75,9 +87,13 @@ createRoot(document.getElementById('root')).render(
         <Route path="/ManageQuestions" element={<AddLabEvalQuestions />} />
         <Route path="/TeacherPerformance" element={<TeacherPerfomance/>} /> {/* Spelling Match with Dashboard */}
         <Route path="/RCEvaluation" element={<RCEvaluation />} />
+        <Route path="/ConfidentialRCEvaluation" element={<ConfidentialRCEvaluation />} />
+        <Route path="/TeacherPerformanceDashboard" element={<TeacherPerformanceDashboard />} />
         <Route path="/CompareResults" element={<CompareResults />} />
         <Route path="/CompareScreenFrom_C_T" element={<CompareScreenFrom_C_T />} />
+        <Route path="/ConfidentialCompareScreen" element={<ConfidentialCompareScreen />} />
         <Route path="/GenderAnalytics" element={<GenderAnalytics />} />
+        <Route path="/TeacherGradeDashboard" element={<TeacherGradeDashboard />} />
         <Route path="/ConfidentialDecryptor" element={<ConfidentialDecryptor />} />
         <Route path="/ConfidentialDecryptorTable" element={<ConfidentialDecryptorTable />} />
         {/* <Route path="/AllAssignedCourseTeachers" element={<AllAssignedCourseTeachers />} /> */}

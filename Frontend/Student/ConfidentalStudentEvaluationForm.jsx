@@ -6,6 +6,7 @@ import logo from "../Images/Biit_Logo.png";
 import avatar from "../Images/avatar.png";
 import ApiEndPoint from '../unity.js';
 import { getConfidentialCompletedCourseNos } from "./confidentialEvalTracking.js";
+import { safeTrim, fetchStudentCoursesMulti } from "./studentApiHelpers.js";
 
 const ConfidentalStudentEvaluationForm = () => {
     const navigate = useNavigate();
@@ -25,19 +26,26 @@ const ConfidentalStudentEvaluationForm = () => {
                 const profileRes = await axios.get(`${ApiEndPoint}Student/GetStudentProfile`, { params: { AridNo } });
                 
                 if (profileRes.status === 200) {
-                    setProfile(profileRes.data);
-                    const courseRes = await axios.get(`${ApiEndPoint}Student/GetStudentCourses`, {
-                        params: { 
-                            AridNo: profileRes.data.AridNo.trim(), 
-                            semester: profileRes.data.Semester, 
-                            discipline: profileRes.data.Course.trim() 
-                        }
-                    });
+                    const raw = profileRes.data;
+                    const normalized =
+                        raw && typeof raw === "object"
+                            ? {
+                                  ...raw,
+                                  AridNo: safeTrim(raw.AridNo ?? raw.Reg_no ?? raw.reg_no ?? AridNo),
+                                  Course: raw.Course ?? raw.Discipline ?? raw.discipline ?? "",
+                              }
+                            : null;
+                    if (!normalized?.AridNo) {
+                        navigate("/");
+                        return;
+                    }
+                    setProfile(normalized);
 
-                    if (courseRes.status === 200) {
-                        const arid = profileRes.data.AridNo.trim();
+                    const { ok, list } = await fetchStudentCoursesMulti(axios, ApiEndPoint, normalized);
+                    if (ok) {
+                        const arid = normalized.AridNo;
                         const completed = getConfidentialCompletedCourseNos(arid);
-                        const coursesWithStatus = (Array.isArray(courseRes.data) ? courseRes.data : []).map((course) => ({
+                        const coursesWithStatus = list.map((course) => ({
                             ...course,
                             isDone: completed.has(String(course.CourseNo ?? course.courseNo ?? "").trim()),
                         }));
@@ -101,8 +109,8 @@ const ConfidentalStudentEvaluationForm = () => {
                 <div className="white-pill-card">
                     <div className="student-info-flex">
                         <div className="info-text-box">
-                            <p>Name: <strong>{profile?.FullName || "Student"}</strong></p>
-                            <p>Arid#: {profile?.AridNo}</p>
+                            <p>Name: <strong>{profile?.FullName || [profile?.St_firstName, profile?.St_middlename, profile?.St_lastname].filter(Boolean).join(" ") || "Student"}</strong></p>
+                            <p>Arid#: {profile?.AridNo ?? profile?.Reg_no}</p>
                             <p style={{marginTop: '5px', color: '#4CAF50', fontWeight: 'bold', fontSize: '0.75rem'}}>
                                 {profile?.Course} - Sem {profile?.Semester} ({profile?.Section})
                             </p>
@@ -134,9 +142,9 @@ const ConfidentalStudentEvaluationForm = () => {
                                         courseName: course.CourseName, 
                                         teacherName: course.TeacherName, 
                                         teacherID: course.EmpNo,
-                                        AridNo: profile.AridNo,
+                                        AridNo: profile?.AridNo,
                                         returnTo: "/ConfidentalStudentEvaluationForm",
-                                        returnState: { AridNo: profile.AridNo, backTo },
+                                        returnState: { AridNo: profile?.AridNo, backTo },
                                     } 
                                 })}
                             >

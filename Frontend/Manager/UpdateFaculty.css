@@ -1,0 +1,322 @@
+/* Update student form — same palette as ManageStudent, responsive */
+
+.uf-page {
+  min-height: 100dvh;
+  min-height: 100vh;
+  background: #0f3b35;
+  color: #fff;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  padding: clamp(14px, 4vw, 24px);
+  padding-bottom: max(32px, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+}
+
+.uf-scroll {
+  max-width: min(720px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 3vw, 22px);
+}
+
+.uf-logo {
+  width: clamp(72px, 22vw, 90px);
+  height: clamp(72px, 22vw, 90px);
+  object-fit: contain;
+}
+
+.uf-card {
+  background: #fff;
+  color: #1a1a1a;
+  width: 100%;
+  max-width: 560px;
+  border-radius: clamp(10px, 2vw, 12px);
+  padding: clamp(14px, 3.5vw, 18px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.uf-card-title {
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 12px;
+  font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+  color: #0f3b35;
+}
+
+.uf-profile-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 380px) {
+  .uf-profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.uf-txt {
+  font-size: clamp(0.82rem, 2.8vw, 0.92rem);
+  margin: 0 0 6px;
+  line-height: 1.35;
+}
+
+.uf-avatar {
+  width: clamp(52px, 14vw, 60px);
+  height: clamp(52px, 14vw, 60px);
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.uf-mcard {
+  background: #204d45;
+  width: 100%;
+  max-width: 560px;
+  border-radius: clamp(10px, 2vw, 12px);
+  padding: clamp(14px, 3.5vw, 18px);
+  box-sizing: border-box;
+}
+
+.uf-mtitle {
+  background: #fff;
+  color: #0f3b35;
+  text-align: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  margin: 0 0 14px;
+  font-size: clamp(0.9rem, 3vw, 1rem);
+}
+
+.uf-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+  height: 44px;
+  margin-bottom: 10px;
+}
+
+.uf-input::placeholder {
+  color: #888;
+}
+
+.uf-name-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 480px) {
+  .uf-name-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.uf-name-row .uf-input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.uf-image-btn {
+  background: #fff;
+  color: #0f3b35;
+  border: none;
+  border-radius: 999px;
+  padding: 0 14px;
+  font-weight: 800;
+  font-size: clamp(0.75rem, 2.4vw, 0.82rem);
+  cursor: pointer;
+  height: 44px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.uf-image-btn:hover {
+  filter: brightness(1.03);
+}
+
+.uf-file-hidden {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.uf-dd-shell {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.uf-dd-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 999px;
+  height: 44px;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+  cursor: pointer;
+  text-align: left;
+}
+
+.uf-dd-toggle:hover {
+  filter: brightness(1.02);
+}
+
+.uf-dd-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: #fff;
+  color: #1a1a1a;
+  border-radius: 12px;
+  margin-top: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  max-height: min(220px, 40vh);
+  overflow-y: auto;
+}
+
+.uf-dd-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 0.92rem;
+  cursor: pointer;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.uf-dd-item:last-child {
+  border-bottom: none;
+}
+
+.uf-dd-item:hover {
+  background: #f5f5f5;
+}
+
+.uf-gender-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.uf-gender-text {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.uf-radio-label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.uf-radio-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: #fff;
+}
+
+.uf-btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+@media (min-width: 400px) {
+  .uf-btn-row {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+.uf-update-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  flex: 1;
+  min-width: 120px;
+}
+
+.uf-back-btn-inline {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  flex: 1;
+  min-width: 120px;
+}
+
+.uf-update-btn:hover,
+.uf-back-btn-inline:hover {
+  filter: brightness(1.06);
+}
+
+.uf-back-pill {
+  background: #fff;
+  color: #0f3b35;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 28px;
+  font-size: clamp(0.9rem, 3vw, 1rem);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.uf-back-pill:hover {
+  filter: brightness(1.04);
+}
+
+.uf-student-preview {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.uf-student-preview img {
+  width: clamp(64px, 20vw, 88px);
+  height: clamp(64px, 20vw, 88px);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+}

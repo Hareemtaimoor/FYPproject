@@ -1,0 +1,465 @@
+@import "../../Teacher/TeacherTheme.css";
+
+.tgd-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--teacher-bg, #0d2e27);
+  padding: clamp(12px, 3vw, 24px) clamp(10px, 4vw, 28px) clamp(28px, 5vw, 48px);
+  box-sizing: border-box;
+  font-family: var(--teacher-font, "Segoe UI", system-ui, sans-serif);
+}
+
+.tgd-shell {
+  width: 100%;
+  min-width: 0;
+  max-width: min(720px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2.5vw, 20px);
+}
+
+.tgd-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .tgd-header {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .tgd-logo-wrap {
+    align-self: flex-start;
+  }
+}
+
+.tgd-logo-wrap {
+  background: #fff;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.tgd-logo {
+  width: clamp(48px, 12vw, 56px);
+  height: clamp(48px, 12vw, 56px);
+  object-fit: contain;
+  display: block;
+}
+
+.tgd-profile-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--teacher-card, #fff);
+  border-radius: var(--teacher-radius-lg, 16px);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--teacher-shadow, 0 6px 20px rgba(0, 0, 0, 0.1));
+  box-sizing: border-box;
+}
+
+.tgd-profile-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.tgd-profile-text p {
+  margin: 0 0 4px;
+  font-size: clamp(0.78rem, 2.2vw, 0.88rem);
+  color: #444;
+}
+
+.tgd-profile-text strong {
+  color: #0d2e27;
+}
+
+.tgd-profile-sub {
+  margin-top: 6px !important;
+  color: var(--teacher-accent, #28a745) !important;
+  font-weight: 700 !important;
+  font-size: clamp(0.72rem, 2vw, 0.8rem) !important;
+}
+
+.tgd-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.tgd-page-title {
+  margin: 0;
+  text-align: center;
+  color: var(--teacher-accent, #28a745);
+  font-size: clamp(0.95rem, 2.8vw, 1.1rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tgd-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tgd-section-title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(0.72rem, 2vw, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tgd-select-wrap {
+  background: #5c5858;
+  border-radius: 12px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.tgd-select {
+  width: 100%;
+  padding: 12px 10px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: clamp(0.88rem, 2.4vw, 1rem);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.tgd-select option {
+  color: #111;
+  background: #fff;
+}
+
+.tgd-scroll-panel {
+  max-height: min(200px, 40vh);
+  min-height: 120px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (min-width: 768px) {
+  .tgd-scroll-panel {
+    max-height: 220px;
+  }
+}
+
+.tgd-empty {
+  margin: 0;
+  padding: 16px 12px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.88rem;
+}
+
+.tgd-teacher-list,
+.tgd-course-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tgd-teacher-card,
+.tgd-course-row {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff;
+  box-sizing: border-box;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tgd-teacher-card:hover,
+.tgd-course-row:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.tgd-teacher-card--active,
+.tgd-course-row--active {
+  background: #e8f5e9;
+  outline: 2px solid var(--teacher-accent, #28a745);
+  outline-offset: -2px;
+}
+
+.tgd-color-bar {
+  width: 5px;
+  align-self: stretch;
+  min-height: 44px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.tgd-teacher-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.tgd-teacher-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tgd-teacher-name {
+  font-size: clamp(0.72rem, 2vw, 0.82rem);
+  font-weight: 800;
+  color: #333;
+  word-break: break-word;
+}
+
+.tgd-teacher-role {
+  font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+  color: #666;
+}
+
+.tgd-teacher-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.tgd-check {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #0d2e27;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: transparent;
+}
+
+.tgd-check--on {
+  background: #0d2e27;
+  color: #fff;
+  font-weight: 800;
+}
+
+.tgd-avg {
+  font-size: clamp(0.62rem, 1.6vw, 0.72rem);
+  color: var(--teacher-accent, #28a745);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tgd-course-row {
+  gap: 12px;
+}
+
+.tgd-course-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tgd-course-code {
+  font-size: clamp(0.68rem, 1.8vw, 0.78rem);
+  font-weight: 800;
+  color: var(--teacher-accent, #28a745);
+}
+
+.tgd-course-name {
+  font-size: clamp(0.8rem, 2.2vw, 0.92rem);
+  color: #333;
+  word-break: break-word;
+}
+
+.tgd-primary-btn {
+  width: 100%;
+  max-width: 400px;
+  margin: 8px auto 0;
+  display: block;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  background: #c91212;
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(0.9rem, 2.4vw, 1rem);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.tgd-primary-btn:active {
+  transform: scale(0.99);
+}
+
+.tgd-primary-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.tgd-primary-btn:disabled:active {
+  transform: none;
+}
+
+.tgd-loading {
+  text-align: center;
+  padding: 12px;
+  color: var(--teacher-accent, #28a745);
+  font-weight: 700;
+}
+
+.tgd-graph-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: clamp(12px, 3vw, 18px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+}
+
+.tgd-graph-title {
+  margin: 0 0 6px;
+  text-align: center;
+  font-size: clamp(0.85rem, 2.4vw, 0.98rem);
+  font-weight: 800;
+  color: #0d2e27;
+}
+
+.tgd-graph-sub {
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: clamp(0.72rem, 2vw, 0.8rem);
+  color: #666;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.tgd-chart-outer {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tgd-chart-inner {
+  width: 100%;
+  min-width: 280px;
+  height: 280px;
+  min-height: 280px;
+}
+
+@media (min-width: 520px) {
+  .tgd-chart-inner {
+    min-width: 400px;
+  }
+}
+
+.tgd-chart-tooltip {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  font-size: 0.82rem;
+}
+
+.tgd-chart-tooltip-title {
+  margin: 0 0 8px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.tgd-chart-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  color: #475569;
+}
+
+.tgd-chart-tooltip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tgd-legend-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.tgd-legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(0.68rem, 1.8vw, 0.78rem);
+  font-weight: 700;
+  color: #444;
+}
+
+.tgd-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.tgd-back-btn {
+  width: 100%;
+  max-width: 400px;
+  margin: 8px auto 0;
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  color: #0d2e27;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tgd-primary-btn:active {
+    transform: none;
+  }
+}

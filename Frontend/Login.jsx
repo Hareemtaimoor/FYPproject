@@ -16,7 +16,7 @@ const Login = () => {
     setLoading(true);
     try {
         const response = await axios.get(
-            `${ApiEndPoint}LogIn/LoginUser?username=${userid.trim()}&password=${password.trim()}`
+            `${ApiEndPoint}Login/LoginUser?username=${encodeURIComponent(userid.trim())}&password=${encodeURIComponent(password.trim())}`
         );
 
         if (response.status === 200 && response.data) {
@@ -30,7 +30,9 @@ const Login = () => {
             
             const evalStatus = parseInt(data.eval, 10);
             const sem = parseInt(data.semester, 10);
-            const currentUserId = data.userid || userid;
+            const currentUserId = String(
+                data.userid ?? data.userId ?? data.user_id ?? data.User_id ?? userid ?? ""
+            ).trim();
 
             // 1. STUDENT LOGIC
             if (userType === "student") {
@@ -60,6 +62,11 @@ else if (userType.includes("teacher")) {
             // 3. DIRECTOR LOGIC
             else if (userType.includes("director")) {
                 nav("/DirectorDashboard", { replace: true });
+            }
+
+            // 3b. MANAGER LOGIC
+            else if (userType.includes("manager")) {
+                nav("/ManagerDashboard", { replace: true });
             }
 
             // 4. ADMIN LOGIC

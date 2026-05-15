@@ -184,21 +184,228 @@
 }
 
 .cct-graph-card {
-  background: #fff;
-  border-radius: 14px;
-  margin-top: 16px;
-  padding: 10px;
+  position: relative;
+  background: linear-gradient(165deg, #ffffff 0%, #f8fafc 55%, #f1f5f9 100%);
+  border-radius: 18px;
+  margin-top: 18px;
+  padding: 18px 14px 16px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 14px 40px rgba(13, 46, 39, 0.12),
+    0 4px 12px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  overflow: hidden;
+}
+
+.cct-graph-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0d9488, #2563eb, #7c3aed, #db2777);
+  opacity: 0.9;
 }
 
 .cct-graph-header {
-  margin: 6px 0;
+  margin: 8px 0 6px;
   text-align: center;
-  color: #0d2e27;
-  font-size: 0.92rem;
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.cct-graph-sub {
+  margin: 0 auto 14px;
+  max-width: 36rem;
+  text-align: center;
+  font-size: 0.76rem;
+  color: #64748b;
+  line-height: 1.45;
 }
 
 .cct-chart-scroll {
   overflow-x: auto;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, #ffffff 28%, #fafbfc 100%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.cct-chart-inner {
+  height: 360px;
+  border-radius: 12px;
+}
+
+.cct-chart-tooltip {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow:
+    0 12px 40px rgba(15, 23, 42, 0.14),
+    0 4px 12px rgba(15, 23, 42, 0.08);
+  min-width: 180px;
+}
+
+.cct-tt-badge {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0f766e;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.14), rgba(37, 99, 235, 0.12));
+  border-radius: 999px;
+  border: 1px solid rgba(13, 148, 136, 0.2);
+}
+
+.cct-tt-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cct-tt-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: #334155;
+}
+
+.cct-tt-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95);
+}
+
+.cct-tt-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cct-tt-val {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+}
+
+.cct-graph-legend-footer {
+  margin-top: 12px;
+  padding: 12px 10px 4px;
+  border-top: 1px solid rgba(226, 232, 240, 0.95);
+  background: rgba(248, 250, 252, 0.85);
+  border-radius: 0 0 12px 12px;
+}
+
+.cct-graph-legend-title {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+  text-align: center;
+}
+
+.cct-legend-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 10px;
+  padding: 0 6px 4px;
+  max-width: 100%;
+}
+
+.cct-legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  max-width: min(100%, 280px);
+}
+
+.cct-legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+}
+
+.cct-legend-chip-text {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cct-pick-course-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.cct-pick-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0d2e27;
+  margin-bottom: 8px;
+}
+
+.cct-pick-select {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 10px;
+  border: 1px solid #cfd6dd;
+  padding: 10px 12px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  background: #fafbfc;
+}
+
+.cct-pick-hint {
+  margin: 8px 0 0;
+  font-size: 0.72rem;
+  color: #c62828;
+}
+
+.cct-teacher-flow-meta {
+  margin-top: 4px;
+}
+
+.cct-teacher-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cct-empty-banner--soft {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
 }
 
 .cct-legend-container {
@@ -393,6 +600,50 @@
   padding: 18px;
   margin-top: 26px;
   text-align: center;
+}
+
+.cct-course-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cct-course-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  background: #f0f7f4;
+  border: 1px solid #c8e6d4;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  color: #0d2e27;
+}
+
+.cct-chip-sub {
+  font-weight: 500;
+  color: #444;
+}
+
+.cct-hint {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  margin: -4px 0 12px;
+}
+
+.cct-empty-banner {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.8rem;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.cct-empty-banner code {
+  font-size: 0.72rem;
 }
 
 @media (min-width: 768px) {

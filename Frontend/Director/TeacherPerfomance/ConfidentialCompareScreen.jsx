@@ -123,19 +123,20 @@ function teacherRowId(t) {
     .trim();
 }
 
-const CompareScreenFrom_C_T = () => {
+const ConfidentialCompareScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const routeState = location.state || {};
 
   const compareMode = useMemo(() => {
+    const minImplicitTeachers = routeState.confidentialEval ? 1 : 2;
     if (routeState.compareMode === "teachers") return "teachers";
-    if (Array.isArray(routeState.teachers) && routeState.teachers.length >= 2) {
+    if (Array.isArray(routeState.teachers) && routeState.teachers.length >= minImplicitTeachers) {
       const hasCourses = Array.isArray(routeState.courses) && routeState.courses.length > 0;
       if (!hasCourses) return "teachers";
     }
     return "courses";
-  }, [routeState.compareMode, routeState.teachers, routeState.courses]);
+  }, [routeState.compareMode, routeState.teachers, routeState.courses, routeState.confidentialEval]);
 
   const initialTeachers = useMemo(
     () => (Array.isArray(routeState.teachers) ? routeState.teachers : []),
@@ -194,7 +195,7 @@ const CompareScreenFrom_C_T = () => {
       try {
         const cid = teacherFlowCourse.courseId;
         const r = await axios.get(
-          api(`Director/GetTeachersByCourse?courseId=${encodeURIComponent(cid)}&session=${encodeURIComponent(session)}`)
+          api(`Director/GetConfidentialTeachersByCourse?courseId=${encodeURIComponent(cid)}&session=${encodeURIComponent(session)}`)
         );
         const list = unwrapListResponse(r.data);
         const listById = new Map(
@@ -237,7 +238,7 @@ const CompareScreenFrom_C_T = () => {
 
       if (courseIds.length > 1) {
         try {
-          const r = await axios.post(api("Director/GetTeachersForCourses"), {
+          const r = await axios.post(api("Director/GetConfidentialTeachersForCourses"), {
             session,
             courseIds,
           });
@@ -263,7 +264,7 @@ const CompareScreenFrom_C_T = () => {
       if (rows.length === 0) {
         if (courseIds.length === 1) {
           const r = await axios.get(
-            api(`Director/GetTeachersByCourse?courseId=${encodeURIComponent(courseIds[0])}&session=${encodeURIComponent(session)}`)
+            api(`Director/GetConfidentialTeachersByCourse?courseId=${encodeURIComponent(courseIds[0])}&session=${encodeURIComponent(session)}`)
           );
           const list = unwrapListResponse(r.data);
           const meta = courses[0];
@@ -278,7 +279,7 @@ const CompareScreenFrom_C_T = () => {
           const parts = await Promise.all(
             courseIds.map(async (courseId) => {
               const r = await axios.get(
-                api(`Director/GetTeachersByCourse?courseId=${encodeURIComponent(courseId)}&session=${encodeURIComponent(session)}`)
+                api(`Director/GetConfidentialTeachersByCourse?courseId=${encodeURIComponent(courseId)}&session=${encodeURIComponent(session)}`)
               );
               const list = unwrapListResponse(r.data);
               const meta = courses.find((c) => normStr(c.courseId).toLowerCase() === normStr(courseId).toLowerCase());
@@ -329,7 +330,7 @@ const CompareScreenFrom_C_T = () => {
     let cancelled = false;
     (async () => {
       try {
-        const r = await axios.get(api(`Director/GetAllocatedCourses?session=${encodeURIComponent(session)}`));
+        const r = await axios.get(api(`Director/GetConfidentialAllocatedCourses?session=${encodeURIComponent(session)}`));
         const raw = unwrapListResponse(r.data);
         if (cancelled) return;
         const mapped = raw
@@ -373,7 +374,7 @@ const CompareScreenFrom_C_T = () => {
     if (!session) return;
     const loadQuestions = async () => {
       try {
-        const resQ = await axios.get(api("Director/GetQuestionsList"));
+        const resQ = await axios.get(api("Director/GetConfidentialQuestionsList"));
         const qList = unwrapListResponse(resQ.data);
         const uniqueQuestions = Array.from(
           new Map(
@@ -518,7 +519,7 @@ const CompareScreenFrom_C_T = () => {
         payload.Session = session;
       }
 
-      const response = await axios.post(api("Director/GetComparisonData"), payload);
+      const response = await axios.post(api("Director/GetConfidentialComparisonData"), payload);
       const apiRows = unwrapListResponse(response.data);
       const seriesSnapshot = selectedSeries.map((s) => ({
         teacherId: normStr(s.teacherId),
@@ -608,9 +609,9 @@ const CompareScreenFrom_C_T = () => {
         <div className="cct-wrap">
           <div className="cct-missing">
             <h2>Missing session</h2>
-            <p>Open this screen from RC Evaluation with a valid session.</p>
-            <button type="button" className="cct-back-btn" onClick={() => navigate("/RCEvaluation")}>
-              Back to RC evaluation
+            <p>Open this screen from Confidential analytics with a valid session.</p>
+            <button type="button" className="cct-back-btn" onClick={() => navigate("/ConfidentialRCEvaluation")}>
+              Back to confidential analytics
             </button>
           </div>
         </div>
@@ -618,15 +619,15 @@ const CompareScreenFrom_C_T = () => {
     );
   }
 
-  if (compareMode === "teachers" && initialTeachers.length < 2) {
+  if (compareMode === "teachers" && initialTeachers.length < 1) {
     return (
       <div className="cct-main">
         <div className="cct-wrap">
           <div className="cct-missing">
-            <h2>Not enough teachers</h2>
-            <p>Select at least two teachers on RC Evaluation, then tap “Compare selected teachers”.</p>
-            <button type="button" className="cct-back-btn" onClick={() => navigate("/RCEvaluation")}>
-              Back to RC evaluation
+            <h2>No teachers selected</h2>
+            <p>Select at least one teacher on Confidential analytics, then open the comparison chart.</p>
+            <button type="button" className="cct-back-btn" onClick={() => navigate("/ConfidentialRCEvaluation")}>
+              Back to confidential analytics
             </button>
           </div>
         </div>
@@ -640,9 +641,9 @@ const CompareScreenFrom_C_T = () => {
         <div className="cct-wrap">
           <div className="cct-missing">
             <h2>Missing course or session</h2>
-            <p>Select one or more courses in RC Evaluation, then open the comparison chart.</p>
-            <button type="button" className="cct-back-btn" onClick={() => navigate("/RCEvaluation")}>
-              Back to RC evaluation
+            <p>Select one or more courses in Confidential analytics, then open the comparison chart.</p>
+            <button type="button" className="cct-back-btn" onClick={() => navigate("/ConfidentialRCEvaluation")}>
+              Back to confidential analytics
             </button>
           </div>
         </div>
@@ -732,7 +733,7 @@ const CompareScreenFrom_C_T = () => {
               ))}
             </select>
             {allocatedCourses.length === 0 && !loading ? (
-              <p className="cct-pick-hint">No courses returned for this session. Check Director/GetAllocatedCourses.</p>
+              <p className="cct-pick-hint">No courses returned for this session. Check Director/GetConfidentialAllocatedCourses.</p>
             ) : null}
           </div>
         )}
@@ -790,8 +791,8 @@ const CompareScreenFrom_C_T = () => {
         {graphData.length > 0 && (
           <div className="cct-graph-card">
             <div className="cct-graph-card-accent" aria-hidden />
-            <h4 className="cct-graph-header">Performance comparison</h4>
-            <p className="cct-graph-sub">Average rating per question (0–5). Grouped bars per teacher/course; hover for detail.</p>
+            <h4 className="cct-graph-header">Confidential performance comparison</h4>
+            <p className="cct-graph-sub">Average rating per question (0–5), confidential evaluation source. Grouped bars per teacher/course; hover for detail.</p>
             <div className="cct-chart-scroll">
               <div
                 className="cct-chart-inner"
@@ -916,8 +917,8 @@ const CompareScreenFrom_C_T = () => {
 
         {loading && <div className="cct-loading">Loading…</div>}
 
-        <button type="button" className="cct-back-btn" onClick={() => navigate("/RCEvaluation")}>
-          Back to RC evaluation
+        <button type="button" className="cct-back-btn" onClick={() => navigate("/ConfidentialRCEvaluation")}>
+          Back to confidential analytics
         </button>
       </div>
 
@@ -990,4 +991,4 @@ const CompareScreenFrom_C_T = () => {
   );
 };
 
-export default CompareScreenFrom_C_T;
+export default ConfidentialCompareScreen;

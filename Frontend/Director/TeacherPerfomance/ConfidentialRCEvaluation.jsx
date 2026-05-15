@@ -65,10 +65,9 @@ const rowSelectionKey = (item, tab, idx) => {
   return id || `${tab}:__row__${idx}`;
 };
 
-const RCEvaluation = () => {
+const ConfidentialRCEvaluation = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Teachers");
-  const [evalType, setEvalType] = useState("Student");
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState("");
   const [dataList, setDataList] = useState([]);
@@ -100,20 +99,17 @@ const RCEvaluation = () => {
       try {
         const endpoint =
           activeTab === "Teachers"
-            ? api(`Director/GetAllocatedTeachers?session=${encodeURIComponent(selectedSession)}`)
-            : api(`Director/GetAllocatedCourses?session=${encodeURIComponent(selectedSession)}`);
+            ? api(`Director/GetConfidentialAllocatedTeachers?session=${encodeURIComponent(selectedSession)}`)
+            : api(`Director/GetConfidentialAllocatedCourses?session=${encodeURIComponent(selectedSession)}`);
 
         const response = await axios.get(endpoint);
         let fetchedData = unwrapList(response.data);
 
         if (activeTab === "Teachers") {
           try {
-            const ratingEndpoint =
-              evalType === "Student"
-                ? api(`Director/GetTeacherAverageRatings?session=${encodeURIComponent(selectedSession)}`)
-                : api(`Director/GetPeerAverageRatings?session=${encodeURIComponent(selectedSession)}`);
-
-            const ratingRes = await axios.get(ratingEndpoint);
+            const ratingRes = await axios.get(
+              api(`Director/GetConfidentialTeacherAverageRatings?session=${encodeURIComponent(selectedSession)}`)
+            );
             const ratingsMap = unwrapList(ratingRes.data);
 
             fetchedData = fetchedData.map((teacher) => {
@@ -149,7 +145,7 @@ const RCEvaluation = () => {
     };
 
     fetchData();
-  }, [activeTab, selectedSession, evalType]);
+  }, [activeTab, selectedSession]);
 
   const setTab = (tab) => {
     setActiveTab(tab);
@@ -172,8 +168,9 @@ const RCEvaluation = () => {
     navigate("/TeacherPerformanceDashboard", {
       state: {
         teachers: items,
-        type: evalType,
+        type: "Student",
         session: selectedSession,
+        confidentialEval: true,
       },
     });
   };
@@ -203,8 +200,9 @@ const RCEvaluation = () => {
       window.alert("Select at least one course with a valid course code.");
       return;
     }
-    navigate("/CompareScreenFrom_C_T", {
+    navigate("/ConfidentialCompareScreen", {
       state: {
+        confidentialEval: true,
         session: selectedSession,
         courses,
       },
@@ -244,7 +242,7 @@ const RCEvaluation = () => {
           </div>
         </div>
 
-        <h2 className="rc-dashboard-title">Analytics &amp; feedback</h2>
+        <h2 className="rc-dashboard-title">Confidential analytics &amp; feedback</h2>
 
         <div className="rc-tabs rc-tabs--two">
           {["Teachers", "Courses"].map((tab) => (
@@ -285,25 +283,6 @@ const RCEvaluation = () => {
               Select one or more courses (checkbox), or tap the arrow to open the comparison chart for one course. Compare teachers across
               multiple subjects on the next screen.
             </p>
-          )}
-
-          {activeTab === "Teachers" && (
-            <div className="rc-sub-tabs">
-              <button
-                type="button"
-                className={`rc-sub-tab ${evalType === "Student" ? "active" : ""}`}
-                onClick={() => setEvalType("Student")}
-              >
-                Student eval
-              </button>
-              <button
-                type="button"
-                className={`rc-sub-tab ${evalType === "Peer" ? "active" : ""}`}
-                onClick={() => setEvalType("Peer")}
-              >
-                Peer eval
-              </button>
-            </div>
           )}
 
           <div className="rc-list-scroll">
@@ -353,7 +332,7 @@ const RCEvaluation = () => {
 
                       {isTeacherTab ? (
                         <div className="rc-rating-box">
-                          <span className="rc-rating-label">{evalType.toUpperCase()}</span>
+                          <span className="rc-rating-label">STUDENT</span>
                           <span className="rc-rating-value">
                             {item.AverageRating === "N/A" ? "--" : item.AverageRating}
                           </span>
@@ -385,7 +364,7 @@ const RCEvaluation = () => {
           {activeTab === "Teachers" && (
             <p className="rc-teachers-hint">
               Select one or more teachers for the <strong>performance dashboard</strong> (per-question chart). With two or more teachers, you
-              can open <strong>Advanced compare</strong> there for the full question picker and <code>GetComparisonData</code> chart.
+              can open <strong>Advanced compare</strong> there for the full question picker and confidential comparison chart.
             </p>
           )}
           <button
@@ -397,7 +376,7 @@ const RCEvaluation = () => {
             Compare selected teachers ({selectedItems.length})
           </button>
           <button type="button" className="rc-dash-btn" onClick={() => navigate("/DirectorDashboard")}>
-            Back to dashboard
+            Back to director dashboard
           </button>
         </div>
       </div>
@@ -405,4 +384,4 @@ const RCEvaluation = () => {
   );
 };
 
-export default RCEvaluation;
+export default ConfidentialRCEvaluation;

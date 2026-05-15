@@ -1,0 +1,153 @@
+================================================================================
+PASTE INTO: FYP2.Controllers.DirectorController (same file as your paste)
+================================================================================
+
+(1) INSIDE class DirectorController — place BEFORE  private string GetAridSemester()
+    (e.g. after GetTeacherStudentEvalDetails closing brace)
+
+--------------------------------------------------------------------------------
+
+        /// <summary>
+        /// POST /api/Director/GetGradeDistribution
+        /// Body: { "TeacherIds": ["..."], "CourseIds": ["..."], "Session": "2022FM" }
+        /// Counts students (distinct Reg_No) per teacher into Grade A–D from average eval marks
+        /// across selected courses in the session (proxy when no formal grade table exists).
+        /// </summary>
+        [HttpPost]
+        public HttpResponseMessage GetGradeDistribution([FromBody] GetGradeDistributionBody body)
+        {
+            try
+            {
+                if (body == null)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Body is required");
+
+                var teacherIds = MergeIdLists(body.TeacherIds, body.teacherIds)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(x => x.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                var courseIds = MergeIdLists(body.CourseIds, body.courseIds)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(x => x.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                var sessionTrim = (body.Session ?? body.session ?? "").Trim();
+
+                if (teacherIds.Count == 0)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "TeacherIds is required.");
+                if (courseIds.Count == 0)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "CourseIds is required.");
+                if (string.IsNullOrEmpty(sessionTrim))
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Session is required.");
+
+                // One row per student (Reg_No) per teacher: average marks over all selected courses & questions
+                var perStudentTeacher = (from ev in db.Evals.AsNoTracking()
+                                         join st in db.STMTRs.AsNoTracking() on ev.Reg_No equals st.Reg_No
+                                         where st.SOS.Trim() == sessionTrim
+                                               && teacherIds.Contains(ev.Emp_no)
+                                               && courseIds.Contains(ev.Course_no)
+                                         group ev by new { ev.Reg_No, ev.Emp_no } into g
+                                         select new
+                                         {
+                                             g.Key.Reg_No,
+                                             g.Key.Emp_no,
+                                             AvgMark = g.Average(x => (double?)x.Answer_Marks) ?? 0
+                                         }).ToList();
+
+                var nameLookup = db.EMPMTRs.AsNoTracking()
+                    .Where(t => teacherIds.Contains(t.Emp_no))
+                    .Select(t => new { t.Emp_no, t.Name })
+                    .ToList()
+                    .GroupBy(t => t.Emp_no, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(g => g.Key, g => g.First().Name ?? g.Key, StringComparer.OrdinalIgnoreCase);
+
+                var result = new List<object>();
+                foreach (var tid in teacherIds)
+                {
+                    int ga = 0, gb = 0, gc = 0, gd = 0;
+                    foreach (var row in perStudentTeacher.Where(x => string.Equals(x.Emp_no, tid, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        switch (LetterGradeFromAvg(row.AvgMark))
+                        {
+                            case "A": ga++; break;
+                            case "B": gb++; break;
+                            case "C": gc++; break;
+                            default: gd++; break;
+                        }
+                    }
+
+                    string tname;
+                    if (!nameLookup.TryGetValue(tid, out tname) || string.IsNullOrWhiteSpace(tname))
+                        tname = tid;
+
+                    result.Add(new
+                    {
+                        TeacherID = tid,
+                        TeacherName = tname,
+                        GradeA = ga,
+                        GradeB = gb,
+                        GradeC = gc,
+                        GradeD = gd
+                    });
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(
+                    HttpStatusCode.InternalServerError,
+                    ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+        private static IEnumerable<string> MergeIdLists(IEnumerable<string> a, IEnumerable<string> b)
+        {
+            if (a != null)
+            {
+                foreach (var x in a)
+                    yield return x;
+            }
+            if (b != null)
+            {
+                foreach (var x in b)
+                    yield return x;
+            }
+        }
+
+        /// <summary>Map 1–5 style averages to A–D (tune thresholds to your policy).</summary>
+        private static string LetterGradeFromAvg(double avg)
+        {
+            if (avg >= 4.25) return "A";
+            if (avg >= 3.5) return "B";
+            if (avg >= 2.5) return "C";
+            return "D";
+        }
+
+--------------------------------------------------------------------------------
+
+(2) AT END OF FILE — same namespace, next to  public class GraphRequest  add:
+
+--------------------------------------------------------------------------------
+
+    public class GetGradeDistributionBody
+    {
+        public List<string> TeacherIds { get; set; }
+        public List<string> CourseIds { get; set; }
+        public string Session { get; set; }
+
+        /// <summary>Optional camelCase binding from some clients.</summary>
+        public List<string> teacherIds { get; set; }
+        public List<string> courseIds { get; set; }
+        public string session { get; set; }
+    }
+
+================================================================================
+After pasting: rebuild the FYP2 Web API project and redeploy to IIS (same site
+as http://…/FYP2/api/). Then POST …/Director/GetGradeDistribution returns 200.
+
+NOTE FOR WEB / SPA: JSON properties are camelCase (gradeA, gradeB, …). Readers
+must use gradeA not gradea (common chart bug if keys are built wrong).
+================================================================================

@@ -55,7 +55,175 @@ namespace FinalBackend.Controllers
             public double AverageRating { get; set; }
         }
 
+        public class GetGradeDistributionBody
+        {
+            public List<string> TeacherIds { get; set; }
+            public List<string> CourseIds { get; set; }
+            public string Session { get; set; }
+
+            /// <summary>Fallback binding when JSON uses camelCase only.</summary>
+            public List<string> teacherIds { get; set; }
+            public List<string> courseIds { get; set; }
+            public string session { get; set; }
+        }
+
         #endregion
+
+        /// <summary>Allocated courses for session (React Native / RCEvaluation teacher-flow course picker).</summary>
+        [HttpGet]
+        public HttpResponseMessage GetAllocatedCourses(string session)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(session))
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "session is required");
+                // TODO: join allocation + course master (see FYP2 DirectorController.GetAllocatedCourses).
+                return Request.CreateResponse(HttpStatusCode.OK, new List<object>());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>Allocated teachers for session (RCEvaluation teachers tab).</summary>
+        [HttpGet]
+        public HttpResponseMessage GetAllocatedTeachers(string session)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(session))
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "session is required");
+                // TODO: join allocation + EMP master (FYP2 GetAllocatedTeachers).
+                var list = new List<object>();
+                if (list.Count == 0)
+                {
+                    list.Add(new { TeacherID = "STUB01", TeacherName = "Demo Teacher Alpha", Designation = "Assistant Professor" });
+                    list.Add(new { TeacherID = "STUB02", TeacherName = "Demo Teacher Beta", Designation = "Lecturer" });
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, list);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>All distinct sessions (dropdown).</summary>
+        [HttpGet]
+        public HttpResponseMessage GetAllSessions()
+        {
+            try
+            {
+                // TODO: distinct sessions from allocation / registration.
+                var sessions = new List<string>();
+                if (sessions.Count == 0)
+                    sessions.Add("2026FM");
+                return Request.CreateResponse(HttpStatusCode.OK, sessions);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public HttpResponseMessage GetTeacherAverageRatings(string session)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, new List<object>());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public HttpResponseMessage GetPeerAverageRatings(string session)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, new List<object>());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>Courses where every selected teacher has evaluation rows in this session (FYP2 DirectorController parity).</summary>
+        [HttpGet]
+        public HttpResponseMessage GetCommonCoursesBySession_Teachers(string session, string teacherIds)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(session))
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "session is required");
+                if (string.IsNullOrWhiteSpace(teacherIds))
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "teacherIds is required");
+
+                // TODO: EF join Evals + STMTR + ALLOCATE matching FYP2 query.
+                var ids = teacherIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .Where(s => s.Length > 0)
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+                if (ids.Count == 0)
+                    return Request.CreateResponse(HttpStatusCode.OK, new List<object>());
+
+                // Stub so TeacherPerformanceDashboard can load before DB wiring.
+                var sample = new[]
+                {
+                    new { Course_no = "DEMO101", Course_desc = "Demonstration course (stub data)" },
+                    new { Course_no = "DEMO102", Course_desc = "Second demo course (stub)" }
+                };
+                return Request.CreateResponse(HttpStatusCode.OK, sample.ToList());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>Per-question average marks for one teacher, session, and course (student evaluations).</summary>
+        [HttpGet]
+        public HttpResponseMessage GetTeacherStudentEvalDetails(string teacherId, string session, string courseId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(teacherId) || string.IsNullOrWhiteSpace(session) || string.IsNullOrWhiteSpace(courseId))
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "teacherId, session, and courseId are required");
+
+                // TODO: EF group Evals joined with STMTR as in FYP2.
+                var rows = StubEvalQuestionRows(teacherId, session, courseId);
+                return Request.CreateResponse(HttpStatusCode.OK, rows);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>Per-question peer averages for one teacher (session parameter reserved for future filtering).</summary>
+        [HttpGet]
+        public HttpResponseMessage GetTeacherPeerEvalDetails(string teacherId, string session)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(teacherId))
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "teacherId is required");
+
+                // TODO: EF PeerEvaluations grouped by Question_Desc.
+                var rows = StubEvalQuestionRows(teacherId, session ?? "", "PEER");
+                return Request.CreateResponse(HttpStatusCode.OK, rows);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
 
         /// <summary>Teachers allocated to a single course/session.</summary>
         [HttpGet]
@@ -181,7 +349,143 @@ namespace FinalBackend.Controllers
             }
         }
 
+        /// <summary>
+        /// Grade band counts per teacher for selected courses (React Native TeacherGradeDashboard).
+        /// Replace stub with real aggregation from marks / GPA tables.
+        /// </summary>
+        [HttpPost]
+        public HttpResponseMessage GetGradeDistribution([FromBody] GetGradeDistributionBody body)
+        {
+            try
+            {
+                if (body == null)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Body is required");
+
+                var teacherIds = MergeStringLists(body.TeacherIds, body.teacherIds)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(x => x.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                if (teacherIds.Count == 0)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "TeacherIds is required");
+
+                var courseIds = MergeStringLists(body.CourseIds, body.courseIds)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(x => x.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                var session = (body.Session ?? body.session ?? "").Trim();
+
+                // TODO: EF — count students in A/B/C/D bands per teacher for courseIds in session.
+                var rows = StubGradeDistributionRows(teacherIds, courseIds, session);
+                return Request.CreateResponse(HttpStatusCode.OK, rows);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        #region Confidential evaluation (same payloads as regular; swap implementation when ConfEval DB is wired)
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialAllocatedCourses(string session) => GetAllocatedCourses(session);
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialAllocatedTeachers(string session) => GetAllocatedTeachers(session);
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialTeacherAverageRatings(string session) => GetTeacherAverageRatings(session);
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialPeerAverageRatings(string session) => GetPeerAverageRatings(session);
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialTeachersByCourse(string courseId, string session) => GetTeachersByCourse(courseId, session);
+
+        [HttpPost]
+        public HttpResponseMessage GetConfidentialTeachersForCourses([FromBody] TeachersForCoursesBody body) => GetTeachersForCourses(body);
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialQuestionsList() => GetQuestionsList();
+
+        [HttpPost]
+        public HttpResponseMessage GetConfidentialComparisonData([FromBody] GetComparisonDataBody body) => GetComparisonData(body);
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialCommonCoursesBySession_Teachers(string session, string teacherIds) =>
+            GetCommonCoursesBySession_Teachers(session, teacherIds);
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialTeacherStudentEvalDetails(string teacherId, string session, string courseId) =>
+            GetTeacherStudentEvalDetails(teacherId, session, courseId);
+
+        [HttpGet]
+        public HttpResponseMessage GetConfidentialTeacherPeerEvalDetails(string teacherId, string session) =>
+            GetTeacherPeerEvalDetails(teacherId, session);
+
+        #endregion
+
         #region TODO: replace with real database queries
+
+        private static IEnumerable<string> MergeStringLists(params List<string>[] lists)
+        {
+            foreach (var list in lists)
+            {
+                if (list == null) continue;
+                foreach (var item in list)
+                    yield return item;
+            }
+        }
+
+        /// <summary>Stub grade counts (GradeA–GradeD) per teacher for chart development.</summary>
+        private static List<object> StubGradeDistributionRows(List<string> teacherIds, List<string> courseIds, string session)
+        {
+            var list = new List<object>();
+            var courseSeed = string.Join("|", courseIds);
+
+            foreach (var tid in teacherIds)
+            {
+                unchecked
+                {
+                    var h = (tid ?? "").GetHashCode() ^ (session ?? "").GetHashCode() ^ (courseSeed ?? "").GetHashCode();
+                    var total = 28 + Math.Abs(h % 24);
+                    var a = Math.Max(0, total * (18 + (h % 7)) / 100);
+                    var b = Math.Max(0, total * (28 + ((h >> 3) % 9)) / 100);
+                    var c = Math.Max(0, total * (22 + ((h >> 5) % 8)) / 100);
+                    var d = Math.Max(0, total - a - b - c);
+                    list.Add(new
+                    {
+                        TeacherID = tid,
+                        TeacherName = "Teacher " + tid,
+                        GradeA = a,
+                        GradeB = b,
+                        GradeC = c,
+                        GradeD = d
+                    });
+                }
+            }
+
+            return list;
+        }
+
+        /// <summary>Stub rows <c>label</c> / <c>score</c> for director performance charts until EF queries are wired.</summary>
+        private static List<object> StubEvalQuestionRows(string teacherId, string session, string courseId)
+        {
+            var rows = new List<object>();
+            for (var q = 1; q <= 5; q++)
+            {
+                unchecked
+                {
+                    var h = (teacherId ?? "").GetHashCode() ^ q ^ (session ?? "").GetHashCode() ^ (courseId ?? "").GetHashCode();
+                    var score = 3.0 + Math.Abs(h % 20) / 10.0;
+                    rows.Add(new { label = "Q" + q, score = Math.Round(score, 1) });
+                }
+            }
+            return rows;
+        }
 
         /// <summary>Return teachers teaching this course in this session.</summary>
         private static List<TeacherCourseRowDto> QueryTeachersForCourse(string courseNo, string session)

@@ -1,0 +1,221 @@
+/* Manager dashboard — mobile-first, scales to desktop */
+
+.md-page {
+  min-height: 100dvh;
+  min-height: 100vh;
+  background: #0d2e27;
+  color: #fff;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  padding: clamp(12px, 3vw, 28px);
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+}
+
+.md-inner {
+  width: 100%;
+  max-width: min(960px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2.5vw, 20px);
+}
+
+.md-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.md-logo-wrap {
+  background: #fff;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.md-logo {
+  width: clamp(56px, 14vw, 72px);
+  height: clamp(56px, 14vw, 72px);
+  object-fit: contain;
+  display: block;
+}
+
+.md-profile-card {
+  width: 100%;
+  background: #fff;
+  color: #1a2e28;
+  border-radius: clamp(14px, 3vw, 18px);
+  padding: clamp(12px, 3vw, 18px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.md-profile-text p {
+  margin: 4px 0;
+  font-size: clamp(0.8rem, 2.8vw, 0.95rem);
+  color: #333;
+}
+
+.md-profile-text strong {
+  font-weight: 700;
+}
+
+.md-role-pill {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: clamp(0.65rem, 2vw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #0d5c3f;
+  text-transform: uppercase;
+}
+
+.md-avatar {
+  width: clamp(40px, 11vw, 52px);
+  height: clamp(40px, 11vw, 52px);
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.md-title {
+  text-align: center;
+  font-size: clamp(0.95rem, 3.5vw, 1.15rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #7ddf9a;
+  margin: 4px 0 2px;
+}
+
+.md-subtitle {
+  text-align: center;
+  font-size: clamp(0.72rem, 2.4vw, 0.82rem);
+  opacity: 0.85;
+  margin: 0 0 8px;
+}
+
+.md-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(10px, 2vw, 14px);
+}
+
+@media (min-width: 520px) {
+  .md-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 860px) {
+  .md-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.md-card {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  background: #fff;
+  color: #1a2e28;
+  border-radius: clamp(12px, 2.5vw, 16px);
+  padding: clamp(14px, 3vw, 18px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 100px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.md-card:hover,
+.md-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+  outline: none;
+}
+
+.md-card:active {
+  transform: translateY(0);
+}
+
+.md-card-label {
+  font-size: clamp(0.62rem, 2vw, 0.7rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #0d5c3f;
+  text-transform: uppercase;
+}
+
+.md-card-title {
+  font-size: clamp(0.88rem, 3vw, 1rem);
+  font-weight: 800;
+  color: #0d2e27;
+  line-height: 1.25;
+}
+
+.md-card-desc {
+  font-size: clamp(0.72rem, 2.4vw, 0.8rem);
+  color: #555;
+  line-height: 1.35;
+  flex: 1;
+}
+
+.md-card-cta {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: #0d2e27;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: clamp(0.72rem, 2.2vw, 0.8rem);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.md-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.md-btn-logout {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.95);
+  color: #0d2e27;
+}
+
+.md-btn-logout:hover {
+  filter: brightness(1.05);
+}
+
+.md-btn-secondary {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 600;
+  font-size: clamp(0.8rem, 2.6vw, 0.9rem);
+  cursor: pointer;
+  background: transparent;
+  color: #fff;
+}
+
+.md-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+}

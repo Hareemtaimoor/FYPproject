@@ -99,29 +99,71 @@ const Attendance = () => {
 
         <div className="att-data-card-white">
           <div className="att-table-header-dark">
-            Monthly Attendance
-            <div className="att-date-sub-gold">{dbRange.start} to {dbRange.end}</div>
+            <span className="att-table-title">Monthly attendance</span>
+            <div className="att-date-sub-gold">
+              {dbRange.start && dbRange.end ? (
+                <>
+                  {dbRange.start} <span className="att-range-sep">→</span> {dbRange.end}
+                </>
+              ) : (
+                "Date range loading…"
+              )}
+            </div>
           </div>
-          
-          <div className="att-table-wrapper">
-            {loading ? <div className="att-loader">Syncing...</div> : (
+
+          <div className="att-table-shell" role="region" aria-label="Attendance records">
+            {loading ? (
+              <div className="att-loader">Syncing…</div>
+            ) : (
               <table className="att-main-table-white">
+                {/* <caption className="att-table-caption">
+                  Daily check-in and check-out for the selected period
+                </caption> */}
                 <thead>
-                  <tr><th>Date</th><th>Day</th><th>In</th><th>Out</th><th>Status</th></tr>
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Day</th>
+                    <th scope="col">In</th>
+                    <th scope="col">Out</th>
+                    <th scope="col">Status</th>
+                  </tr>
                 </thead>
                 <tbody>
-                  {attendanceData.map((row, i) => (
-                    <tr key={i}>
-                      <td>{row.AttendanceDate?.split('T')[0].slice(5)}</td>
-                      <td>{row.Day ? row.Day.slice(0,3) : new Date(row.AttendanceDate).toLocaleDateString('en-US', {weekday: 'short'})}</td>
-                      {/* Multiple checks for property names in your View */}
-                      <td>{row.CheckIn || row.TimeIn || row.Check_In || "-"}</td>
-                      <td>{row.CheckOut || row.TimeOut || row.Check_Out || "-"}</td>
-                      <td className={row.Status?.toLowerCase()==='absent'?'att-red':'att-green'}>
-                        {row.Status?.slice(0,1) || "P"}
+                  {attendanceData.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="att-empty-cell">
+                        No attendance rows for this range.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    attendanceData.map((row, i) => {
+                      const rawDate = row.AttendanceDate ?? row.attendanceDate;
+                      const datePart =
+                        rawDate != null ? String(rawDate).split("T")[0] : "";
+                      const dateShort = datePart.length >= 5 ? datePart.slice(5) : "—";
+                      const dayLabel = row.Day
+                        ? String(row.Day).slice(0, 3)
+                        : rawDate
+                          ? new Date(rawDate).toLocaleDateString("en-US", { weekday: "short" })
+                          : "—";
+                      const st = String(row.Status ?? row.status ?? "Present").toLowerCase();
+                      const statusLetter = (row.Status ?? row.status ?? "P").toString().slice(0, 1).toUpperCase();
+                      return (
+                        <tr key={row.RecordID ?? row.recordID ?? i}>
+                          <td data-label="Date">{dateShort}</td>
+                          <td data-label="Day">{dayLabel}</td>
+                          <td data-label="In">{row.CheckIn || row.TimeIn || row.Check_In || "—"}</td>
+                          <td data-label="Out">{row.CheckOut || row.TimeOut || row.Check_Out || "—"}</td>
+                          <td
+                            data-label="Status"
+                            className={st === "absent" ? "att-status att-status--absent" : "att-status att-status--present"}
+                          >
+                            <span className="att-status-pill">{statusLetter}</span>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             )}
@@ -129,7 +171,9 @@ const Attendance = () => {
         </div>
 
         <div className="att-footer">
-          <p className="att-add-comment" onClick={() => setIsModalOpen(true)}>Add Remarks / Comments</p>
+          <button type="button" className="att-add-comment" onClick={() => setIsModalOpen(true)}>
+            Add remarks / comments
+          </button>
           <button className="att-home-btn" onClick={() => navigate(-1)}>🏠 Home</button>
         </div>
 

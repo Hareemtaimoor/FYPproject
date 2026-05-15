@@ -1,0 +1,280 @@
+/* Manage Student — RN #0f3b35 / #204d45 palette, responsive */
+
+.ms-page {
+  min-height: 100dvh;
+  min-height: 100vh;
+  background: #0f3b35;
+  color: #fff;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  padding: clamp(14px, 4vw, 24px);
+  padding-bottom: max(32px, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+}
+
+.ms-scroll {
+  max-width: min(720px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 3vw, 22px);
+}
+
+.ms-logo {
+  width: clamp(72px, 22vw, 90px);
+  height: clamp(72px, 22vw, 90px);
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.ms-card {
+  background: #fff;
+  color: #1a1a1a;
+  width: 100%;
+  max-width: 560px;
+  border-radius: clamp(10px, 2vw, 12px);
+  padding: clamp(14px, 3.5vw, 18px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.ms-card-title {
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 12px;
+  font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+  color: #0f3b35;
+}
+
+.ms-profile-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 380px) {
+  .ms-profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.ms-txt {
+  font-size: clamp(0.82rem, 2.8vw, 0.92rem);
+  margin: 0 0 6px;
+  line-height: 1.35;
+}
+
+.ms-avatar {
+  width: clamp(52px, 14vw, 60px);
+  height: clamp(52px, 14vw, 60px);
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ms-mcard {
+  background: #204d45;
+  width: 100%;
+  max-width: 560px;
+  border-radius: clamp(10px, 2vw, 12px);
+  padding: clamp(14px, 3.5vw, 18px);
+  box-sizing: border-box;
+}
+
+.ms-mtitle {
+  background: #fff;
+  color: #0f3b35;
+  text-align: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  margin: 0 0 14px;
+  font-size: clamp(0.9rem, 3vw, 1rem);
+}
+
+.ms-search-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 480px) {
+  .ms-search-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.ms-input {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.ms-input::placeholder {
+  color: #888;
+}
+
+.ms-search-btn {
+  background: #0f3b35;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0 18px;
+  font-weight: 700;
+  font-size: clamp(0.82rem, 2.6vw, 0.9rem);
+  cursor: pointer;
+  height: 44px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ms-search-btn:hover {
+  filter: brightness(1.08);
+}
+
+.ms-upload-btn {
+  width: 100%;
+  background: #fff;
+  color: #0f3b35;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 800;
+  font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.ms-upload-btn:hover {
+  filter: brightness(1.03);
+}
+
+.ms-thead {
+  display: none;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+@media (min-width: 520px) {
+  .ms-thead {
+    display: flex;
+  }
+}
+
+.ms-th {
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(0.78rem, 2.4vw, 0.85rem);
+}
+
+.ms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ms-trow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (min-width: 520px) {
+  .ms-trow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 4px 10px 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
+.ms-td {
+  color: #fff;
+  font-size: clamp(0.88rem, 2.8vw, 0.95rem);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.ms-arow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ms-edit-btn,
+.ms-delete-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: clamp(0.72rem, 2.2vw, 0.8rem);
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+}
+
+.ms-edit-btn {
+  background: #ffc107;
+  color: #1a1a1a;
+}
+
+.ms-delete-btn {
+  background: #dc3545;
+}
+
+.ms-edit-btn:hover,
+.ms-delete-btn:hover {
+  filter: brightness(1.05);
+}
+
+.ms-back-btn {
+  background: #fff;
+  color: #0f3b35;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 28px;
+  font-size: clamp(0.9rem, 3vw, 1rem);
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.ms-back-btn:hover {
+  filter: brightness(1.04);
+}
+
+.ms-empty {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  padding: 16px 8px;
+}
+
+.ms-file-hidden {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}

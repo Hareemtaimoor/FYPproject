@@ -1,26 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./CompareResults.css";
 import logo from "../../Images/Biit_Logo.png";
 
 /**
- * Receives navigation state from RC Evaluation "Compare" (RN: CompareResults).
- * state: { selectedIds, type: "Student"|"Peer", session, mode: "teachers"|"courses", items?: [] }
+ * Legacy route: teacher comparison now opens CompareScreenFrom_C_T (same graph + GraphRequest as React Native).
+ * Deep links and bookmarks redirect when valid state is present.
  */
 const CompareResults = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { selectedIds = [], type = "Student", session = "", mode = "teachers", items = [] } = location.state || {};
 
+  useEffect(() => {
+    if (session && mode === "teachers" && Array.isArray(items) && items.length >= 1) {
+      navigate("/TeacherPerformanceDashboard", {
+        replace: true,
+        state: {
+          teachers: items,
+          type,
+          session,
+        },
+      });
+    }
+  }, [session, mode, items, type, navigate]);
+
   if (!session || selectedIds.length === 0) {
     return (
       <div className="cr-page">
         <div className="cr-card">
           <h1 className="cr-title">Nothing to compare</h1>
-          <p className="cr-muted">Open this screen from RC Evaluation after selecting at least two rows.</p>
+          <p className="cr-muted">Open this screen from RC Evaluation after selecting at least one teacher row.</p>
           <button type="button" className="cr-btn" onClick={() => navigate("/RCEvaluation")}>
             Back to RC evaluation
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === "teachers" && items.length >= 1) {
+    return (
+      <div className="cr-page">
+        <div className="cr-inner">
+          <img src={logo} alt="" className="cr-logo" />
+          <div className="cr-card">
+            <h1 className="cr-title">Opening performance dashboard…</h1>
+            <p className="cr-muted">Redirecting.</p>
+          </div>
         </div>
       </div>
     );
@@ -56,7 +83,8 @@ const CompareResults = () => {
                 ))}
           </ul>
           <p className="cr-note">
-            Chart or detailed comparison can be wired here when the backend exposes an endpoint for these selections.
+            For question-level line charts across teachers and courses, use RC Evaluation →{" "}
+            <strong>Compare selected teachers</strong> or <strong>Course comparison chart</strong>.
           </p>
           <button type="button" className="cr-btn" onClick={() => navigate("/RCEvaluation")}>
             Back to RC evaluation

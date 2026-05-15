@@ -48,6 +48,18 @@ const DirectorDashboard = () => {
                     </div>
                 </div>
 
+                <div className="white-pill-card action-hover-effect" onClick={() => navigate("/ConfidentialRCEvaluation")}>
+                    <div className="student-info-flex">
+                        <div className="info-text-box">
+                            <p className="small-label">Confidential evaluations</p>
+                            <p style={{ fontSize: "0.95rem", fontWeight: "bold", color: "#1a2e28" }}>
+                                Confidential analytics &amp; charts
+                            </p>
+                        </div>
+                        <button type="button" className="evaluate-btn-solid">Open</button>
+                    </div>
+                </div>
+
                 <div className="white-pill-card action-hover-effect" onClick={() => navigate("/ManageQuestions")}>
                     <div className="student-info-flex">
                         <div className="info-text-box">
@@ -65,6 +77,16 @@ const DirectorDashboard = () => {
                             <p style={{fontSize: '0.95rem', fontWeight: 'bold', color: '#1a2e28'}}>Gender Analytics</p>
                         </div>
                         <button className="evaluate-btn-solid">Analytics</button>
+                    </div>
+                </div>
+
+                <div className="white-pill-card action-hover-effect" onClick={() => navigate("/TeacherGradeDashboard")}>
+                    <div className="student-info-flex">
+                        <div className="info-text-box">
+                            <p className="small-label">Course outcomes</p>
+                            <p style={{ fontSize: "0.95rem", fontWeight: "bold", color: "#1a2e28" }}>Grade distribution</p>
+                        </div>
+                        <button type="button" className="evaluate-btn-solid">Open</button>
                     </div>
                 </div>
 

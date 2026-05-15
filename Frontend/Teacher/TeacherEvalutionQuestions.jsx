@@ -21,11 +21,11 @@ const readStoredTeacherId = () => {
 
 /** Backend peer ratings: higher = better. UI shows 1–5 with legend 1=Excellent … 5=Poor. */
 const RATING_SCALE = [
-  { displayNum: 1, label: "Excellent", value: 5 },
-  { displayNum: 2, label: "Good", value: 4 },
+  { displayNum: 1, label: "Poor", value: 5 },
+  { displayNum: 2, label: "Below Average", value: 4 },
   { displayNum: 3, label: "Satisfactory", value: 3 },
-  { displayNum: 4, label: "Needs Improvement", value: 2 },
-  { displayNum: 5, label: "Poor", value: 1 },
+  { displayNum: 4, label: "Good", value: 2 },
+  { displayNum: 5, label: "Excelent", value: 1 },
 ];
 
 /**

@@ -76,6 +76,17 @@ const parseDateList = (payload) => {
   return [];
 };
 
+/** When `GetAvailableCHRDates` is missing or fails, still allow picking recent dates in the UI. */
+const fallbackChrDates = () => {
+  const out = [];
+  for (let i = 0; i < 60; i++) {
+    const x = new Date();
+    x.setDate(x.getDate() - i);
+    out.push(x.toISOString().slice(0, 10));
+  }
+  return [...new Set(out)].sort();
+};
+
 const pickProfile = (data) =>
   data?.Profile ?? data?.profile ?? data?.TeacherProfile ?? data?.teacherProfile ?? null;
 
@@ -156,7 +167,7 @@ const CHR = () => {
       }
     } catch (error) {
       console.error("CHR dates error:", error.response?.data ?? error.message);
-      setDateList([]);
+      setDateList(fallbackChrDates());
     } finally {
       setDatesReady(true);
     }
@@ -174,9 +185,35 @@ const CHR = () => {
 
       try {
         const res = await axios.get(
-          api(`Teacher/GetTeacherCHR?tId=${encodeURIComponent(TeacherID)}&date=${encodeURIComponent(d)}`)
+          api(`Teacher/GetTeacherCHR?tId=${encodeURIComponent(TeacherID)}&date=${encodeURIComponent(d)}`),
+          { validateStatus: (status) => status < 500 }
         );
         if (reqId !== chrRequestId.current) return;
+
+        if (res.status === 404) {
+          // Some deployments return 404 when there are no rows; treat as an empty report, not a hard error.
+          setChrData([]);
+          setChrProfile(null);
+          setLoadError("");
+          return;
+        }
+        if (res.status !== 200) {
+          const raw = res.data;
+          const msg =
+            typeof raw === "object" && raw != null
+              ? raw.message || raw.Message || raw.MessageDetail || ""
+              : typeof raw === "string"
+                ? raw
+                : "";
+          setChrData([]);
+          setChrProfile(null);
+          setLoadError(
+            msg
+              ? String(msg).replace(/\bjido\b/gi, "found")
+              : "Could not load this report. Try another date or check your connection."
+          );
+          return;
+        }
 
         const body = res.data;
         const fromChr = pickProfile(body);

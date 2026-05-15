@@ -22,6 +22,9 @@ const AVATAR_IDS = [
 const sessionApiParam = (session) =>
   String(session || "").startsWith("SOS") ? String(session).replace(/^SOS/i, "") : String(session || "");
 
+/** Demo peer % when API has no row or returns 0 — replace with live data once `GetPeerAverageRatings` is populated. */
+const DEMO_PEER_PERCENT = 84;
+
 const EvaluationRate = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,6 +37,7 @@ const EvaluationRate = () => {
   const [selectedSession, setSelectedSession] = useState("");
   const [studentScore, setStudentScore] = useState(0);
   const [peerScore, setPeerScore] = useState(0);
+  const [peerIsDemo, setPeerIsDemo] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const profileImage = AVATAR_IDS.includes(String(TeacherID).toUpperCase()) ? avatarImg : maleAvatar;
@@ -73,14 +77,23 @@ const EvaluationRate = () => {
 
         if (peerMatch) {
           const peerRatingNum = parseFloat(peerMatch.AverageRating ?? peerMatch.averageRating);
-          setPeerScore(Number.isFinite(peerRatingNum) ? Math.round((peerRatingNum / 5) * 100) : 0);
+          const pct = Number.isFinite(peerRatingNum) ? Math.round((peerRatingNum / 5) * 100) : 0;
+          if (pct > 0) {
+            setPeerScore(pct);
+            setPeerIsDemo(false);
+          } else {
+            setPeerScore(DEMO_PEER_PERCENT);
+            setPeerIsDemo(true);
+          }
         } else {
-          setPeerScore(0);
+          setPeerScore(DEMO_PEER_PERCENT);
+          setPeerIsDemo(true);
         }
       } catch (e) {
         console.error("Score fetch error:", e);
         setStudentScore(0);
-        setPeerScore(0);
+        setPeerScore(DEMO_PEER_PERCENT);
+        setPeerIsDemo(true);
       }
     },
     [TeacherID]
@@ -114,7 +127,8 @@ const EvaluationRate = () => {
           } else {
             setSelectedSession("");
             setStudentScore(0);
-            setPeerScore(0);
+            setPeerScore(DEMO_PEER_PERCENT);
+            setPeerIsDemo(true);
           }
         }
       } catch (e) {
@@ -193,18 +207,75 @@ const EvaluationRate = () => {
         <h2 className="er-section-title">Evaluation summary</h2>
 
         <div className="er-analytics-card">
-          <div className="er-stats-row">
+          <div className="er-stats-row" role="group" aria-label="Scores as percentage of maximum">
             <div className="er-circle-wrapper">
-              <div className="er-progress-circle er-progress-circle--student">
-                <span className="er-percent-text">{studentScore}%</span>
+              <div
+                className="er-donut er-donut--student"
+                style={{ "--er-fill": Math.min(100, Math.max(0, studentScore)) }}
+                role="img"
+                aria-label={`Student feedback ${studentScore} percent`}
+              >
+                <div className="er-donut-inner">
+                  <span className="er-percent-text">{studentScore}%</span>
+                </div>
               </div>
               <span className="er-circle-label">Student feedback</span>
             </div>
             <div className="er-circle-wrapper">
-              <div className="er-progress-circle er-progress-circle--peer">
-                <span className="er-percent-text">{peerScore}%</span>
+              <div
+                className="er-donut er-donut--peer"
+                style={{ "--er-fill": Math.min(100, Math.max(0, peerScore)) }}
+                role="img"
+                aria-label={`Peer evaluation ${peerScore} percent${peerIsDemo ? " sample data" : ""}`}
+              >
+                <div className="er-donut-inner">
+                  <span className="er-percent-text">{peerScore}%</span>
+                </div>
               </div>
               <span className="er-circle-label">Peer evaluation</span>
+            </div>
+          </div>
+
+          {peerIsDemo && (
+            <p className="er-demo-note" role="status">
+              Peer score shows sample data ({DEMO_PEER_PERCENT}%) until peer evaluations exist for this session.
+            </p>
+          )}
+
+          <div className="er-chart-wrap" aria-label="Comparison chart">
+            <h3 className="er-chart-title">Comparison</h3>
+            <div className="er-bar-chart">
+              <div className="er-bar-row">
+                <span className="er-bar-label">Student</span>
+                <div className="er-bar-track">
+                  <div
+                    className="er-bar-fill er-bar-fill--student"
+                    style={{ width: `${Math.min(100, Math.max(0, studentScore))}%` }}
+                  />
+                </div>
+                <span className="er-bar-value">{studentScore}%</span>
+              </div>
+              <div className="er-bar-row">
+                <span className="er-bar-label">Peer</span>
+                <div className="er-bar-track">
+                  <div
+                    className="er-bar-fill er-bar-fill--peer"
+                    style={{ width: `${Math.min(100, Math.max(0, peerScore))}%` }}
+                  />
+                </div>
+                <span className="er-bar-value">{peerScore}%</span>
+              </div>
+            </div>
+            <div className="er-chart-axis" aria-hidden="true">
+              <span className="er-chart-axis-spacer" />
+              <div className="er-chart-axis-ticks">
+                <span>0</span>
+                <span>25</span>
+                <span>50</span>
+                <span>75</span>
+                <span>100</span>
+              </div>
+              <span className="er-chart-axis-spacer" />
             </div>
           </div>
         </div>
