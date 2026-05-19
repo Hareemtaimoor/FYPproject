@@ -8,62 +8,13 @@ import avatar from "../../Images/maleAvatar.png";
 
 const api = (path) => `${APIEndPoint}${String(path).replace(/^\//, "")}`;
 
-/** API may return a bare array or wrapped JSON (same patterns as React Native / ASP.NET). */
 function unwrapList(data) {
   if (Array.isArray(data)) return data;
   if (data == null) return [];
   if (Array.isArray(data.data)) return data.data;
   if (Array.isArray(data.Data)) return data.Data;
-  if (Array.isArray(data.d)) return data.d;
-  if (Array.isArray(data.results)) return data.results;
   return [];
 }
-
-/** Sessions may be strings or objects `{ Session, session, ... }` (Picker / select need strings). */
-function normalizeSessionValue(entry) {
-  if (entry == null) return "";
-  if (typeof entry === "string" || typeof entry === "number") return String(entry).trim();
-  if (typeof entry === "object") {
-    return String(
-      entry.Session ??
-        entry.session ??
-        entry.SessionName ??
-        entry.sessionName ??
-        entry.Name ??
-        entry.name ??
-        entry.label ??
-        ""
-    ).trim();
-  }
-  return String(entry).trim();
-}
-
-/** Row id: teachers by id; courses by course code (aligned with RN: TeacherID / CourseNo + web fallbacks). */
-const rowId = (item, tab) =>
-  tab === "Teachers"
-    ? String(item.TeacherID ?? item.teacherID ?? item.teacherId ?? item.EmpNo ?? item.empNo ?? "").trim()
-    : String(
-        item.CourseNo ??
-          item.courseNo ??
-          item.courseId ??
-          item.CourseId ??
-          item.CourseID ??
-          item.Course_code ??
-          item.course_code ??
-          item.SubjectCode ??
-          item.subjectCode ??
-          ""
-      ).trim();
-
-const listItemKey = (item, tab, idx) => {
-  const id = rowId(item, tab);
-  return id ? `${tab}-${id}-${idx}` : `${tab}-row-${idx}`;
-};
-
-const rowSelectionKey = (item, tab, idx) => {
-  const id = rowId(item, tab);
-  return id || `${tab}:__row__${idx}`;
-};
 
 const RCEvaluation = () => {
   const navigate = useNavigate();
@@ -79,8 +30,7 @@ const RCEvaluation = () => {
     const fetchSessions = async () => {
       try {
         const response = await axios.get(api("Director/GetAllSessions"));
-        const raw = unwrapList(response.data);
-        const list = [...new Set(raw.map(normalizeSessionValue).filter(Boolean))];
+        const list = unwrapList(response.data);
         setSessions(list);
         if (list.length > 0) {
           setSelectedSession((prev) => (prev && list.includes(prev) ? prev : list[0]));
@@ -96,47 +46,58 @@ const RCEvaluation = () => {
     const fetchData = async () => {
       if (!selectedSession) return;
       setLoading(true);
-
       try {
-        const endpoint =
-          activeTab === "Teachers"
-            ? api(`Director/GetAllocatedTeachers?session=${encodeURIComponent(selectedSession)}`)
-            : api(`Director/GetAllocatedCourses?session=${encodeURIComponent(selectedSession)}`);
+        let endpoint = "";
+        if (activeTab === "Teachers") {
+          endpoint = api(
+            `Director/GetAllocatedTeachers?session=${encodeURIComponent(selectedSession)}`
+          );
+        } else if (activeTab === "Courses") {
+          endpoint = api(
+            `Director/GetAllocatedCourses?session=${encodeURIComponent(selectedSession)}`
+          );
+        }
 
         const response = await axios.get(endpoint);
         let fetchedData = unwrapList(response.data);
 
         if (activeTab === "Teachers") {
           try {
-            const ratingEndpoint =
-              evalType === "Student"
-                ? api(`Director/GetTeacherAverageRatings?session=${encodeURIComponent(selectedSession)}`)
-                : api(`Director/GetPeerAverageRatings?session=${encodeURIComponent(selectedSession)}`);
+            let ratingsMap = [];
+            const sessionQ = encodeURIComponent(selectedSession);
 
-            const ratingRes = await axios.get(ratingEndpoint);
-            const ratingsMap = unwrapList(ratingRes.data);
+            if (evalType === "Student") {
+              const ratingRes = await axios.get(
+                api(`Director/GetTeacherAverageRatings?session=${sessionQ}`)
+              );
+              ratingsMap = unwrapList(ratingRes.data);
+            } else if (evalType === "Peer") {
+              const ratingRes = await axios.get(
+                api(`Director/GetPeerAverageRatings?session=${sessionQ}`)
+              );
+              ratingsMap = unwrapList(ratingRes.data);
+            } else if (evalType === "Confidential") {
+              const ratingRes = await axios.get(
+                api(`Director/GetConfidentialTeacherAverageRatings?semester=${sessionQ}`)
+              );
+              ratingsMap = unwrapList(ratingRes.data);
+            }
 
             fetchedData = fetchedData.map((teacher) => {
-              const ratingObj = ratingsMap.find((r) => {
-                const rid = String(r.TeacherID ?? r.teacherID ?? r.teacherId ?? r.EmpNo ?? r.empNo ?? "")
-                  .trim()
-                  .toUpperCase();
-                const tid = String(teacher.TeacherID ?? teacher.teacherID ?? teacher.teacherId ?? teacher.EmpNo ?? teacher.empNo ?? "")
-                  .trim()
-                  .toUpperCase();
-                return rid !== "" && rid === tid;
-              });
-              const rawRating = ratingObj?.AverageRating ?? ratingObj?.averageRating;
+              const ratingObj = ratingsMap.find(
+                (r) =>
+                  String(r.TeacherID).trim().toUpperCase() ===
+                  String(teacher.TeacherID).trim().toUpperCase()
+              );
               return {
                 ...teacher,
-                AverageRating:
-                  ratingObj != null && rawRating != null && rawRating !== ""
-                    ? Number(rawRating).toFixed(1)
-                    : "N/A",
+                AverageRating: ratingObj
+                  ? Number(ratingObj.AverageRating).toFixed(1)
+                  : "N/A",
               };
             });
-          } catch {
-            /* same as RN: keep list without ratings */
+          } catch (e) {
+            console.log(`${evalType} Ratings fetch failed.`, e?.message ?? e);
           }
         }
 
@@ -147,259 +108,197 @@ const RCEvaluation = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [activeTab, selectedSession, evalType]);
 
-  const setTab = (tab) => {
-    setActiveTab(tab);
-    setSelectedItems([]);
-  };
-
-  const toggleSelection = (selectKey) => {
-    if (selectKey == null || String(selectKey).trim() === "") return;
-    const sid = String(selectKey);
-    setSelectedItems((prev) => (prev.some((x) => String(x) === sid) ? prev.filter((v) => String(v) !== sid) : [...prev, sid]));
-  };
-
-  const isSelected = (id) => selectedItems.some((x) => String(x) === String(id));
-
-  /** Matches React Native: one or more teachers → performance dashboard (per-question averages; student flow uses common course API). */
-  const handleCompare = () => {
-    if (activeTab !== "Teachers" || selectedItems.length === 0) return;
-    const items = dataList.filter((it, idx) => isSelected(rowSelectionKey(it, "Teachers", idx)));
-    if (items.length === 0) return;
-    navigate("/TeacherPerformanceDashboard", {
-      state: {
-        teachers: items,
-        type: evalType,
-        session: selectedSession,
-      },
-    });
-  };
-
-  const buildCoursesPayload = (rows) =>
-    rows
-      .map((it) => ({
-        courseId: String(
-          it.CourseNo ??
-            it.courseNo ??
-            it.courseId ??
-            it.CourseId ??
-            it.CourseID ??
-            it.Course_code ??
-            it.course_code ??
-            it.SubjectCode ??
-            it.subjectCode ??
-            ""
-        ).trim(),
-        courseName: String(it.CourseName ?? it.courseName ?? it.SubjectName ?? it.subjectName ?? "").trim(),
-      }))
-      .filter((c) => c.courseId);
-
-  const openCourseTeacherCompare = (courseRows) => {
-    const courses = buildCoursesPayload(courseRows);
-    if (courses.length === 0) {
-      window.alert("Select at least one course with a valid course code.");
-      return;
+  const toggleSelection = (id) => {
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter((item) => item !== id));
+    } else {
+      setSelectedItems([...selectedItems, id]);
     }
-    navigate("/CompareScreenFrom_C_T", {
-      state: {
-        session: selectedSession,
-        courses,
-      },
-    });
+  };
+
+  const handleCompare = () => {
+    if (selectedItems.length === 0) return;
+
+    const selectedTeachersList = dataList.filter((item) =>
+      selectedItems.includes(item.TeacherID || item.CourseNo)
+    );
+
+    if (selectedTeachersList.length > 0) {
+      navigate("/TeacherPerformanceDashboard", {
+        state: {
+          teachers: selectedTeachersList,
+          type: evalType,
+          session: selectedSession,
+        },
+      });
+    }
   };
 
   const goCourseCompare = (item) => {
-    openCourseTeacherCompare([item]);
-  };
-
-  const handleOpenCourseChartCompare = () => {
-    if (activeTab !== "Courses" || selectedItems.length === 0) return;
-    const rows = dataList.filter((it, idx) =>
-      selectedItems.some((sid) => String(sid) === String(rowSelectionKey(it, "Courses", idx)))
-    );
-    openCourseTeacherCompare(rows);
+    const id = item.TeacherID || item.CourseNo;
+    const displayName = item.TeacherName || item.CourseName;
+    navigate("/CompareScreenFrom_C_T", {
+      state: {
+        courseId: id,
+        courseName: displayName,
+        session: selectedSession,
+      },
+    });
   };
 
   return (
-    <div className="rc-page">
-      <div className="rc-container">
-        <div className="rc-logo-wrap">
-          <img src={logo} alt="BIIT Logo" className="rc-logo" />
-        </div>
-
-        <div className="rc-card rc-profile-card">
-          <div className="rc-card-title">Director information</div>
-          <div className="rc-profile-body">
-            <div className="rc-profile-text">
-              <p>
-                Name: <strong>Dr. Jamil Sawar</strong>
+    <div className="rc-page rc-page--rn">
+      <div className="rc-container rc-container--rn">
+        <div className="rc-top-wrapper">
+          <div className="rc-logo-container">
+            <img src={logo} alt="BIIT Logo" className="rc-logo-rn" />
+          </div>
+          <div className="rc-profile-card-rn">
+            <div className="rc-profile-info-rn">
+              <p className="rc-p-text-rn">
+                Name: <span className="rc-bold-rn">DR. JAMIL SAWAR</span>
               </p>
-              <p>Role: Director</p>
-              <p className="rc-p-sub">BIIT administration</p>
+              <p className="rc-p-text-rn">
+                Role: <span className="rc-bold-rn">Director</span>
+              </p>
+              <p className="rc-p-sub-rn">BIIT Administration</p>
             </div>
-            <img src={avatar} alt="Director" className="rc-avatar" />
+            <img src={avatar} alt="Director" className="rc-avatar-rn" />
           </div>
         </div>
 
-        <h2 className="rc-dashboard-title">Analytics &amp; feedback</h2>
+        <h2 className="rc-dashboard-title-rn">ANALYTICS &amp; FEEDBACK</h2>
 
-        <div className="rc-tabs rc-tabs--two">
+        <div className="rc-tabs-rn">
           {["Teachers", "Courses"].map((tab) => (
             <button
               key={tab}
               type="button"
-              className={`rc-tab-btn ${activeTab === tab ? "active" : ""}`}
-              onClick={() => setTab(tab)}
+              className={`rc-tab-btn-rn ${activeTab === tab ? "rc-tab-btn-rn--active" : ""}`}
+              onClick={() => {
+                setActiveTab(tab);
+                setSelectedItems([]);
+              }}
             >
               {tab}
             </button>
           ))}
         </div>
 
-        <div className="rc-card rc-list-card">
-          <div className="rc-session-row">
-            <label htmlFor="rc-session">Session</label>
-            <select
-              id="rc-session"
-              className="rc-session-select"
-              value={selectedSession}
-              onChange={(e) => setSelectedSession(e.target.value)}
-            >
-              {sessions.length === 0 ? (
-                <option value="">No sessions</option>
-              ) : (
-                sessions.map((s, i) => (
-                  <option key={`${String(s)}-${i}`} value={s}>
-                    {s}
-                  </option>
-                ))
-              )}
-            </select>
-          </div>
-
-          {activeTab === "Courses" && (
-            <p className="rc-courses-hint">
-              Select one or more courses (checkbox), or tap the arrow to open the comparison chart for one course. Compare teachers across
-              multiple subjects on the next screen.
-            </p>
-          )}
-
-          {activeTab === "Teachers" && (
-            <div className="rc-sub-tabs">
-              <button
-                type="button"
-                className={`rc-sub-tab ${evalType === "Student" ? "active" : ""}`}
-                onClick={() => setEvalType("Student")}
-              >
-                Student eval
-              </button>
-              <button
-                type="button"
-                className={`rc-sub-tab ${evalType === "Peer" ? "active" : ""}`}
-                onClick={() => setEvalType("Peer")}
-              >
-                Peer eval
-              </button>
-            </div>
-          )}
-
-          <div className="rc-list-scroll">
-            {loading ? (
-              <div className="rc-status-msg">Loading records…</div>
-            ) : dataList.length === 0 ? (
-              <div className="rc-status-msg">No records found</div>
-            ) : (
-              <div className="rc-list">
-                {dataList.map((item, idx) => {
-                  const selKey = rowSelectionKey(item, activeTab, idx);
-                  const displayName = item.TeacherName || item.CourseName || "Untitled";
-                  const isTeacherTab = activeTab === "Teachers";
-                  const selected = isSelected(selKey);
-
-                  return (
-                    <div
-                      key={listItemKey(item, activeTab, idx)}
-                      className={`rc-row ${idx !== dataList.length - 1 ? "rc-row-border" : ""} ${selected ? "selected" : ""}`}
-                    >
-                      <div className="rc-row-main">
-                        <button
-                          type="button"
-                          className={`rc-check ${selected ? "checked" : ""}`}
-                          onClick={() => toggleSelection(selKey)}
-                          aria-pressed={selected}
-                          aria-label={selected ? "Deselect" : "Select"}
-                        >
-                          {selected ? "✓" : ""}
-                        </button>
-                        <div className="rc-row-text">
-                          <p className="rc-name">{displayName}</p>
-                          {isTeacherTab && item.Designation && (
-                            <p className="rc-sub rc-sub-green">{item.Designation}</p>
-                          )}
-                          {!isTeacherTab && (
-                            <p className="rc-sub">
-                              {rowId(item, "Courses") ||
-                                item.Course_code ||
-                                item.course_code ||
-                                item.SubjectCode ||
-                                "—"}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      {isTeacherTab ? (
-                        <div className="rc-rating-box">
-                          <span className="rc-rating-label">{evalType.toUpperCase()}</span>
-                          <span className="rc-rating-value">
-                            {item.AverageRating === "N/A" ? "--" : item.AverageRating}
-                          </span>
-                        </div>
-                      ) : (
-                        <button type="button" className="rc-arrow-btn" onClick={() => goCourseCompare(item)} aria-label="Open course comparison">
-                          ➔
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+        <div className="rc-picker-container">
+          <select
+            className="rc-picker-select"
+            value={selectedSession}
+            onChange={(e) => setSelectedSession(e.target.value)}
+          >
+            {sessions.map((s, i) => (
+              <option key={i} label={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <div className="rc-footer">
-          {activeTab === "Courses" ? (
+        {activeTab === "Teachers" && (
+          <div className="rc-sub-tab-container">
             <button
               type="button"
-              className="rc-chart-btn"
-              disabled={selectedItems.length === 0}
-              onClick={handleOpenCourseChartCompare}
+              className={`rc-sub-tab-btn ${evalType === "Student" ? "rc-sub-tab-btn--active" : ""}`}
+              onClick={() => setEvalType("Student")}
             >
-              Course comparison chart ({selectedItems.length} course{selectedItems.length !== 1 ? "s" : ""})
+              Student Eval
             </button>
-          ) : null}
-          {activeTab === "Teachers" && (
-            <p className="rc-teachers-hint">
-              Select one or more teachers for the <strong>performance dashboard</strong> (per-question chart). With two or more teachers, you
-              can open <strong>Advanced compare</strong> there for the full question picker and <code>GetComparisonData</code> chart.
-            </p>
-          )}
+            <button
+              type="button"
+              className={`rc-sub-tab-btn ${evalType === "Peer" ? "rc-sub-tab-btn--active" : ""}`}
+              onClick={() => setEvalType("Peer")}
+            >
+              Peer Eval
+            </button>
+            <button
+              type="button"
+              className={`rc-sub-tab-btn ${evalType === "Confidential" ? "rc-sub-tab-btn--active" : ""}`}
+              onClick={() => setEvalType("Confidential")}
+            >
+              Confidential
+            </button>
+          </div>
+        )}
+
+        {loading ? (
+          <p className="rc-loading-rn">Loading…</p>
+        ) : (
+          <div className="rc-list-wrapper">
+            {dataList.length === 0 ? (
+              <p className="rc-empty-rn">No records found</p>
+            ) : (
+              dataList.map((item, index) => {
+                const id = item.TeacherID || item.CourseNo;
+                const displayName = item.TeacherName || item.CourseName;
+                const isSelected = selectedItems.includes(id);
+                const isTeacherTab = activeTab === "Teachers";
+
+                return (
+                  <div
+                    key={`${id}-${index}`}
+                    className={`rc-list-item ${index !== dataList.length - 1 ? "rc-list-item-border" : ""}`}
+                  >
+                    <div className="rc-item-left">
+                      <button
+                        type="button"
+                        className={`rc-checkbox-rn ${isSelected ? "rc-checkbox-rn--checked" : ""}`}
+                        onClick={() => toggleSelection(id)}
+                      >
+                        {isSelected ? "✓" : ""}
+                      </button>
+                      <div className="rc-item-text-wrap">
+                        <p className="rc-item-title">{displayName}</p>
+                        {item.Designation && (
+                          <p className="rc-sub-text-green">{item.Designation}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {isTeacherTab ? (
+                      <div className="rc-rating-box-rn">
+                        <span className="rc-rating-label-rn">{evalType.toUpperCase()}</span>
+                        <span className="rc-rating-value-rn">
+                          {item.AverageRating === "N/A" ? "--" : item.AverageRating}
+                        </span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="rc-action-btn-small"
+                        onClick={() => goCourseCompare(item)}
+                      >
+                        ➔
+                      </button>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
+
+        <footer className="rc-footer-rn">
           <button
             type="button"
-            className="rc-compare-btn"
-            disabled={activeTab === "Teachers" ? selectedItems.length === 0 : true}
+            className="rc-compare-btn-rn"
+            disabled={selectedItems.length === 0}
+            style={selectedItems.length === 0 ? { opacity: 0.5 } : undefined}
             onClick={handleCompare}
           >
-            Compare selected teachers ({selectedItems.length})
+            Compare selected ({selectedItems.length})
           </button>
-          <button type="button" className="rc-dash-btn" onClick={() => navigate("/DirectorDashboard")}>
-            Back to dashboard
+          <button type="button" className="rc-home-btn-rn" onClick={() => navigate("/DirectorDashboard")}>
+            🏠 Back to Dashboard
           </button>
-        </div>
+        </footer>
       </div>
     </div>
   );
